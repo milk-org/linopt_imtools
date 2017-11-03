@@ -308,6 +308,14 @@ int_fast8_t linopt_compute_linRM_from_inout_cli()
 
 
 
+void __attribute__ ((constructor)) libinit_linopt_imtools()
+{
+	init_linopt_imtools();
+	printf(" ...... Loading module %s\n", __FILE__);
+}
+
+
+
 
 
 int init_linopt_imtools()
