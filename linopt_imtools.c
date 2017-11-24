@@ -321,7 +321,8 @@ void __attribute__ ((constructor)) libinit_linopt_imtools()
 int init_linopt_imtools()
 {
     strcpy(data.module[data.NBmodule].name, __FILE__);
-    strcpy(data.module[data.NBmodule].info, "milk    - Image linear decomposition and optimization tools");
+    strcpy(data.module[data.NBmodule].package, "milk");
+    strcpy(data.module[data.NBmodule].info, "Image linear decomposition and optimization tools");
     data.NBmodule++;
 
 
