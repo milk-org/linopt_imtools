@@ -641,10 +641,20 @@ long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, f
     long k;
     long size2;
     long IDr;
-
+	FILE *fp;
 
     size2 = size*size;
     IDr = create_2Dimage_ID("linopt_tmpr", size, size);
+
+	fp = fopen("ModesExpr_CosRad.txt", "w");
+	fprintf(fp, "# unit for r = %f pix\n", radius);
+	fprintf(fp, "\n");
+	for(k=0; k<kmax; k++)
+		fprintf(fp, "%5ld   cos(r*M_PI*%ld)\n", k, k);
+	
+	
+	fclose(fp);
+
 
     for(ii=0; ii<size; ii++)
     {
@@ -787,6 +797,14 @@ long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, f
     if(writeMfile==1)
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
+        fprintf(fp, "# size       = %ld\n", size);
+		fprintf(fp, "# CPAmax     = %f\n", CPAmax);
+		fprintf(fp, "# deltaCPA   = %f\n", deltaCPA);
+		fprintf(fp, "# radius     = %f\n", radius);
+		fprintf(fp, "# radfactlim = %f\n", radfactlim);
+        fprintf(fp, "# \n");
+        fprintf(fp, "# Unit for x and y = radius [pixel]\n");
+        fprintf(fp, "# \n");
         fprintf(fp, "%4ld %10.5f %10.5f    1.0\n", (long) 0, 0.0, 0.0);
         k1 = 1;
         k = 2;
