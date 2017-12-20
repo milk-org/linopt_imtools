@@ -642,7 +642,7 @@ long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, f
     long size2;
     long IDr;
 	FILE *fp;
-
+ 
     size2 = size*size;
     IDr = create_2Dimage_ID("linopt_tmpr", size, size);
 
