@@ -311,13 +311,9 @@ int_fast8_t linopt_compute_linRM_from_inout_cli()
 void __attribute__ ((constructor)) libinit_linopt_imtools()
 {
 	init_linopt_imtools();
-
-	if(data.progStatus>0)
-	{
-		printf("  Found unloaded shared object in ./libs/ -> LOADING module %s\n", __FILE__);
-		fflush(stdout);
-	}	
+	RegisterModule(__FILE__, "milk", "Image linear decomposition and optimization tools");
 }
+	
 
 
 
@@ -325,14 +321,6 @@ void __attribute__ ((constructor)) libinit_linopt_imtools()
 
 int init_linopt_imtools()
 {
-    strcpy(data.module[data.NBmodule].name, __FILE__);
-    strcpy(data.module[data.NBmodule].package, "milk");
-    strcpy(data.module[data.NBmodule].info, "Image linear decomposition and optimization tools");
-    data.NBmodule++;
-
-
-
-
 
 /* =============================================================================================== */
 /* =============================================================================================== */
