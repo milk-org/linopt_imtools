@@ -68,6 +68,8 @@ static int clock_gettime(int clk_id, struct mach_timespec *t){
 
 extern DATA data;
 
+static int INITSTATUS_linopt_imtools = 0;
+
 
 static long NBPARAM;
 static long double C0;
@@ -310,8 +312,12 @@ int_fast8_t linopt_compute_linRM_from_inout_cli()
 
 void __attribute__ ((constructor)) libinit_linopt_imtools()
 {
-	init_linopt_imtools();
-	RegisterModule(__FILE__, "milk", "Image linear decomposition and optimization tools");
+	if ( INITSTATUS_linopt_imtools == 0 )
+	{
+		init_linopt_imtools();
+		RegisterModule(__FILE__, "milk", "Image linear decomposition and optimization tools");
+		INITSTATUS_linopt_imtools = 1;
+	}
 }
 	
 
