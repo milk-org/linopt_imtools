@@ -66,7 +66,7 @@ static int clock_gettime(int clk_id, struct mach_timespec *t){
 #include "linopt_imtools/linopt_imtools.h"
 #include "cudacomp/cudacomp.h"
 
-extern DATA data;
+//extern DATA data;
 
 static int INITSTATUS_linopt_imtools = 0;
 
