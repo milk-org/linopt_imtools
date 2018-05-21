@@ -1748,7 +1748,7 @@ long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name
 	#ifdef HAVE_MAGMA
 		//printf(" -> Entering CUDACOMP_magma_compute_SVDpseudoinverse \n");
 		//fflush(stdout); 
-		CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat", 0, 0, 1.e-4, 1.e-7);
+		CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat", 0, 0, 1.e-4, 1.e-7, 0);
 		//printf(" -> Exiting  CUDACOMP_magma_compute_SVDpseudoinverse \n");
 		//fflush(stdout);
 	#else
