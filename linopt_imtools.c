@@ -2283,7 +2283,7 @@ long linopt_compute_linRM_from_inout(const char *IDinput_name, const char *IDinm
 
 	// compute pokeM pseudo-inverse
    	#ifdef HAVE_MAGMA
-		CUDACOMP_magma_compute_SVDpseudoInverse("pokeM", "pokeMinv", SVDeps, insize, "VTmat", 0, 0, 1.e-4, 1.e-7);
+		CUDACOMP_magma_compute_SVDpseudoInverse("pokeM", "pokeMinv", SVDeps, insize, "VTmat", 0, 0, 1.e-4, 1.e-7, 0);
 	#else
         linopt_compute_SVDpseudoInverse("pokeM", "pokeMinv", SVDeps, insize, "VTmat");
      #endif   
