@@ -515,11 +515,11 @@ long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_nam
     long naxisin;
     long sizexy;
     long kk;
-    int atype;
+    uint8_t datatype;
 
     ID = image_ID(ID_name);
     naxisin = data.image[ID].md[0].naxis;
-    atype = data.image[ID].md[0].atype;
+    datatype = data.image[ID].md[0].datatype;
 
 
     IDpixindex = image_ID(IDpixindex_name);
@@ -535,14 +535,14 @@ long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_nam
     else
     {
         sizexy = data.image[ID].md[0].size[0]*data.image[ID].md[0].size[1];
-        if(atype==_DATATYPE_FLOAT)
+        if(datatype==_DATATYPE_FLOAT)
         {
             IDvec = create_2Dimage_ID(IDvec_name, NBpix, data.image[ID].md[0].size[2]);
             for(kk=0; kk<data.image[ID].md[0].size[2]; kk++)
                 for(k=0; k<NBpix; k++)
                     data.image[IDvec].array.F[kk*NBpix+k] = data.image[IDpixmult].array.F[k] * data.image[ID].array.F[kk*sizexy+data.image[IDpixindex].array.SI64[k]];
         }
-        if(atype==_DATATYPE_COMPLEX_FLOAT)
+        if(datatype==_DATATYPE_COMPLEX_FLOAT)
         {
             IDvec = create_2Dimage_ID(IDvec_name, NBpix*2, data.image[ID].md[0].size[2]);
             for(kk=0; kk<data.image[ID].md[0].size[2]; kk++)
@@ -985,11 +985,11 @@ long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoef
     long ii, jj, kk;
     long xsize, ysize, zsize;
     long sizexy;
-    int atype;
+    uint8_t datatype;
 
 
     IDmodes = image_ID(IDmodes_name);
-    atype = data.image[IDmodes].md[0].atype;
+    datatype = data.image[IDmodes].md[0].datatype;
 
     xsize = data.image[IDmodes].md[0].size[0];
     ysize = data.image[IDmodes].md[0].size[1];
@@ -999,7 +999,7 @@ long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoef
 
 
 
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
         ID = create_2Dimage_ID(ID_name, xsize, ysize);
     else
         ID = create_2Dimage_ID_double(ID_name, xsize, ysize);
@@ -1007,7 +1007,7 @@ long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoef
     IDcoeff = image_ID(IDcoeff_name);
 
 
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
     {
         for(kk=0; kk<zsize; kk++)
             for(ii=0; ii<sizexy; ii++)
@@ -1037,7 +1037,7 @@ long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char 
     long xsize, ysize, zsize;
     long sizexy;
     int semval;
-    int atype;
+    uint8_t datatype;
     long long cnt = 0;
     int RT_priority = 80; //any number from 0-99
     struct sched_param schedpar;
@@ -1052,7 +1052,7 @@ long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char 
   
   
     IDmodes = image_ID(IDmodes_name);
-    atype = data.image[IDmodes].md[0].atype;
+    datatype = data.image[IDmodes].md[0].datatype;
 
     xsize = data.image[IDmodes].md[0].size[0];
     ysize = data.image[IDmodes].md[0].size[1];
@@ -1258,7 +1258,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
     double egvlim;
     long nbmodesremoved;
 
-    int atype;
+    uint8_t datatype;
 
 	long maxMode, MaxNBmodes1, mode;
 	
@@ -1291,7 +1291,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 			printf("ERROR: matrix %s not found in memory\n", ID_Rmatrix_name);
 			exit(0);
 		}
-    atype = data.image[ID_Rmatrix].md[0].atype;
+    datatype = data.image[ID_Rmatrix].md[0].datatype;
     if(data.image[ID_Rmatrix].md[0].naxis==3)
     {
         n = data.image[ID_Rmatrix].md[0].size[0]*data.image[ID_Rmatrix].md[0].size[1];
@@ -1325,7 +1325,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 
 
     /* write matrix_D */
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
     {
         for(k=0; k<m; k++)
             for(ii=0; ii<n; ii++)
@@ -1413,7 +1413,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
     // Write rotation matrix 
     arraysizetmp[0] = m;
     arraysizetmp[1] = m;
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
     {
         ID_VTmatrix = create_image_ID(ID_VTmatrix_name, 2, arraysizetmp, _DATATYPE_FLOAT, 0, 0);
         for(ii=0; ii<m; ii++) // modes
@@ -1490,7 +1490,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
         arraysizetmp[1] = m;
     }
 
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name, data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_FLOAT, 0, 0);
     else
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name, data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_DOUBLE, 0, 0);
@@ -1500,7 +1500,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 		clock_gettime(CLOCK_REALTIME, &t6);
 
     /* write result */
-    if(atype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT)
     {
         for(ii=0; ii<n; ii++) // sensors
             for(k=0; k<m; k++) // actuator modes
