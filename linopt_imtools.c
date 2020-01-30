@@ -4,11 +4,6 @@
  * 
  * CPU-based lineal algebra tools: decomposition, SVD etc...
  *  
- * @author  O. Guyon
- * @date    7 Jul 2017
- *
- * 
- * @bug No known bugs.
  * 
  */
 
@@ -117,38 +112,78 @@ int fmInit = 0;
 /* =============================================================================================== */
 /* =============================================================================================== */
 
-int_fast8_t linopt_imtools_mask_to_pixtable_cli()
+errno_t linopt_imtools_mask_to_pixtable_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,3)+CLI_checkarg(3,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,3) +
+        CLI_checkarg(3,3)
+        == 0 )
     {
-      linopt_imtools_mask_to_pixtable(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string);
-      return 0;
+        linopt_imtools_mask_to_pixtable(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string
+        );
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
-int_fast8_t linopt_imtools_Image_to_vec_cli()
+
+
+errno_t linopt_imtools_Image_to_vec_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,4)+CLI_checkarg(4,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,4) +
+        CLI_checkarg(4,3)
+        == 0 )
     {
-      linopt_imtools_Image_to_vec(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string, data.cmdargtoken[4].val.string);
-      return 0;
+        linopt_imtools_Image_to_vec(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string,
+            data.cmdargtoken[4].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
-int_fast8_t linopt_imtools_vec_to_2DImage_cli()
+
+errno_t linopt_imtools_vec_to_2DImage_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,4)+CLI_checkarg(4,3)+CLI_checkarg(5,2)+CLI_checkarg(6,2)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,4) +
+        CLI_checkarg(4,3) +
+        CLI_checkarg(5,2) +
+        CLI_checkarg(6,2)
+        == 0 )
     {
-      linopt_imtools_vec_to_2DImage(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string, data.cmdargtoken[4].val.string, data.cmdargtoken[5].val.numl, data.cmdargtoken[6].val.numl);
-      return 0;
+        linopt_imtools_vec_to_2DImage(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string,
+            data.cmdargtoken[4].val.string,
+            data.cmdargtoken[5].val.numl,
+            data.cmdargtoken[6].val.numl
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
@@ -163,27 +198,58 @@ int_fast8_t linopt_imtools_vec_to_2DImage_cli()
 /* =============================================================================================== */
 
 
-int_fast8_t linopt_imtools_makeCosRadModes_cli()
+errno_t linopt_imtools_makeCosRadModes_cli()
 {
-  if(CLI_checkarg(1,3)+CLI_checkarg(2,2)+CLI_checkarg(3,2)+CLI_checkarg(4,1)+CLI_checkarg(5,1)==0)
+    if(
+        CLI_checkarg(1,3) +
+        CLI_checkarg(2,2) +
+        CLI_checkarg(3,2) +
+        CLI_checkarg(4,1) +
+        CLI_checkarg(5,1)
+        == 0 )
     {
-      linopt_imtools_makeCosRadModes(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.numl, data.cmdargtoken[3].val.numl, data.cmdargtoken[4].val.numf, data.cmdargtoken[5].val.numf);
-      return 0;
+        linopt_imtools_makeCosRadModes(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.numl,
+            data.cmdargtoken[3].val.numl,
+            data.cmdargtoken[4].val.numf,
+            data.cmdargtoken[5].val.numf
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
-int_fast8_t linopt_imtools_makeCPAmodes_cli()
+errno_t linopt_imtools_makeCPAmodes_cli()
 {
-  if(CLI_checkarg(1,3)+CLI_checkarg(2,2)+CLI_checkarg(3,1)+CLI_checkarg(4,1)+CLI_checkarg(5,1)+CLI_checkarg(6,1)==0)
+    if(
+        CLI_checkarg(1,3) +
+        CLI_checkarg(2,2) +
+        CLI_checkarg(3,1) +
+        CLI_checkarg(4,1) +
+        CLI_checkarg(5,1) +
+        CLI_checkarg(6,1)
+        == 0 )
     {
-      linopt_imtools_makeCPAmodes(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.numl, data.cmdargtoken[3].val.numf, data.cmdargtoken[4].val.numf, data.cmdargtoken[5].val.numf, data.cmdargtoken[6].val.numf, 1);
-      return 0;
+        linopt_imtools_makeCPAmodes(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.numl,
+            data.cmdargtoken[3].val.numf,
+            data.cmdargtoken[4].val.numf,
+            data.cmdargtoken[5].val.numf,
+            data.cmdargtoken[6].val.numf,
+            1
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
@@ -202,77 +268,150 @@ int_fast8_t linopt_imtools_makeCPAmodes_cli()
 
 
 
-int_fast8_t linopt_imtools_image_construct_cli()
+errno_t linopt_imtools_image_construct_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,3)
+        == 0 )
     {
-      linopt_imtools_image_construct(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string);
-      return 0;
+        linopt_imtools_image_construct(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
 
-int_fast8_t linopt_imtools_image_construct_stream_cli()
+errno_t linopt_imtools_image_construct_stream_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,4)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,4)
+        == 0 )
     {
-      linopt_imtools_image_construct_stream(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string);
-      return 0;
+        linopt_imtools_image_construct_stream(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
 
-int_fast8_t linopt_compute_SVDdecomp_cli()
+errno_t linopt_compute_SVDdecomp_cli()
 {
-    if(CLI_checkarg(1,4)+CLI_checkarg(2,3)+CLI_checkarg(3,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,3) +
+        CLI_checkarg(3,3)
+        == 0 )
     {
-      linopt_compute_SVDdecomp(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string);
-      return 0;
+        linopt_compute_SVDdecomp(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
-int_fast8_t linopt_compute_SVDpseudoInverse_cli()
+errno_t linopt_compute_SVDpseudoInverse_cli()
 {
-    if(CLI_checkarg(1,4)+CLI_checkarg(2,3)+CLI_checkarg(3,1)+CLI_checkarg(4,2)+CLI_checkarg(5,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,3) +
+        CLI_checkarg(3,1) +
+        CLI_checkarg(4,2) +
+        CLI_checkarg(5,3)
+        == 0 )
     {
-      linopt_compute_SVDpseudoInverse(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.numf, data.cmdargtoken[4].val.numl, data.cmdargtoken[5].val.string);
-      return 0;
+        linopt_compute_SVDpseudoInverse(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.numf,
+            data.cmdargtoken[4].val.numl,
+            data.cmdargtoken[5].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
-int_fast8_t linopt_compute_1Dfit_cli()
+errno_t linopt_compute_1Dfit_cli()
 {
-	if(CLI_checkarg(1,5)+CLI_checkarg(2,2)+CLI_checkarg(3,2)+CLI_checkarg(4,5)+CLI_checkarg(5,2)==0)
+    if(
+        CLI_checkarg(1,5) +
+        CLI_checkarg(2,2) +
+        CLI_checkarg(3,2) +
+        CLI_checkarg(4,5) +
+        CLI_checkarg(5,2)
+        == 0 )
     {
-		linopt_compute_1Dfit(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.numl, data.cmdargtoken[3].val.numl, data.cmdargtoken[4].val.string, data.cmdargtoken[5].val.numl);
-      return 0;
+        linopt_compute_1Dfit(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.numl,
+            data.cmdargtoken[3].val.numl,
+            data.cmdargtoken[4].val.string,
+            data.cmdargtoken[5].val.numl
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
-int_fast8_t linopt_imtools_image_fitModes_cli()
+errno_t linopt_imtools_image_fitModes_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,4)+CLI_checkarg(4,1)+CLI_checkarg(5,3)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,4) +
+        CLI_checkarg(4,1) +
+        CLI_checkarg(5,3)
+        == 0 )
     {
-      linopt_imtools_image_fitModes(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string, data.cmdargtoken[4].val.numf, data.cmdargtoken[5].val.string, 0);
-      return 0;
+        linopt_imtools_image_fitModes(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string,
+            data.cmdargtoken[4].val.numf,
+            data.cmdargtoken[5].val.string,
+            0
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
@@ -288,15 +427,27 @@ int_fast8_t linopt_imtools_image_fitModes_cli()
 
 
 
-int_fast8_t linopt_compute_linRM_from_inout_cli()
+errno_t linopt_compute_linRM_from_inout_cli()
 {
-  if(CLI_checkarg(1,4)+CLI_checkarg(2,4)+CLI_checkarg(3,4)+CLI_checkarg(4,4)==0)
+    if(
+        CLI_checkarg(1,4) +
+        CLI_checkarg(2,4) +
+        CLI_checkarg(3,4) +
+        CLI_checkarg(4,4)
+        == 0 )
     {
-      linopt_compute_linRM_from_inout(data.cmdargtoken[1].val.string, data.cmdargtoken[2].val.string, data.cmdargtoken[3].val.string, data.cmdargtoken[4].val.string);
-      return 0;
+        linopt_compute_linRM_from_inout(
+            data.cmdargtoken[1].val.string,
+            data.cmdargtoken[2].val.string,
+            data.cmdargtoken[3].val.string,
+            data.cmdargtoken[4].val.string
+        );
+
+        return CLICMD_SUCCESS;
     }
-  else
-    return 1;
+    else {
+        return CLICMD_INVALID_ARG;
+    }
 }
 
 
@@ -325,95 +476,178 @@ void __attribute__ ((constructor)) libinit_linopt_imtools()
 
 
 
-int init_linopt_imtools()
+errno_t init_linopt_imtools()
 {
 
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 1. INITIALIZATION                                                                               */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+    /*                                                                                                 */
+    /* 1. INITIALIZATION                                                                               */
+    /*                                                                                                 */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
 
 
 
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 2. CONVERSION                                                                                   */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+    /*                                                                                                 */
+    /* 2. CONVERSION                                                                                   */
+    /*                                                                                                 */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
 
-    RegisterCLIcommand("mask2pixtable", __FILE__, linopt_imtools_mask_to_pixtable_cli, "make pixel tables from mask", "<maskname> <pixindex> <pixmult>", "mask2pixtable mask pixi pixm", "long linopt_imtools_mask_to_pixtable(const char *IDmask_name, const char *IDpixindex_name, const char *IDpixmult_name)");
-  
-    RegisterCLIcommand("im2vec", __FILE__, linopt_imtools_Image_to_vec_cli, "remap image to vector", "<imagename> <pixindex> <pixmult> <vecname>", "im2vec im pixi pixm vecim", "long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *IDvec_name)");
-
-    RegisterCLIcommand("vec2im", __FILE__, linopt_imtools_vec_to_2DImage_cli, "remap vector to image", "<vecname> <pixindex> <pixmult> <imname> <xsize> <ysize>", "im2vec vecim pixi pixm im 512 512", "long linopt_imtools_vec_to_2DImage(const char *IDvec_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *ID_name, long xsize, long ysize)");
-
-
-
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 3. CREATE MODES                                                                                 */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
-
-	RegisterCLIcommand("mkcosrmodes", __FILE__, linopt_imtools_makeCosRadModes_cli, "make basis of cosine radial modes", "<output image name> <image size [long]> <kmax [long]> <radius [float]> <overfill factor [float]>", "mkcosrmodes cmodes 256 100 80.0 2.0", "long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, float radius, float radfactlim, int writeMfile)");
-
-    RegisterCLIcommand("mkFouriermodes", __FILE__, linopt_imtools_makeCPAmodes_cli, "make basis of Fourier Modes", "<output image name> <image size> <CPAmax float> <deltaCPA float> <beam radius> <overfill factor>", "mkFouriermodes fmodes 256 10.0 0.8 80.0 2.0", "long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, float deltaCPA, float radius, float radfactlim)");
+    RegisterCLIcommand(
+        "mask2pixtable",
+        __FILE__,
+        linopt_imtools_mask_to_pixtable_cli,
+        "make pixel tables from mask",
+        "<maskname> <pixindex> <pixmult>",
+        "mask2pixtable mask pixi pixm",
+        "long linopt_imtools_mask_to_pixtable(const char *IDmask_name, const char *IDpixindex_name, const char *IDpixmult_name)");
 
 
-
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 4. LINEAR DECOMPOSITION                                                                         */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
-
-   
-
-    RegisterCLIcommand("imlinconstruct", __FILE__, linopt_imtools_image_construct_cli, "construct image as linear sum of modes", "<modes> <coeffs> <outim>", "imlinconstruct modes coeffs outim", "long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoeff_name, const char *ID_name)");
-
-    RegisterCLIcommand("imlinconstructs", __FILE__, linopt_imtools_image_construct_stream_cli, "construct image as linear sum of modes (stream mode)", "<modes> <coeffs> <outim>", "imlinconstructs modes coeffs outim", "long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char *IDcoeff_name, const char *IDout_name)");
-
-    RegisterCLIcommand("imsvd", __FILE__, linopt_compute_SVDdecomp_cli, "Singular values decomposition", "<image cube> <SVD modes> <coeffs>", "imsvd imc svdm coeffs", "long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, const char *IDcoeff_name)");
-
-	RegisterCLIcommand("impsinvsvd", __FILE__, linopt_compute_SVDpseudoInverse_cli, "compute pseudoinverse", "<input matrix [string]> <output pseudo inverse [string]> <singlular value limit [float]> <Max nb modes [long]> <VT matrix [string]>", "impsinvsvd matA matAinv 0.01 1000 matVT", "int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_Cmatrix_name, double SVDeps, long MaxNBmodes, const char *ID_VTmatrix_name)");
+    RegisterCLIcommand(
+        "im2vec",
+        __FILE__, linopt_imtools_Image_to_vec_cli,
+        "remap image to vector",
+        "<imagename> <pixindex> <pixmult> <vecname>",
+        "im2vec im pixi pixm vecim",
+        "long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *IDvec_name)");
 
 
-    RegisterCLIcommand("linopt1Dfit", __FILE__, linopt_compute_1Dfit_cli, "least-square 1D fit", "<output data file> <NBpt> <fit order> <output coeff file> <fit MODE>", "linopt1Dfit data.txt 1000 10 fitsol.txt 0", "long linopt_compute_1Dfit(const char *fnamein, long NBpt, long MaxOrder, const char *fnameout, int MODE)");
+    RegisterCLIcommand(
+        "vec2im",
+        __FILE__, linopt_imtools_vec_to_2DImage_cli,
+        "remap vector to image",
+        "<vecname> <pixindex> <pixmult> <imname> <xsize> <ysize>",
+        "im2vec vecim pixi pixm im 512 512",
+        "long linopt_imtools_vec_to_2DImage(const char *IDvec_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *ID_name, long xsize, long ysize)");
 
-    RegisterCLIcommand("imfitmodes", __FILE__, linopt_imtools_image_fitModes_cli, "fit image as sum of modes", "<imname> <modes> <mask> <epssvd> <outcoeff>", "imfitmodes im modes mask 0.01 outcim", "long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name, const char *IDmask_name, double SVDeps, const char *IDcoeff_name, int reuse)");
 
-   
 
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 5. OPTIMIZATION                                                                                 */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+    /*                                                                                                 */
+    /* 3. CREATE MODES                                                                                 */
+    /*                                                                                                 */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
 
- 
-	RegisterCLIcommand("lincRMiter", __FILE__, linopt_compute_linRM_from_inout_cli, "estimate response matrix from input and output", "<input cube> <inmask> <output cube> <RM>", "lincRMiter inC inmask outC imRM", "long linopt_compute_linRM_iter(const char *IDinput_name, const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name)");
-    
+    RegisterCLIcommand(
+        "mkcosrmodes",
+        __FILE__,
+        linopt_imtools_makeCosRadModes_cli,
+        "make basis of cosine radial modes",
+        "<output image name> <image size [long]> <kmax [long]> <radius [float]> <overfill factor [float]>",
+        "mkcosrmodes cmodes 256 100 80.0 2.0",
+        "long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, float radius, float radfactlim, int writeMfile)");
 
-   
 
+    RegisterCLIcommand(
+        "mkFouriermodes",
+        __FILE__,
+        linopt_imtools_makeCPAmodes_cli,
+        "make basis of Fourier Modes",
+        "<output image name> <image size> <CPAmax float> <deltaCPA float> <beam radius> <overfill factor>",
+        "mkFouriermodes fmodes 256 10.0 0.8 80.0 2.0",
+        "long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, float deltaCPA, float radius, float radfactlim)");
+
+
+
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+    /*                                                                                                 */
+    /* 4. LINEAR DECOMPOSITION                                                                         */
+    /*                                                                                                 */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+
+
+
+    RegisterCLIcommand(
+        "imlinconstruct",
+        __FILE__,
+        linopt_imtools_image_construct_cli,
+        "construct image as linear sum of modes",
+        "<modes> <coeffs> <outim>",
+        "imlinconstruct modes coeffs outim",
+        "long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoeff_name, const char *ID_name)");
+
+
+    RegisterCLIcommand(
+        "imlinconstructs",
+        __FILE__,
+        linopt_imtools_image_construct_stream_cli,
+        "construct image as linear sum of modes (stream mode)",
+        "<modes> <coeffs> <outim>", "imlinconstructs modes coeffs outim",
+        "long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char *IDcoeff_name, const char *IDout_name)");
+
+
+    RegisterCLIcommand(
+        "imsvd",
+        __FILE__,
+        linopt_compute_SVDdecomp_cli,
+        "Singular values decomposition",
+        "<image cube> <SVD modes> <coeffs>",
+        "imsvd imc svdm coeffs",
+        "long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, const char *IDcoeff_name)");
+
+
+    RegisterCLIcommand(
+        "impsinvsvd",
+        __FILE__,
+        linopt_compute_SVDpseudoInverse_cli,
+        "compute pseudoinverse",
+        "<input matrix [string]> <output pseudo inverse [string]> <singlular value limit [float]> <Max nb modes [long]> <VT matrix [string]>",
+        "impsinvsvd matA matAinv 0.01 1000 matVT",
+        "int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_Cmatrix_name, double SVDeps, long MaxNBmodes, const char *ID_VTmatrix_name)");
+
+
+    RegisterCLIcommand(
+        "linopt1Dfit",
+        __FILE__,
+        linopt_compute_1Dfit_cli,
+        "least-square 1D fit",
+        "<output data file> <NBpt> <fit order> <output coeff file> <fit MODE>",
+        "linopt1Dfit data.txt 1000 10 fitsol.txt 0",
+        "long linopt_compute_1Dfit(const char *fnamein, long NBpt, long MaxOrder, const char *fnameout, int MODE)");
+
+
+    RegisterCLIcommand(
+        "imfitmodes",
+        __FILE__,
+        linopt_imtools_image_fitModes_cli,
+        "fit image as sum of modes",
+        "<imname> <modes> <mask> <epssvd> <outcoeff>",
+        "imfitmodes im modes mask 0.01 outcim",
+        "long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name, const char *IDmask_name, double SVDeps, const char *IDcoeff_name, int reuse)");
+
+
+
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+    /*                                                                                                 */
+    /* 5. OPTIMIZATION                                                                                 */
+    /*                                                                                                 */
+    /* =============================================================================================== */
+    /* =============================================================================================== */
+
+
+    RegisterCLIcommand(
+        "lincRMiter",
+        __FILE__,
+        linopt_compute_linRM_from_inout_cli,
+        "estimate response matrix from input and output",
+        "<input cube> <inmask> <output cube> <RM>",
+        "lincRMiter inC inmask outC imRM",
+        "long linopt_compute_linRM_iter(const char *IDinput_name, const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name)");
 
 
     // add atexit functions here
 
 
-    return 0;
-
+    return RETURN_SUCCESS;
 }
 
 
@@ -504,13 +738,17 @@ long linopt_imtools_mask_to_pixtable(const char *IDmask_name, const char *IDpixi
 //
 //
 //
-long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *IDvec_name)
+imageID linopt_imtools_Image_to_vec(
+    const char *ID_name,
+    const char *IDpixindex_name,
+    const char *IDpixmult_name,
+    const char *IDvec_name
+)
 {
-    long ID;
-    long ii;
+    imageID ID;
     long k;
-    long IDpixindex, IDpixmult;
-    long IDvec;
+    imageID IDpixindex, IDpixmult;
+    imageID IDvec;
     long NBpix;
     long naxisin;
     long sizexy;
@@ -555,19 +793,26 @@ long linopt_imtools_Image_to_vec(const char *ID_name, const char *IDpixindex_nam
 
     }
 
-    return(ID);
+    return ID;
 }
 
 
 
 
 
-long linopt_imtools_vec_to_2DImage(const char *IDvec_name, const char *IDpixindex_name, const char *IDpixmult_name, const char *ID_name, long xsize, long ysize)
+imageID linopt_imtools_vec_to_2DImage(
+    const char *IDvec_name,
+    const char *IDpixindex_name,
+    const char *IDpixmult_name,
+    const char *ID_name,
+    long        xsize,
+    long        ysize
+)
 {
-    long ID;
-    long IDvec;
+    imageID ID;
+    imageID IDvec;
     long k;
-    long IDpixindex, IDpixmult;
+    imageID IDpixindex, IDpixmult;
     long NBpix;
 
     IDvec = image_ID(IDvec_name);
@@ -580,7 +825,7 @@ long linopt_imtools_vec_to_2DImage(const char *IDvec_name, const char *IDpixinde
     for(k=0; k<NBpix; k++)
         data.image[ID].array.F[data.image[IDpixindex].array.SI64[k]] = data.image[IDvec].array.F[k]/data.image[IDpixmult].array.F[k];
 
-    return (ID);
+    return ID;
 }
 
 
@@ -602,29 +847,34 @@ long linopt_imtools_vec_to_2DImage(const char *IDvec_name, const char *IDpixinde
 
 // r0pix is r=1 in pixel unit
 
-long linopt_imtools_make1Dpolynomials(const char *IDout_name, long NBpts, long MaxOrder, float r0pix)
+imageID linopt_imtools_make1Dpolynomials(
+    const char *IDout_name,
+    long        NBpts,
+    long        MaxOrder,
+    float       r0pix
+)
 {
-	long IDout;
-	long xsize, ysize, zsize;
-	long ii, kk;
-	float r;
-	
-	xsize = NBpts;
-	ysize = 1;
-	zsize = MaxOrder;
-	
-	IDout = create_3Dimage_ID(IDout_name, xsize, ysize, zsize);
-	
-	for(kk=0;kk<zsize;kk++)
-		{
-			for(ii=0;ii<xsize;ii++)
-				{
-					r = 1.0*ii/r0pix;
-					data.image[IDout].array.F[kk*xsize+ii] = pow(r, 1.0*kk);
-				}
-		}
-	
-	return IDout;
+    imageID IDout;
+    long xsize, ysize, zsize;
+    long ii, kk;
+    float r;
+
+    xsize = NBpts;
+    ysize = 1;
+    zsize = MaxOrder;
+
+    IDout = create_3Dimage_ID(IDout_name, xsize, ysize, zsize);
+
+    for(kk=0; kk<zsize; kk++)
+    {
+        for(ii=0; ii<xsize; ii++)
+        {
+            r = 1.0*ii/r0pix;
+            data.image[IDout].array.F[kk*xsize+ii] = pow(r, 1.0*kk);
+        }
+    }
+
+    return IDout;
 }
 
 
@@ -632,27 +882,33 @@ long linopt_imtools_make1Dpolynomials(const char *IDout_name, long NBpts, long M
 //
 // make cosine radial modes
 //
-long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, float radius, float radfactlim)
+imageID linopt_imtools_makeCosRadModes(
+    const char *ID_name,
+    long        size,
+    long        kmax,
+    float       radius,
+    float       radfactlim
+)
 {
-    long ID;
+    imageID ID;
     long ii, jj;
     float x, y, r;
     long k;
     long size2;
-    long IDr;
-	FILE *fp;
- 
+    imageID IDr;
+    FILE *fp;
+
     size2 = size*size;
     IDr = create_2Dimage_ID("linopt_tmpr", size, size);
 
-	fp = fopen("ModesExpr_CosRad.txt", "w");
-	fprintf(fp, "# unit for r = %f pix\n", radius);
-	fprintf(fp, "\n");
-	for(k=0; k<kmax; k++)
-		fprintf(fp, "%5ld   cos(r*M_PI*%ld)\n", k, k);
-	
-	
-	fclose(fp);
+    fp = fopen("ModesExpr_CosRad.txt", "w");
+    fprintf(fp, "# unit for r = %f pix\n", radius);
+    fprintf(fp, "\n");
+    for(k=0; k<kmax; k++)
+        fprintf(fp, "%5ld   cos(r*M_PI*%ld)\n", k, k);
+
+
+    fclose(fp);
 
 
     for(ii=0; ii<size; ii++)
@@ -679,15 +935,23 @@ long linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, f
 
     delete_image_ID("linopt_tmpr");
 
-    return(ID);
+    return ID;
 }
 
 
 
-long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, float deltaCPA, float radius, float radfactlim, int writeMfile)
+long linopt_imtools_makeCPAmodes(
+    const char *ID_name,
+    long        size,
+    float       CPAmax,
+    float       deltaCPA,
+    float       radius,
+    float       radfactlim,
+    int         writeMfile
+)
 {
-    long ID;
-    long IDx, IDy, IDr;
+    imageID ID;
+    imageID IDx, IDy, IDr;
     float CPAx, CPAy;
     float x, y, r;
     long ii, jj;
@@ -698,8 +962,8 @@ long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, f
     float *CPArarray;
     long size2;
     long NBfrequ;
-    float y0;
-    float ydist;
+    //float y0;
+    //float ydist;
     float eps;
     FILE *fp;
 
@@ -752,8 +1016,8 @@ long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, f
 
 
     NBfrequ = 0;
-    ydist = 2.0*deltaCPA;
-    y0 = 0.0;
+    //ydist = 2.0*deltaCPA;
+    //y0 = 0.0;
     for(CPAx=0; CPAx<CPAmax; CPAx+=deltaCPA)
     {
         for(CPAy=0; CPAy<CPAmax; CPAy+=deltaCPA)
@@ -797,10 +1061,10 @@ long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, f
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
         fprintf(fp, "# size       = %ld\n", size);
-		fprintf(fp, "# CPAmax     = %f\n", CPAmax);
-		fprintf(fp, "# deltaCPA   = %f\n", deltaCPA);
-		fprintf(fp, "# radius     = %f\n", radius);
-		fprintf(fp, "# radfactlim = %f\n", radfactlim);
+        fprintf(fp, "# CPAmax     = %f\n", CPAmax);
+        fprintf(fp, "# deltaCPA   = %f\n", deltaCPA);
+        fprintf(fp, "# radius     = %f\n", radius);
+        fprintf(fp, "# radfactlim = %f\n", radfactlim);
         fprintf(fp, "# \n");
         fprintf(fp, "# Unit for x and y = radius [pixel]\n");
         fprintf(fp, "# \n");
@@ -911,7 +1175,10 @@ long linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, f
 /*                                                                 */
 /* --------------------------------------------------------------- */
 
-double linopt_imtools_opt_f (const gsl_vector *v, void *params)
+double linopt_imtools_opt_f (
+    const gsl_vector *v,
+    __attribute__((unused)) void *params
+)
 {
     double value;
     long k,l,n;
@@ -928,15 +1195,22 @@ double linopt_imtools_opt_f (const gsl_vector *v, void *params)
     return(value);
 }
 
-void linopt_imtools_opt_df (const gsl_vector *v, void *params, gsl_vector *df)
+
+
+
+void linopt_imtools_opt_df (
+    const gsl_vector *v,
+    void             *params,
+    gsl_vector       *df
+)
 {
     double epsilon = 1.0e-8;
     long i,j;
-    double v0,v1,v2;
+    double v1, v2;
     gsl_vector *vcp;
 
     vcp = gsl_vector_alloc (NBPARAM);
-    v0 = linopt_imtools_opt_f (v, params);
+    //v0 = linopt_imtools_opt_f (v, params);
 
     for(i=0; i<NBPARAM; i++)
     {
@@ -964,7 +1238,17 @@ void linopt_imtools_opt_df (const gsl_vector *v, void *params, gsl_vector *df)
     gsl_vector_free (vcp);
 }
 
-void linopt_imtools_opt_fdf (const gsl_vector *x, void *params, double *f, gsl_vector *df)
+
+
+
+
+
+void linopt_imtools_opt_fdf (
+    const gsl_vector *x,
+    void             *params,
+    double           *f,
+    gsl_vector       *df
+)
 {
     *f = linopt_imtools_opt_f(x, params);
     linopt_imtools_opt_df(x, params, df);
@@ -977,12 +1261,16 @@ void linopt_imtools_opt_fdf (const gsl_vector *x, void *params, double *f, gsl_v
 
 
 
-long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoeff_name, const char *ID_name)
+imageID linopt_imtools_image_construct(
+    const char *IDmodes_name,
+    const char *IDcoeff_name,
+    const char *ID_name
+)
 {
-    long ID;
-    long IDmodes;
-    long IDcoeff;
-    long ii, jj, kk;
+    imageID ID;
+    imageID IDmodes;
+    imageID IDcoeff;
+    long ii, kk;
     long xsize, ysize, zsize;
     long sizexy;
     uint8_t datatype;
@@ -1020,39 +1308,41 @@ long linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoef
                 data.image[ID].array.D[ii] += data.image[IDcoeff].array.D[kk] * data.image[IDmodes].array.D[kk*sizexy+ii];
     }
 
-
-    return(ID);
+    return ID;
 }
 
 
 
 
 // FLOAT only
-long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char *IDcoeff_name, const char *IDout_name)
+imageID linopt_imtools_image_construct_stream(
+    const char *IDmodes_name,
+    const char *IDcoeff_name,
+    const char *IDout_name
+)
 {
-    long IDout;
-    long IDmodes;
-    long IDcoeff;
-    long ii, jj, kk;
+    imageID IDout;
+    imageID IDmodes;
+    imageID IDcoeff;
+    long ii, kk;
     long xsize, ysize, zsize;
     long sizexy;
     int semval;
-    uint8_t datatype;
-    long long cnt = 0;
+    uint64_t cnt = 0;
     int RT_priority = 80; //any number from 0-99
     struct sched_param schedpar;
-	int NOSEM = 1; // ignore input semaphore, use counter
-   
-    
+    int NOSEM = 1; // ignore input semaphore, use counter
+
+
     schedpar.sched_priority = RT_priority;
-    #ifndef __MACH__
+#ifndef __MACH__
     sched_setscheduler(0, SCHED_FIFO, &schedpar); //other option is SCHED_RR, might be faster
-    #endif
- 
-  
-  
+#endif
+
+
+
     IDmodes = image_ID(IDmodes_name);
-    datatype = data.image[IDmodes].md[0].datatype;
+    //datatype = data.image[IDmodes].md[0].datatype;
 
     xsize = data.image[IDmodes].md[0].size[0];
     ysize = data.image[IDmodes].md[0].size[1];
@@ -1060,10 +1350,10 @@ long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char 
 
     sizexy = xsize*ysize;
 
-	if(variable_ID("NOSEM")!=-1)
-		NOSEM = 1;
-	else
-		NOSEM = 0;
+    if(variable_ID("NOSEM")!=-1)
+        NOSEM = 1;
+    else
+        NOSEM = 0;
 
     IDout = image_ID(IDout_name);
     IDcoeff = image_ID(IDcoeff_name);
@@ -1079,9 +1369,9 @@ long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char 
         else
             sem_wait(data.image[IDcoeff].semptr[0]);
 
-         for(ii=0; ii<sizexy; ii++)
+        for(ii=0; ii<sizexy; ii++)
             data.image[IDout].array.F[ii] = 0.0;
-                
+
         data.image[IDout].md[0].write = 1;
         for(kk=0; kk<zsize; kk++)
             for(ii=0; ii<sizexy; ii++)
@@ -1094,25 +1384,30 @@ long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char 
         data.image[IDout].md[0].write = 0;
     }
 
-    return(IDout);
+    return IDout;
 }
+
 
 
 
 // rotation matrix written as SVD_VTm
 
-long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, const char *IDcoeff_name)
+imageID linopt_compute_SVDdecomp(
+    const char *IDin_name,
+    const char *IDout_name,
+    const char *IDcoeff_name
+)
 {
-    long IDin;
-    long IDout;
-    long IDcoeff;
-    long ii1, jj1, k, ii;
+    imageID IDin;
+    imageID IDout;
+    imageID IDcoeff;
+    long k, ii;
     gsl_matrix *matrix_D; /* input */
     gsl_matrix *matrix_Dtra;
     gsl_matrix *matrix_DtraD;
     gsl_matrix *matrix_DtraD_evec;
-    gsl_matrix *matrix1;
-    gsl_matrix *matrix2;
+    //gsl_matrix *matrix1;
+    //gsl_matrix *matrix2;
     gsl_vector *matrix_DtraD_eval;
     gsl_eigen_symmv_workspace *w;
     gsl_matrix *matrix_save;
@@ -1122,18 +1417,12 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
     long n;
     uint32_t *arraysizetmp;
 
-    long IDmodes, IDeigenmodes;
-    long xsize_modes, ysize_modes, zsize_modes;
-    long IDeigenmodesResp;
     long kk, kk1;
-    long ID_RMmask;
-    int ret;
-    char command[200];
-    long ID_VTmatrix;
+    imageID ID_VTmatrix;
 
     arraysizetmp = (uint32_t*) malloc(sizeof(uint32_t)*3);
-  
-  
+
+
     printf("[SVD start]");
     fflush(stdout);
 
@@ -1141,8 +1430,8 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
     IDin = image_ID(IDin_name);
 
 
-    n = data.image[IDin].md[0].size[0]*data.image[IDin].md[0].size[1]; 
-    m = data.image[IDin].md[0].size[2]; 
+    n = data.image[IDin].md[0].size[0]*data.image[IDin].md[0].size[1];
+    m = data.image[IDin].md[0].size[2];
 
     matrix_DtraD_eval = gsl_vector_alloc (m);
     matrix_D = gsl_matrix_alloc (n,m);
@@ -1150,7 +1439,7 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
     matrix_DtraD = gsl_matrix_alloc (m,m);
     matrix_DtraD_evec = gsl_matrix_alloc (m,m);
 
-   
+
     /* write matrix_D */
     for(k=0; k<m; k++)
     {
@@ -1173,8 +1462,8 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
     gsl_eigen_symmv_sort (matrix_DtraD_eval, matrix_DtraD_evec, GSL_EIGEN_SORT_ABS_DESC);
 
     IDcoeff = create_2Dimage_ID(IDcoeff_name, m, 1);
-    
- 
+
+
     for(k=0; k<m; k++)
         data.image[IDcoeff].array.F[k] = gsl_vector_get(matrix_DtraD_eval,k);
 
@@ -1192,24 +1481,24 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
             data.image[ID_VTmatrix].array.F[k*m+ii] = (float) gsl_matrix_get( matrix_DtraD_evec, k, ii);
 
     /// Compute SVD decomp
-    
+
     IDout = create_3Dimage_ID(IDout_name, data.image[IDin].md[0].size[0], data.image[IDin].md[0].size[1], data.image[IDin].md[0].size[2]);
     for(kk=0; kk<m; kk++) /// eigen mode index
     {
-//        printf("eigenmode %4ld / %4ld  %g\n", kk, m, data.image[IDcoeff].array.F[kk]);
-//       fflush(stdout);
+        //        printf("eigenmode %4ld / %4ld  %g\n", kk, m, data.image[IDcoeff].array.F[kk]);
+        //       fflush(stdout);
         for(kk1=0; kk1<m; kk1++)
         {
             for(ii=0; ii<n; ii++)
                 data.image[IDout].array.F[kk*n + ii] += data.image[ID_VTmatrix].array.F[kk1*m+kk]*data.image[IDin].array.F[kk1*n + ii];
         }
     }
-    
- //   delete_image_ID("SVD_VTm");
 
- 
+    //   delete_image_ID("SVD_VTm");
+
+
     free(arraysizetmp);
-    
+
     gsl_matrix_free(matrix_D);
     gsl_matrix_free(matrix_Dtra);
     gsl_matrix_free(matrix_DtraD);
@@ -1219,7 +1508,7 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
     printf("[SVD done]\n");
     fflush(stdout);
 
-    return(IDout);
+    return IDout;
 }
 
 
@@ -1233,7 +1522,13 @@ long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, con
 //
 // This implementation computes the eigenvalue decomposition of transpose(M) x M, so it is efficient if n>>m, as transpose(M) x M is size m x m
 //
-int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_Cmatrix_name, double SVDeps, long MaxNBmodes, const char *ID_VTmatrix_name) /* works even for m != n */
+imageID linopt_compute_SVDpseudoInverse(
+    const char *ID_Rmatrix_name,
+    const char *ID_Cmatrix_name,
+    double      SVDeps,
+    long        MaxNBmodes,
+    const char *ID_VTmatrix_name
+) /* works even for m != n */
 {
     FILE *fp;
     char fname[200];
@@ -1253,24 +1548,24 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 
     long m;
     long n;
-    long ID_Rmatrix, ID_Cmatrix, ID_VTmatrix;
+    imageID ID_Rmatrix, ID_Cmatrix, ID_VTmatrix;
     uint32_t *arraysizetmp;
     double egvlim;
     long nbmodesremoved;
 
     uint8_t datatype;
 
-	long maxMode, MaxNBmodes1, mode;
-	
-	// Timing
-	int timing = 1; 
-	struct timespec t0, t1, t2, t3, t4, t5, t6, t7;
-    double t01d, t12d, t23d, t34d, t45d, t56d, t67d;
-	struct timespec tdiff;
+    long MaxNBmodes1, mode;
 
-	int testmode = 0;
-	long ID_AtA;
-	long ID;
+    // Timing
+    int timing = 1;
+    struct timespec t0, t1, t2, t3, t4, t5, t6, t7;
+    double t01d, t12d, t23d, t34d, t45d, t56d, t67d;
+    struct timespec tdiff;
+
+    int testmode = 0;
+    imageID ID_AtA;
+    imageID ID;
 
 
 
@@ -1490,10 +1785,12 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
         arraysizetmp[1] = m;
     }
 
-    if(datatype==_DATATYPE_FLOAT)
+    if(datatype==_DATATYPE_FLOAT) {
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name, data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_FLOAT, 0, 0);
-    else
+	}
+    else {
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name, data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_DOUBLE, 0, 0);
+	}
 
 
 	if(timing==1)
@@ -1567,8 +1864,7 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 		printf("  6-7	%12.3f ms\n", t67d*1000.0);
 	}
 
-
-    return(ID_Cmatrix);
+    return ID_Cmatrix;
 }
 
 
@@ -1576,133 +1872,138 @@ int linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name, const char *ID_
 
 
 
-// MODE : 
+// MODE :
 // 0 : polynomial
 //
-long linopt_compute_1Dfit(const char *fnamein, long NBpt, long MaxOrder, const char *fnameout, int MODE)
+imageID linopt_compute_1Dfit(
+    const char *fnamein,
+    long        NBpt,
+    long        MaxOrder,
+    const char *fnameout,
+    int         MODE
+)
 {
-	float *xarray;
-	float *valarray;
-	
-	FILE *fp;
-	long ii;
-	int ret;
-	
-	long IDin, IDin0;
-	long IDmask;
-	long IDmodes;
-	long NBmodes;
-	long m;
-	
-	float SVDeps = 0.0000001;
-	
-	long IDout, IDout0;
-	double val, vale, err;
-	
-	long NBiter = 100;
-	float gain = 1.0;
-	long iter;
-	
-	
-	xarray = (float*) malloc(sizeof(float)*NBpt);
-	valarray = (float*) malloc(sizeof(float)*NBpt);
-	
-	fp = fopen(fnamein, "r");
-	for(ii=0;ii<NBpt;ii++)
-		ret = fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);		
-	fclose(fp);
-	
-	IDin = create_2Dimage_ID("invect", NBpt, 1);
-	IDin0 = create_2Dimage_ID("invect0", NBpt, 1);
-	IDmask = create_2Dimage_ID("inmask", NBpt, 1);
-	
-	for(ii=0;ii<NBpt;ii++)
-		{
-//			printf("%18.16f  %+18.16f\n", xarray[ii], valarray[ii]);
-			data.image[IDin].array.F[ii] = valarray[ii];
-			data.image[IDin0].array.F[ii] = valarray[ii];
-			data.image[IDmask].array.F[ii] = 1.0;
-		}
-	
-	NBmodes = MaxOrder;
-	IDmodes = create_3Dimage_ID("fitmodes", NBpt, 1, NBmodes);
-	IDout = create_2Dimage_ID("outcoeff", NBmodes, 1);
+    float *xarray;
+    float *valarray;
 
-	switch (MODE) {
-		case 0 :
-			for(m=0; m<NBmodes; m++)
-			{
-				for(ii=0;ii<NBpt;ii++)
-				data.image[IDmodes].array.F[m*NBpt+ii] = pow(xarray[ii], 1.0*m);
-			}
-		break;
-		case 1 :
-			for(m=0; m<NBmodes; m++)
-			{
-				for(ii=0;ii<NBpt;ii++)
-					data.image[IDmodes].array.F[m*NBpt+ii] = cos(xarray[ii]*M_PI*m);
-			}
-		break;
-		default :
-			printf("ERROR: MODE = %d not supported\n", MODE);
-			exit(0);
-		break;
-	}
-	
-	list_image_ID();
-	
-	for(iter = 0; iter<NBiter; iter++)
-	{
-		linopt_imtools_image_fitModes("invect0", "fitmodes", "inmask", SVDeps, "outcoeffim0", 1);
-		IDout0 = image_ID("outcoeffim0");
-	
-	
-		for(m=0;m<NBmodes;m++)
-			data.image[IDout].array.F[m] += gain*data.image[IDout0].array.F[m];
-	
-		for(ii=0;ii<NBpt;ii++)
-		{	
-			err = 0.0;
-			val = 0.0;
-			for(m=0; m<NBmodes; m++)
-				val += data.image[IDout].array.F[m]*data.image[IDmodes].array.F[m*NBpt+ii];
-			data.image[IDin0].array.F[ii] = data.image[IDin].array.F[ii] - val;
-			err += data.image[IDin0].array.F[ii]*data.image[IDin0].array.F[ii];
-		}
-		err = sqrt(err/NBpt);
-		printf("ITERATION %4ld   residual = %20g   [gain = %20g]\n", iter, err, gain);
-		gain *= 0.95;
-	}
-	
-	
-	
-	
-	fp = fopen(fnameout, "w");
-	for(m=0;m<NBmodes;m++)
-		fprintf(fp, "%4ld %+.8g\n", m, data.image[IDout].array.F[m]);
-	fclose(fp);
-	
-	
-	fp = fopen("testout.txt", "w");
-	err = 0.0;
-	for(ii=0;ii<NBpt;ii++)
-		{
-			val = 0.0;
-			for(m=0; m<NBmodes; m++)
-				val += data.image[IDout].array.F[m]*data.image[IDmodes].array.F[m*NBpt+ii];
-			vale = valarray[ii] - val;
-			err += vale*vale;
-			fprintf(fp, "%05ld  %18.16f  %18.16f   %18.16f\n", ii, xarray[ii], valarray[ii], val);
-		}
-	fclose(fp);
-	err = sqrt(err/NBpt);
-	
-	printf("FIT error = %g m\n", err);
-	
-	free(xarray);
-	free(valarray);
-	
-	return(IDout);
+    FILE *fp;
+    long ii;
+
+    imageID IDin, IDin0;
+    imageID IDmask;
+    imageID IDmodes;
+    long NBmodes;
+    long m;
+
+    float SVDeps = 0.0000001;
+
+    long IDout, IDout0;
+    double val, vale, err;
+
+    long NBiter = 100;
+    float gain = 1.0;
+    long iter;
+
+
+    xarray = (float*) malloc(sizeof(float)*NBpt);
+    valarray = (float*) malloc(sizeof(float)*NBpt);
+
+    fp = fopen(fnamein, "r");
+    for(ii=0; ii<NBpt; ii++)
+        fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);
+    fclose(fp);
+
+    IDin = create_2Dimage_ID("invect", NBpt, 1);
+    IDin0 = create_2Dimage_ID("invect0", NBpt, 1);
+    IDmask = create_2Dimage_ID("inmask", NBpt, 1);
+
+    for(ii=0; ii<NBpt; ii++)
+    {
+        //			printf("%18.16f  %+18.16f\n", xarray[ii], valarray[ii]);
+        data.image[IDin].array.F[ii] = valarray[ii];
+        data.image[IDin0].array.F[ii] = valarray[ii];
+        data.image[IDmask].array.F[ii] = 1.0;
+    }
+
+    NBmodes = MaxOrder;
+    IDmodes = create_3Dimage_ID("fitmodes", NBpt, 1, NBmodes);
+    IDout = create_2Dimage_ID("outcoeff", NBmodes, 1);
+
+    switch (MODE) {
+    case 0 :
+        for(m=0; m<NBmodes; m++)
+        {
+            for(ii=0; ii<NBpt; ii++)
+                data.image[IDmodes].array.F[m*NBpt+ii] = pow(xarray[ii], 1.0*m);
+        }
+        break;
+    case 1 :
+        for(m=0; m<NBmodes; m++)
+        {
+            for(ii=0; ii<NBpt; ii++)
+                data.image[IDmodes].array.F[m*NBpt+ii] = cos(xarray[ii]*M_PI*m);
+        }
+        break;
+    default :
+        printf("ERROR: MODE = %d not supported\n", MODE);
+        exit(0);
+        break;
+    }
+
+    list_image_ID();
+
+    for(iter = 0; iter<NBiter; iter++)
+    {
+        linopt_imtools_image_fitModes("invect0", "fitmodes", "inmask", SVDeps, "outcoeffim0", 1);
+        IDout0 = image_ID("outcoeffim0");
+
+
+        for(m=0; m<NBmodes; m++)
+            data.image[IDout].array.F[m] += gain*data.image[IDout0].array.F[m];
+
+        for(ii=0; ii<NBpt; ii++)
+        {
+            err = 0.0;
+            val = 0.0;
+            for(m=0; m<NBmodes; m++)
+                val += data.image[IDout].array.F[m]*data.image[IDmodes].array.F[m*NBpt+ii];
+            data.image[IDin0].array.F[ii] = data.image[IDin].array.F[ii] - val;
+            err += data.image[IDin0].array.F[ii]*data.image[IDin0].array.F[ii];
+        }
+        err = sqrt(err/NBpt);
+        printf("ITERATION %4ld   residual = %20g   [gain = %20g]\n", iter, err, gain);
+        gain *= 0.95;
+    }
+
+
+
+
+    fp = fopen(fnameout, "w");
+    for(m=0; m<NBmodes; m++)
+        fprintf(fp, "%4ld %+.8g\n", m, data.image[IDout].array.F[m]);
+    fclose(fp);
+
+
+    fp = fopen("testout.txt", "w");
+    err = 0.0;
+    for(ii=0; ii<NBpt; ii++)
+    {
+        val = 0.0;
+        for(m=0; m<NBmodes; m++)
+            val += data.image[IDout].array.F[m]*data.image[IDmodes].array.F[m*NBpt+ii];
+        vale = valarray[ii] - val;
+        err += vale*vale;
+        fprintf(fp, "%05ld  %18.16f  %18.16f   %18.16f\n", ii, xarray[ii], valarray[ii], val);
+    }
+    fclose(fp);
+    err = sqrt(err/NBpt);
+
+    printf("FIT error = %g m\n", err);
+
+    free(xarray);
+    free(valarray);
+
+    return IDout;
 }
 
 
@@ -1713,19 +2014,26 @@ long linopt_compute_1Dfit(const char *fnamein, long NBpt, long MaxOrder, const c
 //
 // if reuse = 1, do not recompute pixind, pixmul, respm, recm
 //
-long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name, const char *IDmask_name, double SVDeps, const char *IDcoeff_name, int reuse)
+imageID linopt_imtools_image_fitModes(
+    const char *ID_name,
+    const char *IDmodes_name,
+    const char *IDmask_name,
+    double      SVDeps,
+    const char *IDcoeff_name,
+    int         reuse
+)
 {
-    long ID;
-    long IDmodes;
-    long IDmask;
+    //imageID ID;
+    //imageID IDmodes;
+    //imageID IDmask;
     long m, n;
 
-    long IDrecm;
-    long IDmvec;
-    long IDcoeff;
-    long ii, jj;
+    imageID IDrecm;
+    imageID IDmvec;
+    imageID IDcoeff;
+    //long ii, jj;
 
-	int use_magma = 0;
+    //int use_magma = 0;
 
 
     if((reuse==0)&&(fmInit==1))
@@ -1740,20 +2048,20 @@ long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name
 
     if((reuse==0)||(fmInit==0))
     {
-		
+
         linopt_imtools_mask_to_pixtable(IDmask_name, "_fm_pixind", "_fm_pixmul");
         linopt_imtools_Image_to_vec(IDmodes_name, "_fm_pixind", "_fm_pixmul", "_fm_respm");
-   
 
-	#ifdef HAVE_MAGMA
-		//printf(" -> Entering CUDACOMP_magma_compute_SVDpseudoinverse \n");
-		//fflush(stdout); 
-		CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat", 0, 0, 1.e-4, 1.e-7, 0);
-		//printf(" -> Exiting  CUDACOMP_magma_compute_SVDpseudoinverse \n");
-		//fflush(stdout);
-	#else
+
+#ifdef HAVE_MAGMA
+        //printf(" -> Entering CUDACOMP_magma_compute_SVDpseudoinverse \n");
+        //fflush(stdout);
+        CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat", 0, 0, 1.e-4, 1.e-7, 0);
+        //printf(" -> Exiting  CUDACOMP_magma_compute_SVDpseudoinverse \n");
+        //fflush(stdout);
+#else
         linopt_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat");
-   #endif
+#endif
     }
 
     //printf(" -> Entering linopt_imtools_Image_to_vec \n");
@@ -1772,11 +2080,11 @@ long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name
 
     IDcoeff = create_2Dimage_ID(IDcoeff_name, m, 1);
 
-	//printf(" -> Entering cblas_sgemv \n");
-	//fflush(stdout);
+    //printf(" -> Entering cblas_sgemv \n");
+    //fflush(stdout);
     cblas_sgemv (CblasRowMajor, CblasNoTrans, m, n, 1.0,  data.image[IDrecm].array.F, n, data.image[IDmvec].array.F, 1, 0.0, data.image[IDcoeff].array.F, 1);
-	//printf(" -> Exiting cblas_sgemv \n");
-	//fflush(stdout);
+    //printf(" -> Exiting cblas_sgemv \n");
+    //fflush(stdout);
 
     // for(ii=0;ii<m;ii++)
     //   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
@@ -1801,7 +2109,7 @@ long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name
 
     fmInit = 1;
 
-    return(IDcoeff);
+    return IDcoeff;
 }
 
 
@@ -1811,7 +2119,13 @@ long linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name
 // match a single image (ID_name) to a linear sum of images within IDref_name
 // result is a 1D array of coefficients in IDsol_name
 //
-double linopt_imtools_match_slow(const char *ID_name, const char *IDref_name, const char *IDmask_name, const char *IDsol_name, const char *IDout_name)
+double linopt_imtools_match_slow(
+    const char *ID_name,
+    const char *IDref_name,
+    const char *IDmask_name,
+    const char *IDsol_name,
+    const char *IDout_name
+)
 {
     long ID, IDref, IDmask, IDsol, IDout;
     long naxes[2];
@@ -1850,8 +2164,8 @@ double linopt_imtools_match_slow(const char *ID_name, const char *IDref_name, co
 
     //  printf("Input params : %s %s %s\n",ID_name,IDref_name,IDsol_name);
 
-	params = (double*) malloc(sizeof(double)*1);
-	params[0] = 0.0;
+    params = (double*) malloc(sizeof(double)*1);
+    params[0] = 0.0;
 
 
     ID = image_ID(ID_name);
@@ -2055,7 +2369,7 @@ double linopt_imtools_match_slow(const char *ID_name, const char *IDref_name, co
     polycoeff2 = NULL;
     free(tarray);
     tarray = NULL;
-    
+
     free (params);
 
     return((double) val);
@@ -2075,11 +2389,17 @@ double linopt_imtools_match_slow(const char *ID_name, const char *IDref_name, co
 // IDsol_name must contain initial solution
 //
 
-double linopt_imtools_match(const char *ID_name, const char *IDref_name, const char *IDmask_name, const char *IDsol_name, const char *IDout_name)
+double linopt_imtools_match(
+    const char *ID_name,
+    const char *IDref_name,
+    const char *IDmask_name,
+    const char *IDsol_name,
+    const char *IDout_name
+)
 {
     gsl_multifit_linear_workspace *work;
-    size_t n, p;
-    long ID, IDref, IDmask, IDsol, IDout;
+    uint32_t n, p;
+    imageID ID, IDref, IDmask, IDsol, IDout;
     long naxes[3];
     long i, j, k, ii;
     gsl_matrix *X;
@@ -2186,40 +2506,45 @@ double linopt_imtools_match(const char *ID_name, const char *IDref_name, const c
 // initial value of RM should be best guess
 // inmask = 0 over input that are known to produce no response
 //
-long linopt_compute_linRM_from_inout(const char *IDinput_name, const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name)
+imageID linopt_compute_linRM_from_inout(
+    const char *IDinput_name,
+    const char *IDinmask_name,
+    const char *IDoutput_name,
+    const char *IDRM_name
+)
 {
-	long IDRM;
-	long IDin;
-	long IDinmask;
-	long IDout;
-	long insize; // number of input
-	long xsizein, ysizein, xsizeout, ysizeout;
-	double fitval;
-	long kk, ii_in, jj_in, ii_out, jj_out;
-	double tot;
-	long IDtmp;
-	double tmpv1;
-	long iter;
-	long IDout1;
-	double alpha = 0.001;
-	
-	uint32_t *sizearray;
-	long IDpokeM; // poke matrix (input)
-	long IDoutM; // outputX
-	double SVDeps = 1.0e-4;
-	
-	long NBact, act;
-	long *inpixarray;
-	long spl; // sample measurement
-	long ii;
-	long ID_rm;
-	int autoMask_MODE = 0; // if 1, automatically measure input mask based on IDinput_name image
-	long IDpinv;
-	int use_magma = 0;
-	
-	int ngpu;
-	
-	ngpu = 0;
+    imageID IDRM;
+    imageID IDin;
+    imageID IDinmask;
+    imageID IDout;
+    long insize; // number of input
+    long xsizein, ysizein, xsizeout, ysizeout;
+    double fitval;
+    long kk, ii_in, jj_in, ii_out, jj_out;
+    //double tot;
+    imageID IDtmp;
+    double tmpv1;
+    //long iter;
+    imageID IDout1;
+    //double alpha = 0.001;
+
+    uint32_t *sizearray;
+    imageID IDpokeM; // poke matrix (input)
+    //imageID IDoutM; // outputX
+    double SVDeps = 1.0e-4;
+
+    long NBact, act;
+    long *inpixarray;
+    long spl; // sample measurement
+    long ii;
+    imageID ID_rm;
+    int autoMask_MODE = 0; // if 1, automatically measure input mask based on IDinput_name image
+    imageID IDpinv;
+    //int use_magma = 0;
+
+    //int ngpu;
+
+	//ngpu = 0;
 	setenv("CUDA_VISIBLE_DEVICES", "3,4", 1 );
 	
 	
@@ -2358,7 +2683,7 @@ long linopt_compute_linRM_from_inout(const char *IDinput_name, const char *IDinm
 	free(sizearray);
 	free(inpixarray);
 	
-	return(IDout);
+	return IDout;
 }
 
 
