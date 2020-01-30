@@ -1909,8 +1909,21 @@ imageID linopt_compute_1Dfit(
     valarray = (float*) malloc(sizeof(float)*NBpt);
 
     fp = fopen(fnamein, "r");
-    for(ii=0; ii<NBpt; ii++)
-        fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);
+    for(ii=0; ii<NBpt; ii++) {
+        int fscanfcnt = fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);
+
+        if(fscanfcnt == EOF) {
+            if(ferror(fp)) {
+                perror("fscanf");
+            } else {
+                fprintf(stderr, "Error: fscanf reached end of file, no matching characters, no matching failure\n");
+            }
+            exit(EXIT_FAILURE);
+        } else if(fscanfcnt != 2) {
+            fprintf(stderr, "Error: fscanf successfully matched and assigned %i input items, 2 expected\n", fscanfcnt);
+            exit(EXIT_FAILURE);
+        }
+    }
     fclose(fp);
 
     IDin = create_2Dimage_ID("invect", NBpt, 1);
