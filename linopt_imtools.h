@@ -1,9 +1,9 @@
 /**
  * @file    linopt_imtools.h
  * @brief   Function prototypes for linear algebra tools
- * 
+ *
  * CPU-based lineal algebra tools: decomposition, SVD etc...
- * 
+ *
  */
 
 
@@ -18,11 +18,11 @@
 /** @name 1. INITIALIZATION
  *  register CLI functions
  */
-///@{                                                                                         
+///@{
 /* =============================================================================================== */
 /* =============================================================================================== */
 
-void __attribute__ ((constructor)) libinit_linopt_imtools();
+void __attribute__((constructor)) libinit_linopt_imtools();
 
 ///@}
 
@@ -32,13 +32,14 @@ void __attribute__ ((constructor)) libinit_linopt_imtools();
 /* =============================================================================================== */
 /* =============================================================================================== */
 /** @name 2. CONVERSION
- *  
+ *
  */
-///@{                                                                                         
+///@{
 /* =============================================================================================== */
 /* =============================================================================================== */
 
-long linopt_imtools_mask_to_pixtable(const char *IDmask_name, const char *IDpixindex_name, const char *IDpixmult_name);
+long linopt_imtools_mask_to_pixtable(const char *IDmask_name,
+                                     const char *IDpixindex_name, const char *IDpixmult_name);
 
 
 imageID linopt_imtools_Image_to_vec(
@@ -68,7 +69,7 @@ imageID linopt_imtools_vec_to_2DImage(
 /** @name 3. CREATE MODES
  *  create mode basis
  */
-///@{                                                                                         
+///@{
 /* =============================================================================================== */
 /* =============================================================================================== */
 
@@ -109,9 +110,9 @@ long linopt_imtools_makeCPAmodes(
 /* =============================================================================================== */
 /* =============================================================================================== */
 /** @name 4. LINEAR DECOMPOSITION
- *  
+ *
  */
-///@{                                                                                         
+///@{
 /* =============================================================================================== */
 /* =============================================================================================== */
 
@@ -131,7 +132,8 @@ imageID linopt_imtools_image_construct_stream(
 );
 
 
-long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name, const char *IDcoeff_name);
+long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name,
+                              const char *IDcoeff_name);
 
 
 imageID linopt_compute_SVDpseudoInverse(
@@ -189,20 +191,21 @@ double linopt_imtools_match(
 /* =============================================================================================== */
 /* =============================================================================================== */
 /** @name 5. OPTIMIZATION
- *  
+ *
  */
-///@{                                                                                         
+///@{
 /* =============================================================================================== */
 /* =============================================================================================== */
 
 
 /**
  * @brief Solve for response matrix given a series of input and output
- * 
+ *
  *  initial value of RM should be best guess
  *  inmask = 0 over input that are known to produce no response
  */
-long linopt_compute_linRM_from_inout(const char *IDinput_name, const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name);
+long linopt_compute_linRM_from_inout(const char *IDinput_name,
+                                     const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name);
 
 
 ///@}
