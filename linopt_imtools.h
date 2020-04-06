@@ -23,7 +23,6 @@
 /* =============================================================================================== */
 
 void __attribute__ ((constructor)) libinit_linopt_imtools();
-int init_linopt_imtools();
 
 ///@}
 

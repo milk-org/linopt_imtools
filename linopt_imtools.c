@@ -8,6 +8,34 @@
  */
 
 
+
+/* ================================================================== */
+/* ================================================================== */
+/*            MODULE INFO                                             */
+/* ================================================================== */
+/* ================================================================== */
+
+// module default short name
+// all CLI calls to this module functions will be <shortname>.<funcname>
+// if set to "", then calls use <funcname>
+#define MODULE_SHORTNAME_DEFAULT ""
+
+// Module short description 
+#define MODULE_DESCRIPTION       "Image linear decomposition and optimization tools"
+
+// Application to which module belongs
+#define MODULE_APPLICATION       "milk"
+
+
+
+
+
+
+
+
+
+
+
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
@@ -61,9 +89,6 @@ static int clock_gettime(int clk_id, struct mach_timespec *t){
 #include "linopt_imtools/linopt_imtools.h"
 #include "cudacomp/cudacomp.h"
 
-//extern DATA data;
-
-static int INITSTATUS_linopt_imtools = 0;
 
 
 static long NBPARAM;
@@ -81,15 +106,23 @@ int fmInit = 0;
 
 
 
+/* ================================================================== */
+/* ================================================================== */
+/*            INITIALIZE LIBRARY                                      */
+/* ================================================================== */
+/* ================================================================== */
 
-// CLI commands
+// Module initialization macro in CLIcore.h
+// macro argument defines module name for bindings
 //
-// function CLI_checkarg used to check arguments
-// 1: float
-// 2: long
-// 3: string, not existing image
-// 4: existing image
-// 5: string 
+INIT_MODULE_LIB(linopt_imtools)
+
+
+/* ================================================================== */
+/* ================================================================== */
+/*            COMMAND LINE INTERFACE (CLI) FUNCTIONS                  */
+/* ================================================================== */
+/* ================================================================== */
 
 
 
@@ -461,22 +494,7 @@ errno_t linopt_compute_linRM_from_inout_cli()
 
 
 
-void __attribute__ ((constructor)) libinit_linopt_imtools()
-{
-	if ( INITSTATUS_linopt_imtools == 0 )
-	{
-		init_linopt_imtools();
-		RegisterModule(__FILE__, "milk", "Image linear decomposition and optimization tools");
-		INITSTATUS_linopt_imtools = 1;
-	}
-}
-	
-
-
-
-
-
-errno_t init_linopt_imtools()
+static errno_t init_module_CLI()
 {
 
     /* =============================================================================================== */
