@@ -2408,13 +2408,13 @@ double linopt_imtools_match_slow(
     alpha = (long double *) malloc(sizeof(long double) * n);
     if(alpha == NULL)
     {
-        printERROR(__FILE__, __func__, __LINE__, "Cannot allocate memory");
+		PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
     alphabest = (long double *) malloc(sizeof(long double) * n);
     if(alphabest == NULL)
     {
-        printERROR(__FILE__, __func__, __LINE__, "Cannot allocate memory");
+        PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
 
@@ -2423,20 +2423,20 @@ double linopt_imtools_match_slow(
     polycoeff1 = (long double *) malloc(sizeof(long double) * n);
     if(polycoeff1 == NULL)
     {
-        printERROR(__FILE__, __func__, __LINE__, "Cannot allocate memory");
+        PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
     polycoeff2 = (long double *) malloc(sizeof(long double) * n * n);
     if(polycoeff2 == NULL)
     {
-        printERROR(__FILE__, __func__, __LINE__, "Cannot allocate memory");
+        PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
 
     tarray = (long double *) malloc(sizeof(long double) * n);
     if(tarray == NULL)
     {
-        printERROR(__FILE__, __func__, __LINE__, "Cannot allocate memory");
+        PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
 
@@ -2688,19 +2688,19 @@ double linopt_imtools_match(
     // some verification
     if(IDref == -1)
     {
-        printERROR(__FILE__, __func__, __LINE__, "input ref missing\n");
+        PRINT_ERROR("input ref missing\n");
     }
     if(IDmask == -1)
     {
-        printERROR(__FILE__, __func__, __LINE__, "input mask missing\n");
+        PRINT_ERROR("input mask missing\n");
     }
     if(data.image[IDmask].md[0].size[0] != data.image[ID].md[0].size[0])
     {
-        printERROR(__FILE__, __func__, __LINE__, "mask size[0] is wrong\n");
+        PRINT_ERROR("mask size[0] is wrong\n");
     }
     if(data.image[IDmask].md[0].size[1] != data.image[ID].md[0].size[1])
     {
-        printERROR(__FILE__, __func__, __LINE__, "mask size[1] is wrong\n");
+        PRINT_ERROR("mask size[1] is wrong\n");
     }
 
 
