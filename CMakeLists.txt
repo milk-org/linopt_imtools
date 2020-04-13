@@ -3,10 +3,10 @@ set(LIBNAME "milklinoptimtools")
 
 
 set(SOURCEFILES
-	inopt_imtools.c)
+	linopt_imtools.c)
 
 set(INCLUDEFILES
-	inopt_imtools.h)
+	linopt_imtools.h)
 
 
 # DEFAULT SETTINGS 
