@@ -2013,25 +2013,25 @@ imageID linopt_compute_SVDpseudoInverse(
 
     if(timing == 1)
     {
-        tdiff = info_time_diff(t0, t1);
+        tdiff = timespec_diff(t0, t1);
         t01d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t1, t2);
+        tdiff = timespec_diff(t1, t2);
         t12d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t2, t3);
+        tdiff = timespec_diff(t2, t3);
         t23d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t3, t4);
+        tdiff = timespec_diff(t3, t4);
         t34d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t4, t5);
+        tdiff = timespec_diff(t4, t5);
         t45d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t5, t6);
+        tdiff = timespec_diff(t5, t6);
         t56d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
-        tdiff = info_time_diff(t6, t7);
+        tdiff = timespec_diff(t6, t7);
         t67d = 1.0 * tdiff.tv_sec + 1.0e-9 * tdiff.tv_nsec;
 
         printf("Timing info: \n");
