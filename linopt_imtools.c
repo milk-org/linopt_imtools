@@ -18,7 +18,7 @@
 // module default short name
 // all CLI calls to this module functions will be <shortname>.<funcname>
 // if set to "", then calls use <funcname>
-#define MODULE_SHORTNAME_DEFAULT ""
+#define MODULE_SHORTNAME_DEFAULT "lintools"
 
 // Module short description
 #define MODULE_DESCRIPTION       "Image linear decomposition and optimization tools"
@@ -82,7 +82,6 @@ static int clock_gettime(int clk_id, struct mach_timespec *t)
 
 
 #include "CommandLineInterface/CLIcore.h"
-#include "00CORE/00CORE.h"
 #include "COREMOD_tools/COREMOD_tools.h"
 #include "COREMOD_memory/COREMOD_memory.h"
 #include "COREMOD_arith/COREMOD_arith.h"
