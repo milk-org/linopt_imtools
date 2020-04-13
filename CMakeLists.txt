@@ -1,9 +1,29 @@
-project(lib_linopt_imtools_project)
+p# library name
+set(LIBNAME "milklinoptimtools")
+
+
+set(SOURCEFILES
+	inopt_imtools.c)
+
+set(INCLUDEFILES
+	inopt_imtools.h)
+
+
+# DEFAULT SETTINGS 
+# Do not change unless needed
+# =====================================================================
+
+project(lib_${LIBNAME}_project)
 
 include_directories ("${PROJECT_SOURCE_DIR}/src")
 include_directories ("${PROJECT_SOURCE_DIR}/..")
-add_library(linopt_imtools SHARED linopt_imtools.c)
 
-install(TARGETS linopt_imtools DESTINATION lib)
-install(FILES linopt_imtools.h DESTINATION include)
+
+# Library can be compiled from multiple source files
+# Convention: the main souce file is named <libname>.c
+# 
+add_library(${LIBNAME} SHARED ${SOURCEFILES})
+
+install(TARGETS ${LIBNAME} DESTINATION lib)
+install(FILES ${INCLUDEFILES} DESTINATION include)
 
