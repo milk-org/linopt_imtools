@@ -1,4 +1,4 @@
-p# library name
+# library name
 set(LIBNAME "milklinoptimtools")
 
 
