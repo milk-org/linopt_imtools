@@ -1,12 +1,13 @@
 # library name
 set(LIBNAME "milklinoptimtools")
+set(SRCNAME "linopt_imtools")
 
 
 set(SOURCEFILES
-	linopt_imtools.c)
+	${SRCNAME}.c)
 
 set(INCLUDEFILES
-	linopt_imtools.h)
+	${SRCNAME}.h)
 
 
 # DEFAULT SETTINGS 
@@ -25,5 +26,5 @@ include_directories ("${PROJECT_SOURCE_DIR}/..")
 add_library(${LIBNAME} SHARED ${SOURCEFILES})
 
 install(TARGETS ${LIBNAME} DESTINATION lib)
-install(FILES ${INCLUDEFILES} DESTINATION include)
+install(FILES ${INCLUDEFILES} DESTINATION include/${SRCNAME})
 
