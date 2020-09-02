@@ -89,6 +89,8 @@ static int clock_gettime(int clk_id, struct mach_timespec *t)
 #include "linopt_imtools/linopt_imtools.h"
 #include "cudacomp/cudacomp.h"
 
+#include "CommandLineInterface/timeutils.h"
+
 
 
 static long NBPARAM;
