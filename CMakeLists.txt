@@ -2,6 +2,8 @@
 set(LIBNAME "milklinoptimtools")
 set(SRCNAME "linopt_imtools")
 
+message("")
+message(" SRCNAME = ${SRCNAME} -> LIBNAME = ${LIBNAME}")
 
 set(SOURCEFILES
 	${SRCNAME}.c)
