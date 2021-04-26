@@ -732,9 +732,9 @@ long linopt_imtools_mask_to_pixtable(const char *IDmask_name,
     sizearray[0] = NBpix;
     sizearray[1] = 1;
     IDpixindex = create_image_ID(IDpixindex_name, 2, sizearray, _DATATYPE_INT64, 0,
-                                 0);
+                                 0, 0);
     IDpixmult = create_image_ID(IDpixmult_name, 2, sizearray, _DATATYPE_FLOAT, 0,
-                                0);
+                                0, 0);
 
     k = 0;
     for(ii = 0; ii < size; ii++)
@@ -1562,7 +1562,7 @@ imageID linopt_compute_SVDdecomp(
         delete_image_ID("SVD_VTm");
     }
     ID_VTmatrix = create_image_ID("SVD_VTm", 2, arraysizetmp, _DATATYPE_FLOAT, 0,
-                                  0);
+                                  0, 0);
     for(ii = 0; ii < m; ii++) // modes
         for(k = 0; k < m; k++) // modes
         {
@@ -1834,7 +1834,7 @@ imageID linopt_compute_SVDpseudoInverse(
     if(datatype == _DATATYPE_FLOAT)
     {
         ID_VTmatrix = create_image_ID(ID_VTmatrix_name, 2, arraysizetmp,
-                                      _DATATYPE_FLOAT, 0, 0);
+                                      _DATATYPE_FLOAT, 0, 0, 0);
         for(ii = 0; ii < m; ii++) // modes
             for(k = 0; k < m; k++) // modes
             {
@@ -1845,7 +1845,7 @@ imageID linopt_compute_SVDpseudoInverse(
     else
     {
         ID_VTmatrix = create_image_ID(ID_VTmatrix_name, 2, arraysizetmp,
-                                      _DATATYPE_DOUBLE, 0, 0);
+                                      _DATATYPE_DOUBLE, 0, 0, 0);
         for(ii = 0; ii < m; ii++) // modes
             for(k = 0; k < m; k++) // modes
             {
@@ -1933,12 +1933,12 @@ imageID linopt_compute_SVDpseudoInverse(
     if(datatype == _DATATYPE_FLOAT)
     {
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name,
-                                     data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_FLOAT, 0, 0);
+                                     data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_FLOAT, 0, 0, 0);
     }
     else
     {
         ID_Cmatrix = create_image_ID(ID_Cmatrix_name,
-                                     data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_DOUBLE, 0, 0);
+                                     data.image[ID_Rmatrix].md[0].naxis, arraysizetmp, _DATATYPE_DOUBLE, 0, 0, 0);
     }
 
 
