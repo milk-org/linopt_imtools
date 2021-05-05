@@ -729,6 +729,11 @@ long linopt_imtools_mask_to_pixtable(const char *IDmask_name,
         }
 
     sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
+    if(sizearray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
     sizearray[0] = NBpix;
     sizearray[1] = 1;
     IDpixindex = create_image_ID(IDpixindex_name, 2, sizearray, _DATATYPE_INT64, 0,
@@ -1047,9 +1052,22 @@ long linopt_imtools_makeCPAmodes(
     fflush(stdout);
 
     CPAxarray = (float *) malloc(sizeof(float) * NBfrequ);
-    CPAyarray = (float *) malloc(sizeof(float) * NBfrequ);
-    CPArarray = (float *) malloc(sizeof(float) * NBfrequ);
+    if(CPAxarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
 
+    CPAyarray = (float *) malloc(sizeof(float) * NBfrequ);
+    if(CPAyarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
+    CPArarray = (float *) malloc(sizeof(float) * NBfrequ);
+    if(CPArarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
 
     NBfrequ = 0;
     //ydist = 2.0*deltaCPA;
@@ -1074,6 +1092,7 @@ long linopt_imtools_makeCPAmodes(
             }
         }
     }
+
 
     //  for(k1=0;k1<NBfrequ;k1++)
     //printf("%ld %f %f %f\n", k1, CPAxarray[k1], CPAyarray[k1], CPArarray[k1]);
@@ -1499,6 +1518,10 @@ imageID linopt_compute_SVDdecomp(
     imageID ID_VTmatrix;
 
     arraysizetmp = (uint32_t *) malloc(sizeof(uint32_t) * 3);
+    if(arraysizetmp == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
 
 
     printf("[SVD start]");
@@ -1674,6 +1697,10 @@ imageID linopt_compute_SVDpseudoInverse(
 
 
     arraysizetmp = (uint32_t *) malloc(sizeof(uint32_t) * 3);
+    if(arraysizetmp == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
 
 
     ID_Rmatrix = image_ID(ID_Rmatrix_name);
@@ -2066,7 +2093,17 @@ imageID linopt_compute_1Dfit(
 
 
     xarray = (float *) malloc(sizeof(float) * NBpt);
+    if(xarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
     valarray = (float *) malloc(sizeof(float) * NBpt);
+    if(valarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
 
     fp = fopen(fnamein, "r");
     for(ii = 0; ii < NBpt; ii++)
@@ -2114,28 +2151,28 @@ imageID linopt_compute_1Dfit(
 
     switch(MODE)
     {
-        case 0 :
-            for(m = 0; m < NBmodes; m++)
+    case 0 :
+        for(m = 0; m < NBmodes; m++)
+        {
+            for(ii = 0; ii < NBpt; ii++)
             {
-                for(ii = 0; ii < NBpt; ii++)
-                {
-                    data.image[IDmodes].array.F[m * NBpt + ii] = pow(xarray[ii], 1.0 * m);
-                }
+                data.image[IDmodes].array.F[m * NBpt + ii] = pow(xarray[ii], 1.0 * m);
             }
-            break;
-        case 1 :
-            for(m = 0; m < NBmodes; m++)
+        }
+        break;
+    case 1 :
+        for(m = 0; m < NBmodes; m++)
+        {
+            for(ii = 0; ii < NBpt; ii++)
             {
-                for(ii = 0; ii < NBpt; ii++)
-                {
-                    data.image[IDmodes].array.F[m * NBpt + ii] = cos(xarray[ii] * M_PI * m);
-                }
+                data.image[IDmodes].array.F[m * NBpt + ii] = cos(xarray[ii] * M_PI * m);
             }
-            break;
-        default :
-            printf("ERROR: MODE = %d not supported\n", MODE);
-            exit(0);
-            break;
+        }
+        break;
+    default :
+        printf("ERROR: MODE = %d not supported\n", MODE);
+        exit(0);
+        break;
     }
 
     list_image_ID();
@@ -2370,6 +2407,11 @@ double linopt_imtools_match_slow(
     //  printf("Input params : %s %s %s\n",ID_name,IDref_name,IDsol_name);
 
     params = (double *) malloc(sizeof(double) * 1);
+    if(params == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
     params[0] = 0.0;
 
 
@@ -2387,7 +2429,7 @@ double linopt_imtools_match_slow(
     alpha = (long double *) malloc(sizeof(long double) * n);
     if(alpha == NULL)
     {
-		PRINT_ERROR("Cannot allocate memory");
+        PRINT_ERROR("Cannot allocate memory");
         exit(0);
     }
     alphabest = (long double *) malloc(sizeof(long double) * n);
@@ -2854,6 +2896,11 @@ imageID linopt_compute_linRM_from_inout(
     printf("NBact = %ld\n", NBact);
 
     inpixarray = (long *) malloc(sizeof(long) * NBact);
+    if(inpixarray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
+
     act = 0;
     for(ii = 0; ii < xsizein * ysizein; ii++)
         if(data.image[IDinmask].array.F[ii] > 0.5)
@@ -2865,6 +2912,10 @@ imageID linopt_compute_linRM_from_inout(
 
 
     sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
+    if(sizearray == NULL) {
+        PRINT_ERROR("malloc returns NULL pointer");
+        abort();
+    }
 
     sizearray[0] = NBact;
     sizearray[1] = insize; // number of measurements
