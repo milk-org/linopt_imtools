@@ -972,7 +972,7 @@ imageID linopt_imtools_makeCosRadModes(
         }
 
 
-    delete_image_ID("linopt_tmpr");
+    delete_image_ID("linopt_tmpr", DELETE_IMAGE_ERRMODE_WARNING);
 
     return ID;
 }
@@ -1151,7 +1151,7 @@ long linopt_imtools_makeCPAmodes(
         fclose(fp);
     }
 
-    delete_image_ID("cpamodesfreq");
+    delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_WARNING);
     IDfreq = create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1);
 
 
@@ -1201,9 +1201,9 @@ long linopt_imtools_makeCPAmodes(
     free(CPArarray);
 
 
-    delete_image_ID("cpa_tmpx");
-    delete_image_ID("cpa_tmpy");
-    delete_image_ID("cpa_tmpr");
+    delete_image_ID("cpa_tmpx",DELETE_IMAGE_ERRMODE_WARNING);
+    delete_image_ID("cpa_tmpy", DELETE_IMAGE_ERRMODE_WARNING);
+    delete_image_ID("cpa_tmpr", DELETE_IMAGE_ERRMODE_WARNING);
 
     // printf("done \n");
     //fflush(stdout);
@@ -1582,7 +1582,7 @@ imageID linopt_compute_SVDdecomp(
     ID_VTmatrix = image_ID("SVD_VTm");
     if(ID_VTmatrix != -1)
     {
-        delete_image_ID("SVD_VTm");
+        delete_image_ID("SVD_VTm", DELETE_IMAGE_ERRMODE_WARNING);
     }
     ID_VTmatrix = create_image_ID("SVD_VTm", 2, arraysizetmp, _DATATYPE_FLOAT, 0,
                                   0, 0);
@@ -2275,11 +2275,11 @@ imageID linopt_imtools_image_fitModes(
 
     if((reuse == 0) && (fmInit == 1))
     {
-        delete_image_ID("_fm_pixind");
-        delete_image_ID("_fm_pixmul");
-        delete_image_ID("_fm_respm");
-        delete_image_ID("_fm_recm");
-        delete_image_ID("_fm_vtmat");
+        delete_image_ID("_fm_pixind", DELETE_IMAGE_ERRMODE_WARNING);
+        delete_image_ID("_fm_pixmul", DELETE_IMAGE_ERRMODE_WARNING);
+        delete_image_ID("_fm_respm", DELETE_IMAGE_ERRMODE_WARNING);
+        delete_image_ID("_fm_recm", DELETE_IMAGE_ERRMODE_WARNING);
+        delete_image_ID("_fm_vtmat", DELETE_IMAGE_ERRMODE_WARNING);
     }
 
 
@@ -2331,7 +2331,7 @@ imageID linopt_imtools_image_fitModes(
     //   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
 
 
-    delete_image_ID("_fm_measvec");
+    delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING);
 
 
     if(0) // testing
@@ -3024,7 +3024,7 @@ imageID linopt_compute_linRM_from_inout(
     printf("\n");
     printf("  %5ld    fitval = %.20f\n", kk, sqrt(fitval / xsizeout / ysizeout));
 
-    delete_image_ID("_tmplicli");
+    delete_image_ID("_tmplicli", DELETE_IMAGE_ERRMODE_WARNING);
 
     free(sizearray);
     free(inpixarray);
