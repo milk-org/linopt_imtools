@@ -6,10 +6,26 @@ message("")
 message(" SRCNAME = ${SRCNAME} -> LIBNAME = ${LIBNAME}")
 
 set(SOURCEFILES
-	${SRCNAME}.c)
+	compute_SVDpseudoInverse.c
+	image_construct.c
+	image_fitModes.c
+	image_to_vec.c
+	mask_to_pixtable.c
+)
 
 set(INCLUDEFILES
-	${SRCNAME}.h)
+	compute_SVDpseudoInverse.h
+	image_construct.h
+	image_fitModes.h
+	image_to_vec.h
+	mask_to_pixtable.h
+)
+
+
+set(LINKLIBS
+	CLIcore
+)
+
 
 
 # DEFAULT SETTINGS
@@ -25,9 +41,9 @@ include_directories ("${PROJECT_SOURCE_DIR}/..")
 # Library can be compiled from multiple source files
 # Convention: the main souce file is named <libname>.c
 #
-add_library(${LIBNAME} SHARED ${SOURCEFILES})
+add_library(${LIBNAME} SHARED ${SRCNAME}.c ${SOURCEFILES})
 target_include_directories(${LIBNAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_link_libraries(${LIBNAME} PRIVATE CLIcore)
+target_link_libraries(${LIBNAME} PRIVATE ${LINKLIBS})
 
 if(USE_CUDA)
 find_package(CUDA 9.0 REQUIRED)
@@ -58,4 +74,5 @@ endif(USE_MAGMA)
 
 
 install(TARGETS ${LIBNAME} DESTINATION lib)
+install(FILES ${SRCNAME}.h ${INCLUDEFILES} DESTINATION include/${SRCNAME})
 install(FILES ${INCLUDEFILES} DESTINATION include/${SRCNAME})

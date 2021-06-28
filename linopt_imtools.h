@@ -118,10 +118,11 @@ long linopt_imtools_makeCPAmodes(
 
 
 
-imageID linopt_imtools_image_construct(
+errno_t linopt_imtools_image_construct(
     const char *IDmodes_name,
     const char *IDcoeff_name,
-    const char *ID_name
+    const char *ID_name,
+    imageID *outID
 );
 
 
@@ -145,22 +146,24 @@ imageID linopt_compute_SVDpseudoInverse(
 );
 
 
-imageID linopt_compute_1Dfit(
+errno_t linopt_compute_1Dfit(
     const char *fnamein,
     long        NBpt,
     long        MaxOrder,
     const char *fnameout,
-    int         MODE
+    int         MODE,
+    imageID    *outID
 );
 
 
-imageID linopt_imtools_image_fitModes(
+errno_t linopt_imtools_image_fitModes(
     const char *ID_name,
     const char *IDmodes_name,
     const char *IDmask_name,
     double      SVDeps,
     const char *IDcoeff_name,
-    int         reuse
+    int         reuse,
+    imageID    *outIDcoeff
 );
 
 
