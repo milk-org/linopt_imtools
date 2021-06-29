@@ -78,12 +78,13 @@ static errno_t help_function()
 //
 // This implementation computes the eigenvalue decomposition of transpose(M) x M, so it is efficient if n>>m, as transpose(M) x M is size m x m
 //
-imageID linopt_compute_SVDpseudoInverse(
+errno_t linopt_compute_SVDpseudoInverse(
     const char *ID_Rmatrix_name,
     const char *ID_Cmatrix_name,
     double      SVDeps,
     long        MaxNBmodes,
-    const char *ID_VTmatrix_name
+    const char *ID_VTmatrix_name,
+    imageID    *outID
 ) /* works even for m != n */
 {
     DEBUG_TRACE_FSTART();
@@ -497,8 +498,13 @@ imageID linopt_compute_SVDpseudoInverse(
         printf("  6-7	%12.3f ms\n", t67d * 1000.0);
     }
 
+    if(outID != NULL)
+    {
+        *outID = ID_Cmatrix;
+    }
+
     DEBUG_TRACE_FEXIT();
-    return ID_Cmatrix;
+    return RETURN_SUCCESS;
 }
 
 
@@ -517,7 +523,8 @@ static errno_t compute_function()
             outimname,
             *SVD_epsilon,
             *max_NBmodes,
-            outimVTmatname
+            outimVTmatname,
+            NULL
         );
     }
     else
@@ -531,7 +538,7 @@ static errno_t compute_function()
             *max_NBmodes,
             outimVTmatname,
             0, 0, 1.e-4, 1.e-7,
-            1, 64);
+            1, 64, NULL);
 #endif
     }
 

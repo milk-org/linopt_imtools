@@ -6,19 +6,27 @@ message("")
 message(" SRCNAME = ${SRCNAME} -> LIBNAME = ${LIBNAME}")
 
 set(SOURCEFILES
+	compute_SVDdecomp.c
 	compute_SVDpseudoInverse.c
 	image_construct.c
 	image_fitModes.c
 	image_to_vec.c
+	makeCosRadModes.c
+	makeCPAmodes.c
 	mask_to_pixtable.c
+	vec_to_2Dimage.c
 )
 
 set(INCLUDEFILES
+	compute_SVDdecomp.h
 	compute_SVDpseudoInverse.h
 	image_construct.h
 	image_fitModes.h
 	image_to_vec.h
+	makeCosRadModes.h
+	makeCPAmodes.h
 	mask_to_pixtable.h
+	vec_to_2Dimage.h
 )
 
 

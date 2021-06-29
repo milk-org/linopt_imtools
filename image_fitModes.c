@@ -112,52 +112,59 @@ errno_t linopt_imtools_image_fitModes(
     if((reuse == 0) || (fmInit == 0))
     {
 
-        linopt_imtools_mask_to_pixtable(IDmask_name, "_fm_pixind", "_fm_pixmul");
-        linopt_imtools_image_to_vec(IDmodes_name, "_fm_pixind", "_fm_pixmul",
-                                    "_fm_respm");
+        FUNC_CHECK_RETURN(
+            linopt_imtools_mask_to_pixtable(IDmask_name, "_fm_pixind", "_fm_pixmul", NULL)
+        );
+
+        FUNC_CHECK_RETURN(
+            linopt_imtools_image_to_vec(IDmodes_name,
+                                        "_fm_pixind",
+                                        "_fm_pixmul",
+                                        "_fm_respm",
+                                        NULL)
+        );
 
 
 
 #ifdef HAVE_MAGMA
-        printf(" -> Entering CUDACOMP_magma_compute_SVDpseudoinverse \n");
-        fflush(stdout);
-        CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000,
-                                                "_fm_vtmat", 0, 0, 1.e-4, 1.e-7,
-                                                1, 64);
-        printf(" -> Exiting  CUDACOMP_magma_compute_SVDpseudoinverse \n");
-        fflush(stdout);
+        FUNC_CHECK_RETURN(
+            CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000,
+                    "_fm_vtmat", 0, 0, 1.e-4, 1.e-7,
+                    1, 64, NULL)
+        );
+
 #else
-        linopt_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000,
-                                        "_fm_vtmat");
+        FUNC_CHECK_RETURN(
+            linopt_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000,
+                                            "_fm_vtmat", NULL)
+        );
 #endif
     }
 
-    //printf(" -> Entering linopt_imtools_image_to_vec \n");
-    //fflush(stdout);
-    linopt_imtools_image_to_vec(ID_name, "_fm_pixind", "_fm_pixmul", "_fm_measvec");
-    //printf(" -> Exiting linopt_imtools_image_to_vec \n");
-    //fflush(stdout);
+    FUNC_CHECK_RETURN(
+        linopt_imtools_image_to_vec(ID_name, "_fm_pixind", "_fm_pixmul", "_fm_measvec", NULL)
+    );
 
     IDmvec = image_ID("_fm_measvec");
     IDrecm = image_ID("_fm_recm");
     uint32_t m = data.image[IDrecm].md[0].size[1];
     uint32_t n = data.image[IDrecm].md[0].size[0];
-    // printf("m=%ld n=%ld\n", m, n);
-    // m = number modes
-    // n = number WFS elem
+// printf("m=%ld n=%ld\n", m, n);
+// m = number modes
+// n = number WFS elem
 
     FUNC_CHECK_RETURN(
         create_2Dimage_ID(IDcoeff_name, m, 1, &IDcoeff));
 
-    //printf(" -> Entering cblas_sgemv \n");
-    //fflush(stdout);
+//printf(" -> Entering cblas_sgemv \n");
+//fflush(stdout);
     cblas_sgemv(CblasRowMajor, CblasNoTrans, m, n, 1.0,  data.image[IDrecm].array.F,
                 n, data.image[IDmvec].array.F, 1, 0.0, data.image[IDcoeff].array.F, 1);
-    //printf(" -> Exiting cblas_sgemv \n");
-    //fflush(stdout);
+//printf(" -> Exiting cblas_sgemv \n");
+//fflush(stdout);
 
-    // for(ii=0;ii<m;ii++)
-    //   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
+// for(ii=0;ii<m;ii++)
+//   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
 
 
     delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING);

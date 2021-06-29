@@ -55,15 +55,17 @@ static errno_t help_function()
 // STEP 1: create index and mult tables (linopt_imtools_mask_to_pixtable)
 //
 
-long linopt_imtools_mask_to_pixtable(
+errno_t linopt_imtools_mask_to_pixtable(
     const char *IDmask_name,
     const char *IDpixindex_name,
-    const char *IDpixmult_name
+    const char *IDpixmult_name,
+    long *outNBpix
 )
 {
+    DEBUG_TRACE_FSTART();
+
     long NBpix;
-    long ii;
-    long ID;
+    imageID ID;
     long size;
     float eps = 1.0e-8;
     long k;
@@ -73,10 +75,8 @@ long linopt_imtools_mask_to_pixtable(
     ID = image_ID(IDmask_name);
     size = data.image[ID].md[0].nelement;
 
-
-
     NBpix = 0;
-    for(ii = 0; ii < size; ii++)
+    for(long ii = 0; ii < size; ii++)
         if(data.image[ID].array.F[ii] > eps)
         {
             NBpix++;
@@ -87,17 +87,22 @@ long linopt_imtools_mask_to_pixtable(
         PRINT_ERROR("malloc returns NULL pointer");
         abort();
     }
-
     sizearray[0] = NBpix;
     sizearray[1] = 1;
-    create_image_ID(IDpixindex_name, 2, sizearray, _DATATYPE_INT64, 0,
-                    0, 0, &IDpixindex);
 
-    create_image_ID(IDpixmult_name, 2, sizearray, _DATATYPE_FLOAT, 0,
-                    0, 0, &IDpixmult);
+    FUNC_CHECK_RETURN(
+        create_image_ID(IDpixindex_name, 2, sizearray, _DATATYPE_INT64, 0,
+                        0, 0, &IDpixindex)
+    );
+
+    FUNC_CHECK_RETURN(
+        create_image_ID(IDpixmult_name, 2, sizearray, _DATATYPE_FLOAT, 0,
+                        0, 0, &IDpixmult)
+    );
+    free(sizearray);
 
     k = 0;
-    for(ii = 0; ii < size; ii++)
+    for(long ii = 0; ii < size; ii++)
         if(data.image[ID].array.F[ii] > eps)
         {
             data.image[IDpixindex].array.SI64[k] = ii;
@@ -107,7 +112,13 @@ long linopt_imtools_mask_to_pixtable(
 
     //  printf("%ld active pixels in mask %s\n", NBpix, IDmask_name);
 
-    return(NBpix);
+    if(outNBpix != NULL)
+    {
+        *outNBpix = NBpix;
+    }
+
+    DEBUG_TRACE_FEXIT();
+    return RETURN_SUCCESS;
 }
 
 
@@ -124,7 +135,8 @@ static errno_t compute_function()
     linopt_imtools_mask_to_pixtable(
         inimname,
         outpixiimname,
-        outpixmimname
+        outpixmimname,
+        NULL
     );
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_END

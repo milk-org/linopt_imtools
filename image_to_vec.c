@@ -54,11 +54,12 @@ static errno_t help_function()
 //
 //
 //
-imageID linopt_imtools_image_to_vec(
+errno_t linopt_imtools_image_to_vec(
     const char *ID_name,
     const char *IDpixindex_name,
     const char *IDpixmult_name,
-    const char *IDvec_name
+    const char *IDvec_name,
+    imageID    *outID
 )
 {
     DEBUG_TRACE_FSTART();
@@ -125,8 +126,13 @@ imageID linopt_imtools_image_to_vec(
 
     }
 
+    if(outID != NULL)
+    {
+        *outID = IDvec;
+    }
+
     DEBUG_TRACE_FEXIT();
-    return ID;
+    return RETURN_SUCCESS;
 }
 
 
@@ -141,7 +147,8 @@ static errno_t compute_function()
         inimname,
         inpixiname,
         inpixmultname,
-        outvecname
+        outvecname,
+        NULL
     );
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_END

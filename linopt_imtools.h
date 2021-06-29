@@ -13,51 +13,25 @@
 
 
 
-/* =============================================================================================== */
-/* =============================================================================================== */
-/** @name 1. INITIALIZATION
- *  register CLI functions
- */
-///@{
-/* =============================================================================================== */
-/* =============================================================================================== */
+#include "compute_SVDdecomp.h"
+#include "compute_SVDpseudoInverse.h"
+#include "image_construct.h"
+#include "image_to_vec.h"
+#include "image_fitModes.h"
+#include "makeCosRadModes.h"
+#include "makeCPAmodes.h"
+#include "mask_to_pixtable.h"
+#include "vec_to_2Dimage.h"
+
+
 
 void __attribute__((constructor)) libinit_linopt_imtools();
 
-///@}
 
 
 
 
-/* =============================================================================================== */
-/* =============================================================================================== */
-/** @name 2. CONVERSION
- *
- */
-///@{
-/* =============================================================================================== */
-/* =============================================================================================== */
 
-long linopt_imtools_mask_to_pixtable(const char *IDmask_name,
-                                     const char *IDpixindex_name, const char *IDpixmult_name);
-
-
-imageID linopt_imtools_Image_to_vec(
-    const char *ID_name,
-    const char *IDpixindex_name,
-    const char *IDpixmult_name,
-    const char *IDvec_name
-);
-
-imageID linopt_imtools_vec_to_2DImage(
-    const char *IDvec_name,
-    const char *IDpixindex_name,
-    const char *IDpixmult_name,
-    const char *ID_name,
-    long        xsize,
-    long        ysize
-);
-///@}
 
 
 
@@ -81,24 +55,7 @@ imageID linopt_imtools_make1Dpolynomials(
 );
 
 
-imageID linopt_imtools_makeCosRadModes(
-    const char *ID_name,
-    long        size,
-    long        kmax,
-    float       radius,
-    float       radfactlim
-);
 
-
-long linopt_imtools_makeCPAmodes(
-    const char *ID_name,
-    long        size,
-    float       CPAmax,
-    float       deltaCPA,
-    float       radius,
-    float       radfactlim,
-    int         writeMfile
-);
 
 ///@}
 
@@ -118,13 +75,6 @@ long linopt_imtools_makeCPAmodes(
 
 
 
-errno_t linopt_imtools_image_construct(
-    const char *IDmodes_name,
-    const char *IDcoeff_name,
-    const char *ID_name,
-    imageID *outID
-);
-
 
 imageID linopt_imtools_image_construct_stream(
     const char *IDmodes_name,
@@ -133,17 +83,7 @@ imageID linopt_imtools_image_construct_stream(
 );
 
 
-long linopt_compute_SVDdecomp(const char *IDin_name, const char *IDout_name,
-                              const char *IDcoeff_name);
 
-
-imageID linopt_compute_SVDpseudoInverse(
-    const char *ID_Rmatrix_name,
-    const char *ID_Cmatrix_name,
-    double      SVDeps,
-    long        MaxNBmodes,
-    const char *ID_VTmatrix_name
-);
 
 
 errno_t linopt_compute_1Dfit(
