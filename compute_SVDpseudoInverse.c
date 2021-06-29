@@ -215,7 +215,9 @@ imageID linopt_compute_SVDpseudoInverse(
     if(testmode == 1)
     {
         // TEST
-        ID_AtA = create_2Dimage_ID("AtA", m, m);
+        FUNC_CHECK_RETURN(
+            create_2Dimage_ID("AtA", m, m, &ID_AtA));
+
         for(ii = 0; ii < m; ii++)
             for(jj = 0; jj < m; jj++)
             {
@@ -300,8 +302,9 @@ imageID linopt_compute_SVDpseudoInverse(
     arraysizetmp[0] = m;
     arraysizetmp[1] = m;
 
-    create_image_ID(ID_VTmatrix_name, 2, arraysizetmp,
-                    datatype, 0, 0, 0, &ID_VTmatrix);
+    FUNC_CHECK_RETURN(
+        create_image_ID(ID_VTmatrix_name, 2, arraysizetmp,
+                        datatype, 0, 0, 0, &ID_VTmatrix));
 
     if(datatype == _DATATYPE_FLOAT)
     {
@@ -373,7 +376,9 @@ imageID linopt_compute_SVDpseudoInverse(
 
     if(testmode == 1)
     {
-        ID = create_2Dimage_ID("M2", m, m);
+        FUNC_CHECK_RETURN(
+            create_2Dimage_ID("M2", m, m, &ID));
+
         for(ii = 0; ii < m; ii++)
             for(jj = 0; jj < m; jj++)
             {
@@ -399,13 +404,14 @@ imageID linopt_compute_SVDpseudoInverse(
     }
 
 
-    create_image_ID(
-        ID_Cmatrix_name,
-        data.image[ID_Rmatrix].md[0].naxis,
-        arraysizetmp,
-        datatype,
-        0, 0, 0,
-        &ID_Cmatrix);
+    FUNC_CHECK_RETURN(
+        create_image_ID(
+            ID_Cmatrix_name,
+            data.image[ID_Rmatrix].md[0].naxis,
+            arraysizetmp,
+            datatype,
+            0, 0, 0,
+            &ID_Cmatrix));
 
 
 
@@ -534,7 +540,6 @@ static errno_t compute_function()
     DEBUG_TRACE_FEXIT();
     return RETURN_SUCCESS;
 }
-
 
 
 

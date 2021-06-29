@@ -75,11 +75,13 @@ errno_t linopt_imtools_image_construct(
 
     if(datatype == _DATATYPE_FLOAT)
     {
-        ID = create_2Dimage_ID(ID_name, xsize, ysize);
+        FUNC_CHECK_RETURN(
+            create_2Dimage_ID(ID_name, xsize, ysize, &ID));
     }
     else
     {
-        ID = create_2Dimage_ID_double(ID_name, xsize, ysize);
+        FUNC_CHECK_RETURN(
+            create_2Dimage_ID_double(ID_name, xsize, ysize, &ID));
     }
 
     IDcoeff = image_ID(IDcoeff_name);

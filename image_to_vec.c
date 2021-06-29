@@ -61,6 +61,8 @@ imageID linopt_imtools_image_to_vec(
     const char *IDvec_name
 )
 {
+    DEBUG_TRACE_FSTART();
+
     imageID ID;
     long k;
     imageID IDpixindex, IDpixmult;
@@ -68,7 +70,6 @@ imageID linopt_imtools_image_to_vec(
     long NBpix;
     long naxisin;
     long sizexy;
-    long kk;
     uint8_t datatype;
 
     ID = image_ID(ID_name);
@@ -82,7 +83,8 @@ imageID linopt_imtools_image_to_vec(
 
     if(naxisin < 3)
     {
-        IDvec = create_2Dimage_ID(IDvec_name, NBpix, 1);
+        FUNC_CHECK_RETURN(
+            create_2Dimage_ID(IDvec_name, NBpix, 1, &IDvec));
         for(k = 0; k < NBpix; k++)
         {
             data.image[IDvec].array.F[k] = data.image[IDpixmult].array.F[k] *
@@ -94,8 +96,10 @@ imageID linopt_imtools_image_to_vec(
         sizexy = data.image[ID].md[0].size[0] * data.image[ID].md[0].size[1];
         if(datatype == _DATATYPE_FLOAT)
         {
-            IDvec = create_2Dimage_ID(IDvec_name, NBpix, data.image[ID].md[0].size[2]);
-            for(kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
+            FUNC_CHECK_RETURN(
+                create_2Dimage_ID(IDvec_name, NBpix, data.image[ID].md[0].size[2], &IDvec));
+
+            for(uint32_t kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
                 for(k = 0; k < NBpix; k++)
                 {
                     data.image[IDvec].array.F[kk * NBpix + k] = data.image[IDpixmult].array.F[k] *
@@ -104,8 +108,10 @@ imageID linopt_imtools_image_to_vec(
         }
         if(datatype == _DATATYPE_COMPLEX_FLOAT)
         {
-            IDvec = create_2Dimage_ID(IDvec_name, NBpix * 2, data.image[ID].md[0].size[2]);
-            for(kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
+            FUNC_CHECK_RETURN(
+                create_2Dimage_ID(IDvec_name, NBpix * 2, data.image[ID].md[0].size[2], &IDvec));
+
+            for(uint32_t kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
                 for(k = 0; k < NBpix; k++)
                 {
                     data.image[IDvec].array.F[kk * NBpix * 2 + 2 * k] =
@@ -119,6 +125,7 @@ imageID linopt_imtools_image_to_vec(
 
     }
 
+    DEBUG_TRACE_FEXIT();
     return ID;
 }
 

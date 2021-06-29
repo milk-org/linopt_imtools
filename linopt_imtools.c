@@ -552,6 +552,8 @@ imageID linopt_imtools_vec_to_2DImage(
     long        ysize
 )
 {
+    DEBUG_TRACE_FSTART();
+
     imageID ID;
     imageID IDvec;
     long k;
@@ -563,7 +565,8 @@ imageID linopt_imtools_vec_to_2DImage(
     IDpixmult = image_ID(IDpixmult_name);
     NBpix = data.image[IDpixindex].md[0].nelement;
 
-    ID = create_2Dimage_ID(ID_name, xsize, ysize);
+    FUNC_CHECK_RETURN(
+        create_2Dimage_ID(ID_name, xsize, ysize, &ID));
 
     for(k = 0; k < NBpix; k++)
     {
@@ -571,6 +574,7 @@ imageID linopt_imtools_vec_to_2DImage(
             data.image[IDvec].array.F[k] / data.image[IDpixmult].array.F[k];
     }
 
+    DEBUG_TRACE_FEXIT();
     return ID;
 }
 
@@ -600,26 +604,29 @@ imageID linopt_imtools_make1Dpolynomials(
     float       r0pix
 )
 {
+    DEBUG_TRACE_FSTART();
+
     imageID IDout;
     long xsize, ysize, zsize;
     long ii, kk;
-    float r;
 
     xsize = NBpts;
     ysize = 1;
     zsize = MaxOrder;
 
-    IDout = create_3Dimage_ID(IDout_name, xsize, ysize, zsize);
+    FUNC_CHECK_RETURN(
+        create_3Dimage_ID(IDout_name, xsize, ysize, zsize, &IDout));
 
     for(kk = 0; kk < zsize; kk++)
     {
         for(ii = 0; ii < xsize; ii++)
         {
-            r = 1.0 * ii / r0pix;
+            float r = 1.0 * ii / r0pix;
             data.image[IDout].array.F[kk * xsize + ii] = pow(r, 1.0 * kk);
         }
     }
 
+    DEBUG_TRACE_FEXIT();
     return IDout;
 }
 
@@ -636,16 +643,17 @@ imageID linopt_imtools_makeCosRadModes(
     float       radfactlim
 )
 {
+    DEBUG_TRACE_FSTART();
+
     imageID ID;
     long ii, jj;
-    float x, y, r;
     long k;
     long size2;
     imageID IDr;
     FILE *fp;
 
     size2 = size * size;
-    IDr = create_2Dimage_ID("linopt_tmpr", size, size);
+    create_2Dimage_ID("linopt_tmpr", size, size, &IDr);
 
     fp = fopen("ModesExpr_CosRad.txt", "w");
     fprintf(fp, "# unit for r = %f pix\n", radius);
@@ -661,21 +669,22 @@ imageID linopt_imtools_makeCosRadModes(
 
     for(ii = 0; ii < size; ii++)
     {
-        x = (1.0 * ii - 0.5 * size) / radius;
+        float x = (1.0 * ii - 0.5 * size) / radius;
         for(jj = 0; jj < size; jj++)
         {
-            y = (1.0 * jj - 0.5 * size) / radius;
-            r = sqrt(x * x + y * y);
+            float y = (1.0 * jj - 0.5 * size) / radius;
+            float r = sqrt(x * x + y * y);
             data.image[IDr].array.F[jj * size + ii] = r;
         }
     }
 
-    ID = create_3Dimage_ID(ID_name, size, size, kmax);
+    FUNC_CHECK_RETURN(
+        create_3Dimage_ID(ID_name, size, size, kmax, &ID));
 
     for(k = 0; k < kmax; k++)
         for(ii = 0; ii < size2; ii++)
         {
-            r = data.image[IDr].array.F[ii];
+            float r = data.image[IDr].array.F[ii];
             if(r < radfactlim)
             {
                 data.image[ID].array.F[k * size2 + ii] = cos(r * M_PI * k);
@@ -684,6 +693,8 @@ imageID linopt_imtools_makeCosRadModes(
 
 
     delete_image_ID("linopt_tmpr", DELETE_IMAGE_ERRMODE_WARNING);
+
+    DEBUG_TRACE_FEXIT();
 
     return ID;
 }
@@ -728,9 +739,9 @@ long linopt_imtools_makeCPAmodes(
 
 
     size2 = size * size;
-    IDx = create_2Dimage_ID("cpa_tmpx", size, size);
-    IDy = create_2Dimage_ID("cpa_tmpy", size, size);
-    IDr = create_2Dimage_ID("cpa_tmpr", size, size);
+    create_2Dimage_ID("cpa_tmpx", size, size, &IDx);
+    create_2Dimage_ID("cpa_tmpy", size, size, &IDy);
+    create_2Dimage_ID("cpa_tmpr", size, size, &IDr);
 
 
     printf("precomputing x, y, r\n");
@@ -819,7 +830,7 @@ long linopt_imtools_makeCPAmodes(
 
 
     NBmax = NBfrequ * 2;
-    ID = create_3Dimage_ID(ID_name, size, size, NBmax - 1);
+    create_3Dimage_ID(ID_name, size, size, NBmax - 1, &ID);
 
 
 
@@ -863,7 +874,7 @@ long linopt_imtools_makeCPAmodes(
     }
 
     delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_WARNING);
-    IDfreq = create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1);
+    create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1, &IDfreq);
 
 
     // mode 0 (piston)
@@ -1145,6 +1156,8 @@ imageID linopt_compute_SVDdecomp(
     const char *IDcoeff_name
 )
 {
+    DEBUG_TRACE_FSTART();
+
     imageID IDin;
     imageID IDout;
     imageID IDcoeff;
@@ -1216,7 +1229,7 @@ imageID linopt_compute_SVDdecomp(
     gsl_eigen_symmv_sort(matrix_DtraD_eval, matrix_DtraD_evec,
                          GSL_EIGEN_SORT_ABS_DESC);
 
-    IDcoeff = create_2Dimage_ID(IDcoeff_name, m, 1);
+    create_2Dimage_ID(IDcoeff_name, m, 1, &IDcoeff);
 
 
     for(k = 0; k < m; k++)
@@ -1234,8 +1247,8 @@ imageID linopt_compute_SVDdecomp(
     {
         delete_image_ID("SVD_VTm", DELETE_IMAGE_ERRMODE_WARNING);
     }
-     create_image_ID("SVD_VTm", 2, arraysizetmp, _DATATYPE_FLOAT, 0,
-                                  0, 0, &ID_VTmatrix);
+    create_image_ID("SVD_VTm", 2, arraysizetmp, _DATATYPE_FLOAT, 0,
+                    0, 0, &ID_VTmatrix);
     for(ii = 0; ii < m; ii++) // modes
         for(k = 0; k < m; k++) // modes
         {
@@ -1245,8 +1258,12 @@ imageID linopt_compute_SVDdecomp(
 
     /// Compute SVD decomp
 
-    IDout = create_3Dimage_ID(IDout_name, data.image[IDin].md[0].size[0],
-                              data.image[IDin].md[0].size[1], data.image[IDin].md[0].size[2]);
+    create_3Dimage_ID(IDout_name,
+                      data.image[IDin].md[0].size[0],
+                      data.image[IDin].md[0].size[1],
+                      data.image[IDin].md[0].size[2],
+                      &IDout);
+
     for(kk = 0; kk < m; kk++) /// eigen mode index
     {
         //        printf("eigenmode %4ld / %4ld  %g\n", kk, m, data.image[IDcoeff].array.F[kk]);
@@ -1275,6 +1292,7 @@ imageID linopt_compute_SVDdecomp(
     printf("[SVD done]\n");
     fflush(stdout);
 
+    DEBUG_TRACE_FEXIT();
     return IDout;
 }
 
@@ -1360,9 +1378,9 @@ errno_t linopt_compute_1Dfit(
     }
     fclose(fp);
 
-    IDin = create_2Dimage_ID("invect", NBpt, 1);
-    IDin0 = create_2Dimage_ID("invect0", NBpt, 1);
-    IDmask = create_2Dimage_ID("inmask", NBpt, 1);
+    create_2Dimage_ID("invect", NBpt, 1, &IDin);
+    create_2Dimage_ID("invect0", NBpt, 1, &IDin0);
+    create_2Dimage_ID("inmask", NBpt, 1, &IDmask);
 
     for(ii = 0; ii < NBpt; ii++)
     {
@@ -1373,8 +1391,8 @@ errno_t linopt_compute_1Dfit(
     }
 
     NBmodes = MaxOrder;
-    IDmodes = create_3Dimage_ID("fitmodes", NBpt, 1, NBmodes);
-    IDout = create_2Dimage_ID("outcoeff", NBmodes, 1);
+    create_3Dimage_ID("fitmodes", NBpt, 1, NBmodes, &IDmodes);
+    create_2Dimage_ID("outcoeff", NBmodes, 1, &IDout);
 
     switch(MODE)
     {
@@ -1406,11 +1424,9 @@ errno_t linopt_compute_1Dfit(
 
     for(iter = 0; iter < NBiter; iter++)
     {
-        if(linopt_imtools_image_fitModes("invect0", "fitmodes", "inmask", SVDeps,
-                                         "outcoeffim0", 1, NULL) != RETURN_SUCCESS)
-        {
-            FUNC_RETURN_FAILURE("Call to linopt_imtools_image_fitModes failed");
-        }
+        FUNC_CHECK_RETURN(
+            linopt_imtools_image_fitModes("invect0", "fitmodes", "inmask", SVDeps,
+                                          "outcoeffim0", 1, NULL));
         IDout0 = image_ID("outcoeffim0");
 
 
@@ -1753,7 +1769,7 @@ double linopt_imtools_match_slow(
     gsl_vector_free(x);
 
 
-    IDsol = create_2Dimage_ID(IDsol_name, n, 1);
+    create_2Dimage_ID(IDsol_name, n, 1, &IDsol);
     for(i = 0; i < n; i++)
     {
         data.image[IDsol].array.F[i] = alphabest[i];
@@ -1763,7 +1779,7 @@ double linopt_imtools_match_slow(
 
     // compute residual
 
-    IDout = create_2Dimage_ID(IDout_name, naxes[0], naxes[1]);
+    create_2Dimage_ID(IDout_name, naxes[0], naxes[1], &IDout);
 
     for(ii = 0; ii < naxes[0]*naxes[1]; ii++)
     {
@@ -1886,7 +1902,7 @@ double linopt_imtools_match(
     printf("-");
     fflush(stdout);
 
-    IDsol = create_2Dimage_ID(IDsol_name, p, 1);
+    create_2Dimage_ID(IDsol_name, p, 1, &IDsol);
     for(i = 0; i < p; i++)
     {
         data.image[IDsol].array.F[i] = gsl_vector_get(c, i);
@@ -1903,7 +1919,7 @@ double linopt_imtools_match(
     fflush(stdout);
 
     // compute residual
-    IDout = create_2Dimage_ID(IDout_name, naxes[0], naxes[1]);
+    create_2Dimage_ID(IDout_name, naxes[0], naxes[1], &IDout);
     for(ii = 0; ii < naxes[0]*naxes[1]; ii++)
     {
         data.image[IDout].array.F[ii] = 0.0;
@@ -2005,7 +2021,7 @@ imageID linopt_compute_linRM_from_inout(
     }
     else
     {
-        IDinmask = create_2Dimage_ID("_RMmask", xsizein, ysizein);
+        create_2Dimage_ID("_RMmask", xsizein, ysizein, &IDinmask);
         for(spl = 0; spl < insize; spl++)
             for(ii = 0; ii < xsizein * ysizein; ii++)
                 if(data.image[IDin].array.F[spl * xsizein * ysizein + ii] > 0.5)
@@ -2056,7 +2072,7 @@ imageID linopt_compute_linRM_from_inout(
     }
 
 
-    IDpokeM = create_2Dimage_ID("pokeM", NBact, insize);
+    create_2Dimage_ID("pokeM", NBact, insize, &IDpokeM);
 
     for(spl = 0; spl < insize; spl++)
         for(act = 0; act < NBact; act++)
@@ -2079,7 +2095,7 @@ imageID linopt_compute_linRM_from_inout(
     IDpinv = image_ID("pokeMinv");
 
     // multiply measurements by pokeMinv
-    ID_rm = create_3Dimage_ID("_respmat", xsizeout, ysizeout, xsizein * ysizein);
+    create_3Dimage_ID("_respmat", xsizeout, ysizeout, xsizein * ysizein, &ID_rm);
 
     for(act = 0; act < NBact; act++)
     {
@@ -2100,8 +2116,8 @@ imageID linopt_compute_linRM_from_inout(
     IDRM = image_ID("_respmat");
 
 
-    IDtmp = create_2Dimage_ID("_tmplicli", xsizeout, ysizeout);
-    IDout1 = create_3Dimage_ID("testout", xsizeout, ysizeout, insize);
+    create_2Dimage_ID("_tmplicli", xsizeout, ysizeout, &IDtmp);
+    create_3Dimage_ID("testout", xsizeout, ysizeout, insize, &IDout1);
 
     printf("IDin  = %ld\n", IDin);
     printf("IDout = %ld\n", IDout);

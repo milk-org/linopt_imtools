@@ -146,7 +146,8 @@ errno_t linopt_imtools_image_fitModes(
     // m = number modes
     // n = number WFS elem
 
-    IDcoeff = create_2Dimage_ID(IDcoeff_name, m, 1);
+    FUNC_CHECK_RETURN(
+        create_2Dimage_ID(IDcoeff_name, m, 1, &IDcoeff));
 
     //printf(" -> Entering cblas_sgemv \n");
     //fflush(stdout);
