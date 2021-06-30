@@ -2,7 +2,9 @@
 
 #include "CommandLineInterface/CLIcore.h"
 #include "COREMOD_iofits/savefits.h"
+
 #include "cudacomp/magma_compute_SVDpseudoInverse.h"
+#include "compute_SVDpseudoInverse.h"
 
 // Local variables pointers
 static char *inputimname;

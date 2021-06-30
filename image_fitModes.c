@@ -1,13 +1,16 @@
 #include <gsl/gsl_cblas.h>
 
 #include "CommandLineInterface/CLIcore.h"
-#include "cudacomp/cudacomp.h"
+
 #include "COREMOD_iofits/savefits.h"
 #include "COREMOD_arith/COREMOD_arith.h"
 
 #include "image_construct.h"
 #include "image_to_vec.h"
 #include "mask_to_pixtable.h"
+
+#include "cudacomp/magma_compute_SVDpseudoInverse.h"
+#include "compute_SVDpseudoInverse.h"
 
 
 
