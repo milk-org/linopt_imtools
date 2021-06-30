@@ -11,6 +11,8 @@ set(SOURCEFILES
 	image_construct.c
 	image_fitModes.c
 	image_to_vec.c
+	lin1Dfit.c
+	linRM_from_inout.c
 	makeCosRadModes.c
 	makeCPAmodes.c
 	mask_to_pixtable.c
@@ -23,6 +25,8 @@ set(INCLUDEFILES
 	image_construct.h
 	image_fitModes.h
 	image_to_vec.h
+	lin1Dfit.h
+	linRM_from_inout.h
 	makeCosRadModes.h
 	makeCPAmodes.h
 	mask_to_pixtable.h

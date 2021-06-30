@@ -74,12 +74,14 @@
 #include "image_construct.h"
 #include "image_to_vec.h"
 #include "image_fitModes.h"
+#include "lin1Dfit.h"
 #include "makeCosRadModes.h"
 #include "makeCPAmodes.h"
 #include "mask_to_pixtable.h"
 
 
 
+/*
 static long NBPARAM;
 static long double C0;
 // polynomial coeff (degree = 1)
@@ -87,7 +89,7 @@ static long double *polycoeff1 = NULL;
 // polynomial coeff (degree = 2)
 static long double *polycoeff2 = NULL;
 static long dfcnt = 0;
-
+*/
 
 
 
@@ -110,7 +112,7 @@ INIT_MODULE_LIB(linopt_imtools)
 
 
 
-
+/*
 
 errno_t linopt_imtools_image_construct_stream_cli()
 {
@@ -133,74 +135,13 @@ errno_t linopt_imtools_image_construct_stream_cli()
         return CLICMD_INVALID_ARG;
     }
 }
+*/
 
 
 
 
 
-errno_t linopt_compute_1Dfit_cli()
-{
-    if(
-        CLI_checkarg(1, 5) +
-        CLI_checkarg(2, 2) +
-        CLI_checkarg(3, 2) +
-        CLI_checkarg(4, 5) +
-        CLI_checkarg(5, 2)
-        == 0)
-    {
-        linopt_compute_1Dfit(
-            data.cmdargtoken[1].val.string,
-            data.cmdargtoken[2].val.numl,
-            data.cmdargtoken[3].val.numl,
-            data.cmdargtoken[4].val.string,
-            data.cmdargtoken[5].val.numl,
-            NULL
-        );
 
-        return CLICMD_SUCCESS;
-    }
-    else
-    {
-        return CLICMD_INVALID_ARG;
-    }
-}
-
-
-
-
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 5. OPTIMIZATION                                                                                 */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
-
-
-
-errno_t linopt_compute_linRM_from_inout_cli()
-{
-    if(
-        CLI_checkarg(1, 4) +
-        CLI_checkarg(2, 4) +
-        CLI_checkarg(3, 4) +
-        CLI_checkarg(4, 4)
-        == 0)
-    {
-        linopt_compute_linRM_from_inout(
-            data.cmdargtoken[1].val.string,
-            data.cmdargtoken[2].val.string,
-            data.cmdargtoken[3].val.string,
-            data.cmdargtoken[4].val.string
-        );
-
-        return CLICMD_SUCCESS;
-    }
-    else
-    {
-        return CLICMD_INVALID_ARG;
-    }
-}
 
 
 
@@ -216,12 +157,7 @@ errno_t linopt_compute_linRM_from_inout_cli()
 static errno_t init_module_CLI()
 {
 
-
-    /* =============================================================================================== */
-    /*                                                                                                 */
-    /* CONVERSION                                                                                      */
-    /*                                                                                                 */
-    /* =============================================================================================== */
+    // CONVERSION
 
     CLIADDCMD_linopt_imtools__mask_to_pixtable();
 
@@ -230,25 +166,14 @@ static errno_t init_module_CLI()
     CLIADDCMD_linopt_imtools__vec_to_2DImage();
 
 
-    /* =============================================================================================== */
-    /*                                                                                                 */
-    /* 3. CREATE MODES                                                                                 */
-    /*                                                                                                 */
-    /* =============================================================================================== */
+    // CREATE MODES
 
     CLIADDCMD_linopt_imtools__makeCosRadModes();
 
     CLIADDCMD_linopt_imtools__makeCPAmodes();
- 
 
 
-    /* =============================================================================================== */
-    /* =============================================================================================== */
-    /*                                                                                                 */
-    /* 4. LINEAR DECOMPOSITION                                                                         */
-    /*                                                                                                 */
-    /* =============================================================================================== */
-    /* =============================================================================================== */
+    // LINEAR DECOMPOSITION
 
     CLIADDCMD_linopt_imtools__image_fitModes();
 
@@ -257,51 +182,25 @@ static errno_t init_module_CLI()
 
 
 
-    RegisterCLIcommand(
-        "imlinconstructs",
-        __FILE__,
-        linopt_imtools_image_construct_stream_cli,
-        "construct image as linear sum of modes (stream mode)",
-        "<modes> <coeffs> <outim>", "imlinconstructs modes coeffs outim",
-        "long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char *IDcoeff_name, const char *IDout_name)");
-
+    /*   RegisterCLIcommand(
+           "imlinconstructs",
+           __FILE__,
+           linopt_imtools_image_construct_stream_cli,
+           "construct image as linear sum of modes (stream mode)",
+           "<modes> <coeffs> <outim>", "imlinconstructs modes coeffs outim",
+           "long linopt_imtools_image_construct_stream(const char *IDmodes_name, const char *IDcoeff_name, const char *IDout_name)");
+    */
 
     CLIADDCMD_linopt_imtools__compute_SVDdecomp();
 
-
     CLIADDCMD_linopt_imtools__compute_SVDpseudoinverse();
 
-
-    RegisterCLIcommand(
-        "linopt1Dfit",
-        __FILE__,
-        linopt_compute_1Dfit_cli,
-        "least-square 1D fit",
-        "<output data file> <NBpt> <fit order> <output coeff file> <fit MODE>",
-        "linopt1Dfit data.txt 1000 10 fitsol.txt 0",
-        "long linopt_compute_1Dfit(const char *fnamein, long NBpt, long MaxOrder, const char *fnameout, int MODE)");
+    CLIADDCMD_linopt_imtools__lin1Dfits();
 
 
-    /* =============================================================================================== */
-    /* =============================================================================================== */
-    /*                                                                                                 */
-    /* 5. OPTIMIZATION                                                                                 */
-    /*                                                                                                 */
-    /* =============================================================================================== */
-    /* =============================================================================================== */
+    // OPTIMIZATION
 
-
-    RegisterCLIcommand(
-        "lincRMiter",
-        __FILE__,
-        linopt_compute_linRM_from_inout_cli,
-        "estimate response matrix from input and output",
-        "<input cube> <inmask> <output cube> <RM>",
-        "lincRMiter inC inmask outC imRM",
-        "long linopt_compute_linRM_iter(const char *IDinput_name, const char *IDinmask_name, const char *IDoutput_name, const char *IDRM_name)");
-
-
-    // add atexit functions here
+    CLIADDCMD_linopt_imtools__linRM_from_inout();
 
 
     return RETURN_SUCCESS;
@@ -384,6 +283,7 @@ imageID linopt_imtools_make1Dpolynomials(
 /*                                                                 */
 /* --------------------------------------------------------------- */
 
+/*
 double linopt_imtools_opt_f(
     const gsl_vector *v,
     __attribute__((unused)) void *params
@@ -407,10 +307,10 @@ double linopt_imtools_opt_f(
 
     return(value);
 }
+*/
 
 
-
-
+/*
 void linopt_imtools_opt_df(
     const gsl_vector *v,
     void             *params,
@@ -456,11 +356,11 @@ void linopt_imtools_opt_df(
 
     gsl_vector_free(vcp);
 }
+*/
 
 
 
-
-
+/*
 
 void linopt_imtools_opt_fdf(
     const gsl_vector *x,
@@ -472,6 +372,7 @@ void linopt_imtools_opt_fdf(
     *f = linopt_imtools_opt_f(x, params);
     linopt_imtools_opt_df(x, params, df);
 }
+*/
 
 
 
@@ -480,8 +381,7 @@ void linopt_imtools_opt_fdf(
 
 
 
-
-
+/*
 // FLOAT only
 imageID linopt_imtools_image_construct_stream(
     const char *IDmodes_name,
@@ -571,206 +471,7 @@ imageID linopt_imtools_image_construct_stream(
     return IDout;
 }
 
-
-
-
-
-
-
-
-// MODE :
-// 0 : polynomial
-//
-errno_t linopt_compute_1Dfit(
-    const char *fnamein,
-    long        NBpt,
-    long        MaxOrder,
-    const char *fnameout,
-    int         MODE,
-    imageID    *outID
-)
-{
-    DEBUG_TRACE_FSTART();
-
-    float *xarray;
-    float *valarray;
-
-    FILE *fp;
-    long ii;
-
-    imageID IDin, IDin0;
-    imageID IDmask;
-    imageID IDmodes;
-    long NBmodes;
-    long m;
-
-    float SVDeps = 0.0000001;
-
-    long IDout, IDout0;
-    double val, vale, err;
-
-    long NBiter = 100;
-    float gain = 1.0;
-    long iter;
-
-
-    xarray = (float *) malloc(sizeof(float) * NBpt);
-    if(xarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
-    }
-
-    valarray = (float *) malloc(sizeof(float) * NBpt);
-    if(valarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
-    }
-
-
-    fp = fopen(fnamein, "r");
-    for(ii = 0; ii < NBpt; ii++)
-    {
-        int fscanfcnt = fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);
-
-        if(fscanfcnt == EOF)
-        {
-            if(ferror(fp))
-            {
-                perror("fscanf");
-            }
-            else
-            {
-                fprintf(stderr,
-                        "Error: fscanf reached end of file, no matching characters, no matching failure\n");
-            }
-            exit(EXIT_FAILURE);
-        }
-        else if(fscanfcnt != 2)
-        {
-            fprintf(stderr,
-                    "Error: fscanf successfully matched and assigned %i input items, 2 expected\n",
-                    fscanfcnt);
-            exit(EXIT_FAILURE);
-        }
-    }
-    fclose(fp);
-
-    create_2Dimage_ID("invect", NBpt, 1, &IDin);
-    create_2Dimage_ID("invect0", NBpt, 1, &IDin0);
-    create_2Dimage_ID("inmask", NBpt, 1, &IDmask);
-
-    for(ii = 0; ii < NBpt; ii++)
-    {
-        //			printf("%18.16f  %+18.16f\n", xarray[ii], valarray[ii]);
-        data.image[IDin].array.F[ii] = valarray[ii];
-        data.image[IDin0].array.F[ii] = valarray[ii];
-        data.image[IDmask].array.F[ii] = 1.0;
-    }
-
-    NBmodes = MaxOrder;
-    create_3Dimage_ID("fitmodes", NBpt, 1, NBmodes, &IDmodes);
-    create_2Dimage_ID("outcoeff", NBmodes, 1, &IDout);
-
-    switch(MODE)
-    {
-    case 0 :
-        for(m = 0; m < NBmodes; m++)
-        {
-            for(ii = 0; ii < NBpt; ii++)
-            {
-                data.image[IDmodes].array.F[m * NBpt + ii] = pow(xarray[ii], 1.0 * m);
-            }
-        }
-        break;
-    case 1 :
-        for(m = 0; m < NBmodes; m++)
-        {
-            for(ii = 0; ii < NBpt; ii++)
-            {
-                data.image[IDmodes].array.F[m * NBpt + ii] = cos(xarray[ii] * M_PI * m);
-            }
-        }
-        break;
-    default :
-        printf("ERROR: MODE = %d not supported\n", MODE);
-        exit(0);
-        break;
-    }
-
-    list_image_ID();
-
-    for(iter = 0; iter < NBiter; iter++)
-    {
-        FUNC_CHECK_RETURN(
-            linopt_imtools_image_fitModes("invect0", "fitmodes", "inmask", SVDeps,
-                                          "outcoeffim0", 1, NULL));
-        IDout0 = image_ID("outcoeffim0");
-
-
-        for(m = 0; m < NBmodes; m++)
-        {
-            data.image[IDout].array.F[m] += gain * data.image[IDout0].array.F[m];
-        }
-
-        for(ii = 0; ii < NBpt; ii++)
-        {
-            err = 0.0;
-            val = 0.0;
-            for(m = 0; m < NBmodes; m++)
-            {
-                val += data.image[IDout].array.F[m] * data.image[IDmodes].array.F[m * NBpt +
-                        ii];
-            }
-            data.image[IDin0].array.F[ii] = data.image[IDin].array.F[ii] - val;
-            err += data.image[IDin0].array.F[ii] * data.image[IDin0].array.F[ii];
-        }
-        err = sqrt(err / NBpt);
-        printf("ITERATION %4ld   residual = %20g   [gain = %20g]\n", iter, err, gain);
-        gain *= 0.95;
-    }
-
-
-
-
-    fp = fopen(fnameout, "w");
-    for(m = 0; m < NBmodes; m++)
-    {
-        fprintf(fp, "%4ld %+.8g\n", m, data.image[IDout].array.F[m]);
-    }
-    fclose(fp);
-
-
-    fp = fopen("testout.txt", "w");
-    err = 0.0;
-    for(ii = 0; ii < NBpt; ii++)
-    {
-        val = 0.0;
-        for(m = 0; m < NBmodes; m++)
-        {
-            val += data.image[IDout].array.F[m] * data.image[IDmodes].array.F[m * NBpt +
-                    ii];
-        }
-        vale = valarray[ii] - val;
-        err += vale * vale;
-        fprintf(fp, "%05ld  %18.16f  %18.16f   %18.16f\n", ii, xarray[ii], valarray[ii],
-                val);
-    }
-    fclose(fp);
-    err = sqrt(err / NBpt);
-
-    printf("FIT error = %g m\n", err);
-
-    free(xarray);
-    free(valarray);
-
-    if(outID != NULL)
-    {
-        *outID = IDout;
-    }
-
-    DEBUG_TRACE_FEXIT();
-    return RETURN_SUCCESS;
-}
+*/
 
 
 
@@ -779,6 +480,8 @@ errno_t linopt_compute_1Dfit(
 
 
 
+
+/*
 //
 // match a single image (ID_name) to a linear sum of images within IDref_name
 // result is a 1D array of coefficients in IDsol_name
@@ -812,10 +515,10 @@ double linopt_imtools_match_slow(
     long double *alphabest = NULL;
     long double ampl;
 
-    /*
-      the optimization problem is first rewritten as a 2nd degree polynomial of alpha values
-      val = V0 + SUM_{k=0...n-1}{polycoeff1[k]*alpha[k] + SUM_{k=0...n-1}{l=0...k}{polycoeff2[k,l]*alpha[k]*alpha[l]}
-     */
+    //
+    //  the optimization problem is first rewritten as a 2nd degree polynomial of alpha values
+    //  val = V0 + SUM_{k=0...n-1}{polycoeff1[k]*alpha[k] + SUM_{k=0...n-1}{l=0...k}{polycoeff2[k,l]*alpha[k]*alpha[l]}
+    //
 
     long iter = 0;
     double *params;
@@ -919,8 +622,8 @@ double linopt_imtools_match_slow(
     }
 
     // find solution
-    /*   val = C0 + SUM_{k=0...n-1}{polycoeff1[k]*alpha[k] + SUM_{k=0...n-1}{l=0...k}{polycoeff2[k,l]*alpha[k]*alpha[l]}
-     */
+    //   val = C0 + SUM_{k=0...n-1}{polycoeff1[k]*alpha[k] + SUM_{k=0...n-1}{l=0...k}{polycoeff2[k,l]*alpha[k]*alpha[l]}
+    //
     val = C0;
     for(k = 0; k < n; k++)
     {
@@ -1086,7 +789,7 @@ double linopt_imtools_match_slow(
     return((double) val);
 }
 
-
+*/
 
 
 
@@ -1099,7 +802,7 @@ double linopt_imtools_match_slow(
 // ID_name is input, size (n,1)
 // IDsol_name must contain initial solution
 //
-
+/*
 double linopt_imtools_match(
     const char *ID_name,
     const char *IDref_name,
@@ -1211,289 +914,7 @@ double linopt_imtools_match(
     return(chisq);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-/* =============================================================================================== */
-/* =============================================================================================== */
-/*                                                                                                 */
-/* 5. OPTIMIZATION                                                                                 */
-/*                                                                                                 */
-/* =============================================================================================== */
-/* =============================================================================================== */
-
-
-
-//
-// solve for response matrix given a series of input and output
-// initial value of RM should be best guess
-// inmask = 0 over input that are known to produce no response
-//
-imageID linopt_compute_linRM_from_inout(
-    const char *IDinput_name,
-    const char *IDinmask_name,
-    const char *IDoutput_name,
-    const char *IDRM_name
-)
-{
-    imageID IDRM;
-    imageID IDin;
-    imageID IDinmask;
-    imageID IDout;
-    long insize; // number of input
-    long xsizein, ysizein, xsizeout, ysizeout;
-    double fitval;
-    long kk, ii_in, jj_in, ii_out, jj_out;
-    //double tot;
-    imageID IDtmp;
-    double tmpv1;
-    //long iter;
-    imageID IDout1;
-    //double alpha = 0.001;
-
-    uint32_t *sizearray;
-    imageID IDpokeM; // poke matrix (input)
-    //imageID IDoutM; // outputX
-    double SVDeps = 1.0e-4;
-
-    long NBact, act;
-    long *inpixarray;
-    long spl; // sample measurement
-    long ii;
-    imageID ID_rm;
-    int autoMask_MODE =
-        0; // if 1, automatically measure input mask based on IDinput_name image
-    imageID IDpinv;
-    //int use_magma = 0;
-
-    //int ngpu;
-
-    //ngpu = 0;
-    setenv("CUDA_VISIBLE_DEVICES", "3,4", 1);
-
-
-    IDin = image_ID(IDinput_name);
-    IDout = image_ID(IDoutput_name);
-    IDRM = image_ID(IDRM_name);
-
-
-    insize = data.image[IDin].md[0].size[2];
-    xsizeout = data.image[IDRM].md[0].size[0];
-    ysizeout = data.image[IDRM].md[0].size[1];
-    xsizein = data.image[IDin].md[0].size[0];
-    ysizein = data.image[IDin].md[0].size[1];
-
-    if(autoMask_MODE == 0)
-    {
-        IDinmask = image_ID(IDinmask_name);
-    }
-    else
-    {
-        create_2Dimage_ID("_RMmask", xsizein, ysizein, &IDinmask);
-        for(spl = 0; spl < insize; spl++)
-            for(ii = 0; ii < xsizein * ysizein; ii++)
-                if(data.image[IDin].array.F[spl * xsizein * ysizein + ii] > 0.5)
-                {
-                    data.image[IDinmask].array.F[ii] = 1.0;
-                }
-    }
-
-    // create pokeM
-    NBact = 0;
-    for(ii = 0; ii < xsizein * ysizein; ii++)
-        if(data.image[IDinmask].array.F[ii] > 0.5)
-        {
-            NBact++;
-        }
-
-    printf("NBact = %ld\n", NBact);
-
-    inpixarray = (long *) malloc(sizeof(long) * NBact);
-    if(inpixarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
-    }
-
-    act = 0;
-    for(ii = 0; ii < xsizein * ysizein; ii++)
-        if(data.image[IDinmask].array.F[ii] > 0.5)
-        {
-            inpixarray[act] = ii;
-            act++;
-        }
-
-
-
-    sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
-    if(sizearray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
-    }
-
-    sizearray[0] = NBact;
-    sizearray[1] = insize; // number of measurements
-
-    printf("NBact = %ld\n", NBact);
-    for(act = 0; act < 10; act++)
-    {
-        printf("act %5ld -> pix %5ld\n", act, inpixarray[act]);
-    }
-
-
-    create_2Dimage_ID("pokeM", NBact, insize, &IDpokeM);
-
-    for(spl = 0; spl < insize; spl++)
-        for(act = 0; act < NBact; act++)
-        {
-            data.image[IDpokeM].array.F[NBact * spl + act] = data.image[IDin].array.F[spl *
-                    xsizein * ysizein + inpixarray[act]];
-        }
-    save_fits("pokeM", "!_test_pokeM.fits");
-
-    // compute pokeM pseudo-inverse
-#ifdef HAVE_MAGMA
-    CUDACOMP_magma_compute_SVDpseudoInverse("pokeM", "pokeMinv", SVDeps, insize,
-                                            "VTmat", 0, 0, 1.e-4, 1.e-7, 0, 64, NULL);
-#else
-    linopt_compute_SVDpseudoInverse("pokeM", "pokeMinv", SVDeps, insize, "VTmat", NULL);
-#endif
-
-    list_image_ID();
-    save_fits("pokeMinv", "!pokeMinv.fits");
-    IDpinv = image_ID("pokeMinv");
-
-    // multiply measurements by pokeMinv
-    create_3Dimage_ID("_respmat", xsizeout, ysizeout, xsizein * ysizein, &ID_rm);
-
-    for(act = 0; act < NBact; act++)
-    {
-        for(kk = 0; kk < insize; kk++)
-            for(ii = 0; ii < xsizeout * ysizeout; ii++)
-            {
-                data.image[ID_rm].array.F[inpixarray[act]*xsizeout * ysizeout + ii] +=
-                    data.image[IDout].array.F[kk * xsizeout * ysizeout + ii] *
-                    data.image[IDpinv].array.F[kk * NBact + act];
-            }
-    }
-    save_fits("_respmat", "!_test_RM.fits");
-//exit(0);
-
-
-    // COMPUTE SOLUTION QUALITY
-
-    IDRM = image_ID("_respmat");
-
-
-    create_2Dimage_ID("_tmplicli", xsizeout, ysizeout, &IDtmp);
-    create_3Dimage_ID("testout", xsizeout, ysizeout, insize, &IDout1);
-
-    printf("IDin  = %ld\n", IDin);
-    printf("IDout = %ld\n", IDout);
-    printf("IDinmask = %ld\n", IDinmask);
-
-    // on iteration 0, compute initial fit value
-    fitval = 0.0;
-
-
-
-    for(kk = 0; kk < insize; kk++)
-    {
-        printf("\r kk = %5ld / %5ld    ", kk, insize);
-        fflush(stdout);
-
-        for(ii_out = 0; ii_out < xsizeout; ii_out++)
-            for(jj_out = 0; jj_out < ysizeout; jj_out++)
-            {
-                data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] = 0.0;
-            }
-
-
-        for(ii_in = 0; ii_in < xsizein; ii_in++)
-            for(jj_in = 0; jj_in < ysizein; jj_in++)
-            {
-
-                //printf("%ld  pix %ld %ld active\n", kk, ii_in, jj_in);
-                for(ii_out = 0; ii_out < xsizeout; ii_out++)
-                    for(jj_out = 0; jj_out < ysizeout; jj_out++)
-                    {
-                        data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] +=
-                            data.image[IDin].array.F[kk * xsizein * ysizein + jj_in * xsizein + ii_in] *
-                            data.image[IDRM].array.F[(jj_in * xsizein + ii_in) * xsizeout * ysizeout +
-                                                     jj_out * xsizeout + ii_out];
-                    }
-
-            }
-        for(ii_out = 0; ii_out < xsizeout; ii_out++)
-            for(jj_out = 0; jj_out < ysizeout; jj_out++)
-            {
-                tmpv1 = data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] -
-                        data.image[IDout].array.F[kk * xsizeout * ysizeout + jj_out * xsizeout +
-                                                  ii_out];
-                fitval += tmpv1 * tmpv1;
-                data.image[IDout1].array.F[kk * xsizeout * ysizeout + jj_out * xsizeout +
-                                           ii_out] = tmpv1; //data.image[IDtmp].array.F[jj_out*xsizeout+ii_out];
-            }
-    }
-    printf("\n");
-    printf("  %5ld    fitval = %.20f\n", kk, sqrt(fitval / xsizeout / ysizeout));
-
-    delete_image_ID("_tmplicli", DELETE_IMAGE_ERRMODE_WARNING);
-
-    free(sizearray);
-    free(inpixarray);
-
-    return IDout;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
