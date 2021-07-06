@@ -69,19 +69,21 @@ errno_t linopt_imtools_image_construct(
     uint32_t zsize = data.image[IDmodes].md[0].size[2];
 
     uint64_t sizexy = xsize;
-    sizexy *=ysize;
+    sizexy *= ysize;
 
 
 
     if(datatype == _DATATYPE_FLOAT)
     {
         FUNC_CHECK_RETURN(
-            create_2Dimage_ID(ID_name, xsize, ysize, &ID));
+            create_2Dimage_ID(ID_name, xsize, ysize, &ID)
+        );
     }
     else
     {
         FUNC_CHECK_RETURN(
-            create_2Dimage_ID_double(ID_name, xsize, ysize, &ID));
+            create_2Dimage_ID_double(ID_name, xsize, ysize, &ID)
+        );
     }
 
     IDcoeff = image_ID(IDcoeff_name);
@@ -89,6 +91,7 @@ errno_t linopt_imtools_image_construct(
 
     if(datatype == _DATATYPE_FLOAT)
     {
+        memset(data.image[ID].array.F, 0, sizeof(float)*data.image[ID].md[0].nelement);
         for(uint32_t kk = 0; kk < zsize; kk++)
             for(uint64_t ii = 0; ii < sizexy; ii++)
             {
@@ -98,6 +101,7 @@ errno_t linopt_imtools_image_construct(
     }
     else
     {
+        memset(data.image[ID].array.D, 0, sizeof(double)*data.image[ID].md[0].nelement);
         for(uint32_t kk = 0; kk < zsize; kk++)
             for(uint64_t ii = 0; ii < sizexy; ii++)
             {
