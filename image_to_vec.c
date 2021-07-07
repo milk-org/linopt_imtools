@@ -55,17 +55,23 @@ static errno_t help_function()
 //
 //
 errno_t linopt_imtools_image_to_vec(
-    const char *ID_name,
-    const char *IDpixindex_name,
-    const char *IDpixmult_name,
-    const char *IDvec_name,
+    const char *__restrict__ ID_name,
+    const char *__restrict__ IDpixindex_name,
+    const char *__restrict__ IDpixmult_name,
+    const char *__restrict__ IDvec_name,
     imageID    *outID
 )
 {
     DEBUG_TRACE_FSTART();
+    DEBUG_TRACEPOINT(
+        "FARG %s %s %s %s",
+        ID_name,
+        IDpixindex_name,
+        IDpixmult_name,
+        IDvec_name
+    );
 
     imageID ID;
-    long k;
     imageID IDpixindex, IDpixmult;
     imageID IDvec;
     long NBpix;
@@ -86,7 +92,7 @@ errno_t linopt_imtools_image_to_vec(
     {
         FUNC_CHECK_RETURN(
             create_2Dimage_ID(IDvec_name, NBpix, 1, &IDvec));
-        for(k = 0; k < NBpix; k++)
+        for(long k = 0; k < NBpix; k++)
         {
             data.image[IDvec].array.F[k] = data.image[IDpixmult].array.F[k] *
                                            data.image[ID].array.F[data.image[IDpixindex].array.SI64[k]];
@@ -101,7 +107,7 @@ errno_t linopt_imtools_image_to_vec(
                 create_2Dimage_ID(IDvec_name, NBpix, data.image[ID].md[0].size[2], &IDvec));
 
             for(uint32_t kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
-                for(k = 0; k < NBpix; k++)
+                for(long k = 0; k < NBpix; k++)
                 {
                     data.image[IDvec].array.F[kk * NBpix + k] = data.image[IDpixmult].array.F[k] *
                             data.image[ID].array.F[kk * sizexy + data.image[IDpixindex].array.SI64[k]];
@@ -113,7 +119,7 @@ errno_t linopt_imtools_image_to_vec(
                 create_2Dimage_ID(IDvec_name, NBpix * 2, data.image[ID].md[0].size[2], &IDvec));
 
             for(uint32_t kk = 0; kk < data.image[ID].md[0].size[2]; kk++)
-                for(k = 0; k < NBpix; k++)
+                for(long k = 0; k < NBpix; k++)
                 {
                     data.image[IDvec].array.F[kk * NBpix * 2 + 2 * k] =
                         data.image[IDpixmult].array.F[k] * data.image[ID].array.CF[kk * sizexy +
