@@ -116,15 +116,22 @@ errno_t linopt_imtools_image_fitModes(
     {
 
         FUNC_CHECK_RETURN(
-            linopt_imtools_mask_to_pixtable(IDmask_name, "_fm_pixind", "_fm_pixmul", NULL)
+            linopt_imtools_mask_to_pixtable(
+                IDmask_name,
+                "_fm_pixind",
+                "_fm_pixmul",
+                NULL
+            )
         );
 
         FUNC_CHECK_RETURN(
-            linopt_imtools_image_to_vec(IDmodes_name,
-                                        "_fm_pixind",
-                                        "_fm_pixmul",
-                                        "_fm_respm",
-                                        NULL)
+            linopt_imtools_image_to_vec(
+                IDmodes_name,
+                "_fm_pixind",
+                "_fm_pixmul",
+                "_fm_respm",
+                NULL
+            )
         );
 
 
@@ -170,7 +177,9 @@ errno_t linopt_imtools_image_fitModes(
 //   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
 
 
-    delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING);
+    FUNC_CHECK_RETURN(
+        delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING)
+    );
 
 
     if(0) // testing
