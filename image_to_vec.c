@@ -55,10 +55,10 @@ static errno_t help_function()
 //
 //
 errno_t linopt_imtools_image_to_vec(
-    const char *__restrict__ ID_name,
-    const char *__restrict__ IDpixindex_name,
-    const char *__restrict__ IDpixmult_name,
-    const char *__restrict__ IDvec_name,
+    const char *__restrict ID_name,
+    const char *__restrict IDpixindex_name,
+    const char *__restrict IDpixmult_name,
+    const char *__restrict IDvec_name,
     imageID    *outID
 )
 {
