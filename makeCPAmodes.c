@@ -254,7 +254,7 @@ errno_t linopt_imtools_makeCPAmodes(
     }
 
     FUNC_CHECK_RETURN(
-        delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_WARNING)
+        delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_IGNORE)
     );
 
     FUNC_CHECK_RETURN(
