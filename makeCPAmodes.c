@@ -270,7 +270,10 @@ errno_t linopt_imtools_makeCPAmodes(
         create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1, &IDfreq)
     );
 
-    DEBUG_TRACEPOINT("compute");
+    DEBUG_TRACEPOINT("IDfreq %ld", IDfreq);
+    DEBUG_TRACEPOINT("IDx %ld", IDx);
+    DEBUG_TRACEPOINT("IDy %ld", IDy);
+    DEBUG_TRACEPOINT("IDr %ld", IDr);
 
     // mode 0 (piston)
     data.image[IDfreq].array.F[0] = 0.0;
@@ -285,10 +288,13 @@ errno_t linopt_imtools_makeCPAmodes(
         }
     }
 
+
+
     k1 = 1;
     k = 2;
     while(k < NBmax)
     {
+        DEBUG_TRACEPOINT("k = %ld / %ld", k, NBmax);
         //      printf("\r%5ld / %5ld          ", k, NBmax);
         //      fflush(stdout);
         CPAx = CPAxarray[k1];
