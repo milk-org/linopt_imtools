@@ -296,8 +296,6 @@ errno_t linopt_imtools_makeCPAmodes(
     {
         DEBUG_TRACEPOINT("k = %ld / %ld   k1 = %ld / %ld", k, NBmax, k1, NBfrequ);
 
-        //      printf("\r%5ld / %5ld          ", k, NBmax);
-        //      fflush(stdout);
         CPAx = CPAxarray[k1];
         CPAy = CPAyarray[k1];
         DEBUG_TRACEPOINT("    %ld %f %f", k1, CPAx, CPAy);
@@ -311,7 +309,7 @@ errno_t linopt_imtools_makeCPAmodes(
             data.image[IDfreq].array.F[k] = sqrt(CPAx * CPAx + CPAy * CPAy);
             if(r < radfactlim)
             {
-                //data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
+                data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
                 data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
             }
         }
