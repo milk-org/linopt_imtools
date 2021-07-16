@@ -263,7 +263,6 @@ errno_t linopt_imtools_makeCPAmodes(
     );
 
 
-
     DEBUG_TRACEPOINT("Create cpamodesfreq");
 
     FUNC_CHECK_RETURN(
@@ -274,6 +273,9 @@ errno_t linopt_imtools_makeCPAmodes(
     DEBUG_TRACEPOINT("IDx %ld", IDx);
     DEBUG_TRACEPOINT("IDy %ld", IDy);
     DEBUG_TRACEPOINT("IDr %ld", IDr);
+    DEBUG_TRACEPOINT("ID %ld", ID);
+    DEBUG_TRACEPOINT("size2 %ld", size2);
+    list_image_ID();
 
     // mode 0 (piston)
     data.image[IDfreq].array.F[0] = 0.0;
@@ -299,7 +301,7 @@ errno_t linopt_imtools_makeCPAmodes(
         //      fflush(stdout);
         CPAx = CPAxarray[k1];
         CPAy = CPAyarray[k1];
-        // printf("    %ld %f %f\n", k1, CPAx, CPAy);
+        DEBUG_TRACEPOINT("    %ld %f %f", k1, CPAx, CPAy);
         for(ii = 0; ii < size2; ii++)
         {
             x = data.image[IDx].array.F[ii];
