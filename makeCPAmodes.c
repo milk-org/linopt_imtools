@@ -153,8 +153,7 @@ errno_t linopt_imtools_makeCPAmodes(
             NBfrequ ++;
         }
 
-    printf("NBfrequ = %ld\n", NBfrequ);
-    fflush(stdout);
+    DEBUG_TRACEPOINT("NBfrequ = %ld", NBfrequ);
 
     CPAxarray = (float *) malloc(sizeof(float) * NBfrequ);
     if(CPAxarray == NULL) {
@@ -296,12 +295,14 @@ errno_t linopt_imtools_makeCPAmodes(
     k = 2;
     while(k < NBmax)
     {
-        DEBUG_TRACEPOINT("k = %ld / %ld", k, NBmax);
+        DEBUG_TRACEPOINT("k = %ld / %ld   k1 = %ld / %ld", k, NBmax, k1, NBfrequ);
+
         //      printf("\r%5ld / %5ld          ", k, NBmax);
         //      fflush(stdout);
         CPAx = CPAxarray[k1];
         CPAy = CPAyarray[k1];
         DEBUG_TRACEPOINT("    %ld %f %f", k1, CPAx, CPAy);
+
         for(ii = 0; ii < size2; ii++)
         {
             x = data.image[IDx].array.F[ii];
