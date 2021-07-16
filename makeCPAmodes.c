@@ -290,7 +290,6 @@ errno_t linopt_imtools_makeCPAmodes(
     }
 
 
-
     k1 = 1;
     k = 2;
     while(k < NBmax)
@@ -313,7 +312,7 @@ errno_t linopt_imtools_makeCPAmodes(
             if(r < radfactlim)
             {
                 //data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
-                //data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
+                data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
             }
         }
         k += 2;
