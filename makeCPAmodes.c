@@ -1,5 +1,8 @@
 #include <math.h>
 
+// log all debug trace points to file
+#define DEBUGLOG
+
 #include "CommandLineInterface/CLIcore.h"
 
 #include "COREMOD_tools/COREMOD_tools.h"
@@ -83,6 +86,8 @@ errno_t linopt_imtools_makeCPAmodes(
 )
 {
     DEBUG_TRACE_FSTART();
+    DEBUG_TRACEPOINT("FARG %s",
+                     ID_name);
 
     imageID ID;
     imageID IDx, IDy, IDr;
@@ -257,10 +262,15 @@ errno_t linopt_imtools_makeCPAmodes(
         delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_IGNORE)
     );
 
+
+
+    DEBUG_TRACEPOINT("Create cpamodesfreq");
+
     FUNC_CHECK_RETURN(
         create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1, &IDfreq)
     );
 
+    DEBUG_TRACEPOINT("compute");
 
     // mode 0 (piston)
     data.image[IDfreq].array.F[0] = 0.0;
@@ -302,11 +312,13 @@ errno_t linopt_imtools_makeCPAmodes(
     }
     //  printf("done \n");
     // fflush(stdout);
+    DEBUG_TRACEPOINT("free memory");
 
     free(CPAxarray);
     free(CPAyarray);
     free(CPArarray);
 
+    DEBUG_TRACEPOINT("delete tmp files");
 
     FUNC_CHECK_RETURN(
         delete_image_ID("cpa_tmpx",DELETE_IMAGE_ERRMODE_WARNING)
