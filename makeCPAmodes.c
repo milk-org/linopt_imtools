@@ -312,8 +312,8 @@ errno_t linopt_imtools_makeCPAmodes(
             data.image[IDfreq].array.F[k] = sqrt(CPAx * CPAx + CPAy * CPAy);
             if(r < radfactlim)
             {
-                data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
-                data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
+                //data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
+                //data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
             }
         }
         k += 2;
