@@ -225,7 +225,7 @@ errno_t linopt_compute_SVDpseudoInverse(
                 data.image[ID_AtA].array.F[jj * m + ii] =
                     (float) gsl_matrix_get(matrix_DtraD, ii, jj);
             }
-        save_fits("AtA", "!test_AtA.fits");
+        save_fits("AtA", "test_AtA.fits");
     }
 
     if(timing == 1)
@@ -328,7 +328,7 @@ errno_t linopt_compute_SVDpseudoInverse(
 
     if(testmode == 1)
     {
-        save_fits(ID_VTmatrix_name, "!test_VT.fits");
+        save_fits(ID_VTmatrix_name, "test_VT.fits");
     }
 
     /* second, build the "inverse" of the diagonal matrix of eigenvalues (matrix1) */
@@ -385,7 +385,7 @@ errno_t linopt_compute_SVDpseudoInverse(
             {
                 data.image[ID].array.F[jj * m + ii] = gsl_matrix_get(matrix_DtraDinv, ii, jj);
             }
-        save_fits("M2", "!test_M2.fits");
+        save_fits("M2", "test_M2.fits");
     }
 
 
@@ -443,7 +443,7 @@ errno_t linopt_compute_SVDpseudoInverse(
 
     if(testmode == 1)
     {
-        save_fits(ID_Cmatrix_name, "!test_Ainv.fits");
+        save_fits(ID_Cmatrix_name, "test_Ainv.fits");
     }
 
     if(timing == 1)

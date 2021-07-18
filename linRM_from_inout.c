@@ -183,7 +183,7 @@ errno_t linopt_compute_linRM_from_inout(
             data.image[IDpokeM].array.F[NBact * spl + act] = data.image[IDin].array.F[spl *
                     xsizein * ysizein + inpixarray[act]];
         }
-    save_fits("pokeM", "!_test_pokeM.fits");
+    save_fits("pokeM", "_test_pokeM.fits");
 
     // compute pokeM pseudo-inverse
 #ifdef HAVE_MAGMA
@@ -194,7 +194,7 @@ errno_t linopt_compute_linRM_from_inout(
 #endif
 
     list_image_ID();
-    save_fits("pokeMinv", "!pokeMinv.fits");
+    save_fits("pokeMinv", "pokeMinv.fits");
     IDpinv = image_ID("pokeMinv");
 
     // multiply measurements by pokeMinv
@@ -210,7 +210,7 @@ errno_t linopt_compute_linRM_from_inout(
                     data.image[IDpinv].array.F[kk * NBact + act];
             }
     }
-    save_fits("_respmat", "!_test_RM.fits");
+    save_fits("_respmat", "_test_RM.fits");
 //exit(0);
 
 
