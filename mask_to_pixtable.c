@@ -84,8 +84,7 @@ errno_t linopt_imtools_mask_to_pixtable(
 
     sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
     if(sizearray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
     sizearray[0] = NBpix;
     sizearray[1] = 1;

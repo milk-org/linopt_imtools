@@ -140,8 +140,7 @@ errno_t linopt_compute_SVDpseudoInverse(
 
     arraysizetmp = (uint32_t *) malloc(sizeof(uint32_t) * 3);
     if(arraysizetmp == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
 

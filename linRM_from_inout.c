@@ -145,8 +145,7 @@ errno_t linopt_compute_linRM_from_inout(
 
     inpixarray = (long *) malloc(sizeof(long) * NBact);
     if(inpixarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     act = 0;
@@ -161,8 +160,7 @@ errno_t linopt_compute_linRM_from_inout(
 
     sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
     if(sizearray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     sizearray[0] = NBact;

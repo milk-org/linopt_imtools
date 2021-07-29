@@ -95,14 +95,12 @@ errno_t linopt_compute_1Dfit(
 
     xarray = (float *) malloc(sizeof(float) * NBpt);
     if(xarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     valarray = (float *) malloc(sizeof(float) * NBpt);
     if(valarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
 

@@ -157,20 +157,17 @@ errno_t linopt_imtools_makeCPAmodes(
 
     CPAxarray = (float *) malloc(sizeof(float) * NBfrequ);
     if(CPAxarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     CPAyarray = (float *) malloc(sizeof(float) * NBfrequ);
     if(CPAyarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     CPArarray = (float *) malloc(sizeof(float) * NBfrequ);
     if(CPArarray == NULL) {
-        PRINT_ERROR("malloc returns NULL pointer");
-        abort();
+        FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     NBfrequ = 0;
