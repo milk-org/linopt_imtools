@@ -17,32 +17,32 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".inim", "input vector", "imvec",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &imvecname
+        (void **) &imvecname, NULL
     },
     {
         CLIARG_IMG, ".inpixi", "pixel index image", "pixi",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inpixiname
+        (void **) &inpixiname, NULL
     },
     {
         CLIARG_IMG, ".inpixmult", "input pixel mult image", "pixmult",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inpixmultname
+        (void **) &inpixmultname, NULL
     },
     {
         CLIARG_STR, ".outim", "output 2D image", "outim",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     },
     {
         CLIARG_LONG, ".xsize", "X size", "512",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &xsizein
+        (void **) &xsizein, NULL
     },
     {
         CLIARG_LONG, ".ysize", "Y size", "512",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &ysizein
+        (void **) &ysizein, NULL
     }
 };
 

@@ -17,27 +17,27 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_STR, ".indat", "input file", "data.txt",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &infname
+        (void **) &infname, NULL
     },
     {
         CLIARG_LONG, ".NBpt", "number of sample points", "1000",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &NBptval
+        (void **) &NBptval, NULL
     },
     {
         CLIARG_LONG, ".maxorder", "maximum polynomial order", "8",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &maxorderval
+        (void **) &maxorderval, NULL
     },
     {
         CLIARG_STR, ".outdat", "output file", "fitsol.txt",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outfname
+        (void **) &outfname, NULL
     },
     {
         CLIARG_LONG, ".mode", "fit mode", "0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &modeval
+        (void **) &modeval, NULL
     }
 };
 

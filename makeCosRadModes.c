@@ -17,27 +17,27 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_STR, ".outim", "output image", "outim",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     },
     {
         CLIARG_LONG, ".size", "size", "512",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &sizeout
+        (void **) &sizeout, NULL
     },
     {
         CLIARG_LONG, ".kmax", "k max", "100",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &kmaxval
+        (void **) &kmaxval, NULL
     },
     {
         CLIARG_FLOAT, ".radius", "radius [pix]", "160.0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &radiusval
+        (void **) &radiusval, NULL
     },
     {
         CLIARG_FLOAT, ".rfactlim", "radius factor limit", "2.0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &radfactorlimval
+        (void **) &radfactorlimval, NULL
     }
 };
 

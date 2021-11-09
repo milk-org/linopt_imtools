@@ -24,32 +24,32 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".inim", "input image", "im",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inimname
+        (void **) &inimname, NULL
     },
     {
         CLIARG_STR, ".outim", "output image", "outim",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     },
     {
         CLIARG_FLOAT, ".svdeps", "SVD cutoff", "0.001",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &SVD_epsilon
+        (void **) &SVD_epsilon, NULL
     },
     {
         CLIARG_LONG, ".maxNBmode", "Maximum NB modes", "10000",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &max_NBmodes
+        (void **) &max_NBmodes, NULL
     },
     {
         CLIARG_STR, ".outimVT", "output VT matrix", "outVTmat",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimVTmatname
+        (void **) &outimVTmatname, NULL
     },
     {
         CLIARG_LONG, ".GPU", "use GPU", "0",
         CLIARG_HIDDEN_DEFAULT,
-        (void **) &useGPU
+        (void **) &useGPU, NULL
     }
 };
 

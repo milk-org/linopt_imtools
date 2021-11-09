@@ -32,32 +32,32 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".inim", "input image", "im1",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inimname
+        (void **) &inimname, NULL
     },
     {
         CLIARG_IMG, ".modes", "modes image cube", "imcmode",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &modesimname
+        (void **) &modesimname, NULL
     },
     {
         CLIARG_IMG, ".mask", "mask image", "immask",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &maskimname
+        (void **) &maskimname, NULL
     },
     {
         CLIARG_FLOAT, ".SVDeps", "SVD cutoff", "0.001",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &SVDeps
+        (void **) &SVDeps, NULL
     },
     {
         CLIARG_STR, ".outimcoeff", "output coeff image", "immask",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outcoeffimname
+        (void **) &outcoeffimname, NULL
     },
     {
         CLIARG_LONG, ".reuse", "reuse configuration flag", "0",
         CLIARG_HIDDEN_DEFAULT,
-        (void **) &reuse
+        (void **) &reuse, NULL
     }
 };
 

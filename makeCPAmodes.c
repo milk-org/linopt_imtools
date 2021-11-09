@@ -22,37 +22,37 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_STR, ".out_name", "output image", "out1",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     },
     {
         CLIARG_LONG, ".size", "size", "512",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &sizeout
+        (void **) &sizeout, NULL
     },
     {
         CLIARG_FLOAT, ".CPAmax", "maximum cycle per aperture", "8.0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &CPAmaxval
+        (void **) &CPAmaxval, NULL
     },
     {
         CLIARG_FLOAT, ".deltaCPA", "CPA interval", "0.8",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &deltaCPAval
+        (void **) &deltaCPAval, NULL
     },
     {
         CLIARG_FLOAT, ".radius", "disk radius", "160.0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &radiusval
+        (void **) &radiusval, NULL
     },
     {
         CLIARG_FLOAT, ".radfactlim", "radius factor limit", "1.5",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &radiusfactorlimval
+        (void **) &radiusfactorlimval, NULL
     },
     {
         CLIARG_LONG, ".writefile", "write file flag", "0",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &writefileval
+        (void **) &writefileval, NULL
     }
 };
 

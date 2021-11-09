@@ -16,17 +16,17 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".modes", "modes image cube", "imcmode",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &modesimname
+        (void **) &modesimname, NULL
     },
     {
         CLIARG_IMG, ".invec", "input vector", "imvec",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &invecname
+        (void **) &invecname, NULL
     },
     {
         CLIARG_STR, ".outim", "output image", "outim",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     }
 };
 

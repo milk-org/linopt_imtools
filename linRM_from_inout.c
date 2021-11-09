@@ -18,22 +18,22 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".inimname", "input image", "im",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inputimname
+        (void **) &inputimname, NULL
     },
     {
         CLIARG_IMG, ".inmaskname", "mask image", "mask",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &inmaskname
+        (void **) &inmaskname, NULL
     },
     {
         CLIARG_IMG, ".mrespimname", "measured response images", "mresp",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &mrespimname
+        (void **) &mrespimname, NULL
     },
     {
         CLIARG_STR, ".outRM", "output RM image", "ourRM",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outRMimname
+        (void **) &outRMimname, NULL
     }
 };
 

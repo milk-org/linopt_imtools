@@ -17,17 +17,17 @@ static CLICMDARGDEF farg[] =
     {
         CLIARG_IMG, ".inc", "input 3D cube", "imc",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &imcinname
+        (void **) &imcinname, NULL
     },
     {
         CLIARG_STR, ".outm", "output modes", "outm",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname
+        (void **) &outimname, NULL
     },
     {
         CLIARG_STR, ".outcoeff", "output coeffs", "outcoeff",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &outcoeffname
+        (void **) &outcoeffname, NULL
     }
 };
 
