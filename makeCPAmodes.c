@@ -16,78 +16,26 @@ static double *radiusval;
 static double *radiusfactorlimval;
 static long *writefileval;
 
+static CLICMDARGDEF farg[] = {
+    {CLIARG_STR, ".out_name", "output image", "out1", CLIARG_VISIBLE_DEFAULT, (void **)&outimname, NULL},
+    {CLIARG_LONG, ".size", "size", "512", CLIARG_VISIBLE_DEFAULT, (void **)&sizeout, NULL},
+    {CLIARG_FLOAT, ".CPAmax", "maximum cycle per aperture", "8.0", CLIARG_VISIBLE_DEFAULT, (void **)&CPAmaxval, NULL},
+    {CLIARG_FLOAT, ".deltaCPA", "CPA interval", "0.8", CLIARG_VISIBLE_DEFAULT, (void **)&deltaCPAval, NULL},
+    {CLIARG_FLOAT, ".radius", "disk radius", "160.0", CLIARG_VISIBLE_DEFAULT, (void **)&radiusval, NULL},
+    {CLIARG_FLOAT, ".radfactlim", "radius factor limit", "1.5", CLIARG_VISIBLE_DEFAULT, (void **)&radiusfactorlimval,
+     NULL},
+    {CLIARG_LONG, ".writefile", "write file flag", "0", CLIARG_VISIBLE_DEFAULT, (void **)&writefileval, NULL}};
 
-static CLICMDARGDEF farg[] =
-{
-    {
-        CLIARG_STR, ".out_name", "output image", "out1",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &outimname, NULL
-    },
-    {
-        CLIARG_LONG, ".size", "size", "512",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &sizeout, NULL
-    },
-    {
-        CLIARG_FLOAT, ".CPAmax", "maximum cycle per aperture", "8.0",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &CPAmaxval, NULL
-    },
-    {
-        CLIARG_FLOAT, ".deltaCPA", "CPA interval", "0.8",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &deltaCPAval, NULL
-    },
-    {
-        CLIARG_FLOAT, ".radius", "disk radius", "160.0",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &radiusval, NULL
-    },
-    {
-        CLIARG_FLOAT, ".radfactlim", "radius factor limit", "1.5",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &radiusfactorlimval, NULL
-    },
-    {
-        CLIARG_LONG, ".writefile", "write file flag", "0",
-        CLIARG_VISIBLE_DEFAULT,
-        (void **) &writefileval, NULL
-    }
-};
-
-static CLICMDDATA CLIcmddata =
-{
-    "mkFouriermodes",
-    "make basis of Fourier Modes",
-    CLICMD_FIELDS_DEFAULTS
-};
-
+static CLICMDDATA CLIcmddata = {"mkFouriermodes", "make basis of Fourier Modes", CLICMD_FIELDS_DEFAULTS};
 
 // detailed help
-static errno_t help_function()
-{
-    return RETURN_SUCCESS;
-}
+static errno_t help_function() { return RETURN_SUCCESS; }
 
-
-
-
-
-errno_t linopt_imtools_makeCPAmodes(
-    const char *ID_name,
-    long        size,
-    float       CPAmax,
-    float       deltaCPA,
-    float       radius,
-    float       radfactlim,
-    int         writeMfile,
-    long       *outNBmax
-)
+errno_t linopt_imtools_makeCPAmodes(const char *ID_name, long size, float CPAmax, float deltaCPA, float radius,
+                                    float radfactlim, int writeMfile, long *outNBmax)
 {
     DEBUG_TRACE_FSTART();
-    DEBUG_TRACEPOINT("FARG %s",
-                     ID_name);
+    DEBUG_TRACEPOINT("FARG %s", ID_name);
 
     imageID ID;
     imageID IDx, IDy, IDr;
@@ -113,27 +61,20 @@ errno_t linopt_imtools_makeCPAmodes(
     printf("radius     = %f\n", radius);
     printf("radfactlim = %f\n", radfactlim);
 
-
     size2 = size * size;
-    FUNC_CHECK_RETURN(
-        create_2Dimage_ID("cpa_tmpx", size, size, &IDx)
-    );
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpx", size, size, &IDx));
 
-    FUNC_CHECK_RETURN(
-        create_2Dimage_ID("cpa_tmpy", size, size, &IDy)
-    );
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpy", size, size, &IDy));
 
-    FUNC_CHECK_RETURN(
-        create_2Dimage_ID("cpa_tmpr", size, size, &IDr)
-    );
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpr", size, size, &IDr));
 
     printf("precomputing x, y, r\n");
     fflush(stdout);
 
-    for(ii = 0; ii < size; ii++)
+    for (ii = 0; ii < size; ii++)
     {
         x = (1.0 * ii - 0.5 * size) / radius;
-        for(jj = 0; jj < size; jj++)
+        for (jj = 0; jj < size; jj++)
         {
             y = (1.0 * jj - 0.5 * size) / radius;
             r = sqrt(x * x + y * y);
@@ -143,48 +84,50 @@ errno_t linopt_imtools_makeCPAmodes(
         }
     }
 
-
     printf("CPA: max = %f   delta = %f\n", CPAmax, deltaCPA);
     fflush(stdout);
     NBfrequ = 0;
-    for(CPAx = 0; CPAx < CPAmax; CPAx += deltaCPA)
-        for(CPAy = -CPAmax; CPAy < CPAmax; CPAy += deltaCPA)
+    for (CPAx = 0; CPAx < CPAmax; CPAx += deltaCPA)
+        for (CPAy = -CPAmax; CPAy < CPAmax; CPAy += deltaCPA)
         {
-            NBfrequ ++;
+            NBfrequ++;
         }
 
     DEBUG_TRACEPOINT("NBfrequ = %ld", NBfrequ);
 
-    CPAxarray = (float *) malloc(sizeof(float) * NBfrequ);
-    if(CPAxarray == NULL) {
+    CPAxarray = (float *)malloc(sizeof(float) * NBfrequ);
+    if (CPAxarray == NULL)
+    {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
-    CPAyarray = (float *) malloc(sizeof(float) * NBfrequ);
-    if(CPAyarray == NULL) {
+    CPAyarray = (float *)malloc(sizeof(float) * NBfrequ);
+    if (CPAyarray == NULL)
+    {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
-    CPArarray = (float *) malloc(sizeof(float) * NBfrequ);
-    if(CPArarray == NULL) {
+    CPArarray = (float *)malloc(sizeof(float) * NBfrequ);
+    if (CPArarray == NULL)
+    {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     NBfrequ = 0;
     //ydist = 2.0*deltaCPA;
     //y0 = 0.0;
-    for(CPAx = 0; CPAx < CPAmax; CPAx += deltaCPA)
+    for (CPAx = 0; CPAx < CPAmax; CPAx += deltaCPA)
     {
-        for(CPAy = 0; CPAy < CPAmax; CPAy += deltaCPA)
+        for (CPAy = 0; CPAy < CPAmax; CPAy += deltaCPA)
         {
             CPAxarray[NBfrequ] = CPAx;
             CPAyarray[NBfrequ] = CPAy;
             CPArarray[NBfrequ] = sqrt(CPAx * CPAx + CPAy * CPAy);
             NBfrequ++;
         }
-        if(CPAx > eps)
+        if (CPAx > eps)
         {
-            for(CPAy = -deltaCPA; CPAy > -CPAmax; CPAy -= deltaCPA)
+            for (CPAy = -deltaCPA; CPAy > -CPAmax; CPAy -= deltaCPA)
             {
                 CPAxarray[NBfrequ] = CPAx;
                 CPAyarray[NBfrequ] = CPAy;
@@ -194,28 +137,18 @@ errno_t linopt_imtools_makeCPAmodes(
         }
     }
 
-
     //  for(k1=0;k1<NBfrequ;k1++)
     //printf("%ld %f %f %f\n", k1, CPAxarray[k1], CPAyarray[k1], CPArarray[k1]);
-
-
 
     //  printf("sorting\n");
     // fflush(stdout);
 
     quick_sort3_float(CPArarray, CPAxarray, CPAyarray, NBfrequ);
 
-
-
-
     NBmax = NBfrequ * 2;
-    FUNC_CHECK_RETURN(
-        create_3Dimage_ID(ID_name, size, size, NBmax - 1, &ID)
-    );
+    FUNC_CHECK_RETURN(create_3Dimage_ID(ID_name, size, size, NBmax - 1, &ID));
 
-
-
-    if(writeMfile == 1)
+    if (writeMfile == 1)
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
         fprintf(fp, "# size       = %ld\n", size);
@@ -226,26 +159,22 @@ errno_t linopt_imtools_makeCPAmodes(
         fprintf(fp, "# \n");
         fprintf(fp, "# Unit for x and y = radius [pixel]\n");
         fprintf(fp, "# \n");
-        fprintf(fp, "%4ld %10.5f %10.5f    1.0\n", (long) 0, 0.0, 0.0);
+        fprintf(fp, "%4ld %10.5f %10.5f    1.0\n", (long)0, 0.0, 0.0);
         k1 = 1;
         k = 2;
-        while(k < NBmax)
+        while (k < NBmax)
         {
             CPAx = CPAxarray[k1];
             CPAy = CPAyarray[k1];
-            if(CPAy < 0)
+            if (CPAy < 0)
             {
-                fprintf(fp, "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n", k - 1, CPAx,
-                        CPAy, CPAx, -CPAy);
-                fprintf(fp, "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n", k, CPAx, CPAy,
-                        CPAx, -CPAy);
+                fprintf(fp, "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n", k - 1, CPAx, CPAy, CPAx, -CPAy);
+                fprintf(fp, "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n", k, CPAx, CPAy, CPAx, -CPAy);
             }
             else
             {
-                fprintf(fp, "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n", k - 1, CPAx,
-                        CPAy, CPAx, CPAy);
-                fprintf(fp, "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n", k, CPAx, CPAy,
-                        CPAx, CPAy);
+                fprintf(fp, "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n", k - 1, CPAx, CPAy, CPAx, CPAy);
+                fprintf(fp, "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n", k, CPAx, CPAy, CPAx, CPAy);
             }
             k += 2;
             k1++;
@@ -254,16 +183,11 @@ errno_t linopt_imtools_makeCPAmodes(
         fclose(fp);
     }
 
-    FUNC_CHECK_RETURN(
-        delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_IGNORE)
-    );
-
+    FUNC_CHECK_RETURN(delete_image_ID("cpamodesfreq", DELETE_IMAGE_ERRMODE_IGNORE));
 
     DEBUG_TRACEPOINT("Create cpamodesfreq");
 
-    FUNC_CHECK_RETURN(
-        create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1, &IDfreq)
-    );
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpamodesfreq", NBmax - 1, 1, &IDfreq));
 
     DEBUG_TRACEPOINT("IDfreq %ld", IDfreq);
     DEBUG_TRACEPOINT("IDx %ld", IDx);
@@ -275,21 +199,20 @@ errno_t linopt_imtools_makeCPAmodes(
 
     // mode 0 (piston)
     data.image[IDfreq].array.F[0] = 0.0;
-    for(ii = 0; ii < size2; ii++)
+    for (ii = 0; ii < size2; ii++)
     {
         x = data.image[IDx].array.F[ii];
         y = data.image[IDy].array.F[ii];
         r = data.image[IDr].array.F[ii];
-        if(r < radfactlim)
+        if (r < radfactlim)
         {
             data.image[ID].array.F[ii] = 1.0;
         }
     }
 
-
     k1 = 1;
     k = 2;
-    while(k < NBmax)
+    while (k < NBmax)
     {
         DEBUG_TRACEPOINT("k = %ld / %ld   k1 = %ld / %ld", k, NBmax, k1, NBfrequ);
 
@@ -297,16 +220,16 @@ errno_t linopt_imtools_makeCPAmodes(
         CPAy = CPAyarray[k1];
         DEBUG_TRACEPOINT("    %ld %f %f", k1, CPAx, CPAy);
 
-        for(ii = 0; ii < size2; ii++)
+        for (ii = 0; ii < size2; ii++)
         {
             x = data.image[IDx].array.F[ii];
             y = data.image[IDy].array.F[ii];
             r = data.image[IDr].array.F[ii];
             data.image[IDfreq].array.F[k - 1] = sqrt(CPAx * CPAx + CPAy * CPAy);
             data.image[IDfreq].array.F[k] = sqrt(CPAx * CPAx + CPAy * CPAy);
-            if(r < radfactlim)
+            if (r < radfactlim)
             {
-                data.image[ID].array.F[(k - 1)*size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
+                data.image[ID].array.F[(k - 1) * size2 + ii] = cos(M_PI * (x * CPAx + y * CPAy));
                 data.image[ID].array.F[k * size2 + ii] = sin(M_PI * (x * CPAx + y * CPAy));
             }
         }
@@ -323,22 +246,16 @@ errno_t linopt_imtools_makeCPAmodes(
 
     DEBUG_TRACEPOINT("delete tmp files");
 
-    FUNC_CHECK_RETURN(
-        delete_image_ID("cpa_tmpx",DELETE_IMAGE_ERRMODE_WARNING)
-    );
+    FUNC_CHECK_RETURN(delete_image_ID("cpa_tmpx", DELETE_IMAGE_ERRMODE_WARNING));
 
-    FUNC_CHECK_RETURN(
-        delete_image_ID("cpa_tmpy", DELETE_IMAGE_ERRMODE_WARNING)
-    );
+    FUNC_CHECK_RETURN(delete_image_ID("cpa_tmpy", DELETE_IMAGE_ERRMODE_WARNING));
 
-    FUNC_CHECK_RETURN(
-        delete_image_ID("cpa_tmpr", DELETE_IMAGE_ERRMODE_WARNING)
-    );
+    FUNC_CHECK_RETURN(delete_image_ID("cpa_tmpr", DELETE_IMAGE_ERRMODE_WARNING));
 
     // printf("done \n");
     //fflush(stdout);
 
-    if(outNBmax != NULL)
+    if (outNBmax != NULL)
     {
         *outNBmax = NBmax;
     }
@@ -347,25 +264,14 @@ errno_t linopt_imtools_makeCPAmodes(
     return RETURN_SUCCESS;
 }
 
-
-
-
 static errno_t compute_function()
 {
     DEBUG_TRACE_FSTART();
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_START
 
-    linopt_imtools_makeCPAmodes(
-        outimname,
-        *sizeout,
-        *CPAmaxval,
-        *deltaCPAval,
-        *radiusval,
-        *radiusfactorlimval,
-        *writefileval,
-        NULL
-    );
+    linopt_imtools_makeCPAmodes(outimname, *sizeout, *CPAmaxval, *deltaCPAval, *radiusval, *radiusfactorlimval,
+                                *writefileval, NULL);
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_END
 
@@ -373,14 +279,12 @@ static errno_t compute_function()
     return RETURN_SUCCESS;
 }
 
-
-
 INSERT_STD_FPSCLIfunctions
 
-// Register function in CLI
-errno_t CLIADDCMD_linopt_imtools__makeCPAmodes()
+    // Register function in CLI
+    errno_t
+    CLIADDCMD_linopt_imtools__makeCPAmodes()
 {
     INSERT_STD_CLIREGISTERFUNC
     return RETURN_SUCCESS;
 }
-

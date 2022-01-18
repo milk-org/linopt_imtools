@@ -7,8 +7,6 @@
  *
  */
 
-
-
 /* ================================================================== */
 /* ================================================================== */
 /*            MODULE INFO                                             */
@@ -21,65 +19,52 @@
 #define MODULE_SHORTNAME_DEFAULT "lintools"
 
 // Module short description
-#define MODULE_DESCRIPTION       "Image linear decomposition and optimization tools"
+#define MODULE_DESCRIPTION "Image linear decomposition and optimization tools"
 
-
-
-
-
-
-
-
-
-
-#include <stdint.h>
-#include <string.h>
-#include <stdio.h>
 #include <ctype.h>
+#include <gsl/gsl_multifit.h>
+#include <gsl/gsl_multimin.h>
 #include <malloc.h>
 #include <math.h>
-#include <stdlib.h>
-#include <semaphore.h>
 #include <sched.h>
-#include <gsl/gsl_multimin.h>
-#include <gsl/gsl_multifit.h>
+#include <semaphore.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_eigen.h>
-#include <gsl/gsl_cblas.h>
 #include <gsl/gsl_blas.h>
-
+#include <gsl/gsl_cblas.h>
+#include <gsl/gsl_eigen.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
 
 #include <time.h>
 
 #include <fitsio.h>
 
-
-#include "CommandLineInterface/CLIcore.h"
-#include "COREMOD_tools/COREMOD_tools.h"
-#include "COREMOD_memory/COREMOD_memory.h"
 #include "COREMOD_arith/COREMOD_arith.h"
 #include "COREMOD_iofits/COREMOD_iofits.h"
-#include "statistic/statistic.h"
+#include "COREMOD_memory/COREMOD_memory.h"
+#include "COREMOD_tools/COREMOD_tools.h"
+#include "CommandLineInterface/CLIcore.h"
+#include "cudacomp/cudacomp.h"
 #include "info/info.h"
 #include "linopt_imtools/linopt_imtools.h"
-#include "cudacomp/cudacomp.h"
+#include "statistic/statistic.h"
 
 #include "CommandLineInterface/timeutils.h"
 
 #include "compute_SVDdecomp.h"
 #include "compute_SVDpseudoInverse.h"
 #include "image_construct.h"
-#include "image_to_vec.h"
 #include "image_fitModes.h"
+#include "image_to_vec.h"
 #include "lin1Dfit.h"
-#include "makeCosRadModes.h"
 #include "makeCPAmodes.h"
+#include "makeCosRadModes.h"
 #include "mask_to_pixtable.h"
-
-
 
 /*
 static long NBPARAM;
@@ -91,12 +76,6 @@ static long double *polycoeff2 = NULL;
 static long dfcnt = 0;
 */
 
-
-
-
-
-
-
 /* ================================================================== */
 /* ================================================================== */
 /*            INITIALIZE LIBRARY                                      */
@@ -107,10 +86,6 @@ static long dfcnt = 0;
 // macro argument defines module name for bindings
 //
 INIT_MODULE_LIB(linopt_imtools)
-
-
-
-
 
 /*
 
@@ -137,23 +112,6 @@ errno_t linopt_imtools_image_construct_stream_cli()
 }
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 static errno_t init_module_CLI()
 {
 
@@ -165,22 +123,17 @@ static errno_t init_module_CLI()
 
     CLIADDCMD_linopt_imtools__vec_to_2DImage();
 
-
     // CREATE MODES
 
     CLIADDCMD_linopt_imtools__makeCosRadModes();
 
     CLIADDCMD_linopt_imtools__makeCPAmodes();
 
-
     // LINEAR DECOMPOSITION
 
     CLIADDCMD_linopt_imtools__image_fitModes();
 
     CLIADDCMD_linopt_imtools__image_construct();
-
-
-
 
     /*   RegisterCLIcommand(
            "imlinconstructs",
@@ -197,33 +150,12 @@ static errno_t init_module_CLI()
 
     CLIADDCMD_linopt_imtools__lin1Dfits();
 
-
     // OPTIMIZATION
 
     CLIADDCMD_linopt_imtools__linRM_from_inout();
 
-
     return RETURN_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* =============================================================================================== */
 /* =============================================================================================== */
@@ -233,16 +165,9 @@ static errno_t init_module_CLI()
 /* =============================================================================================== */
 /* =============================================================================================== */
 
-
-
 // r0pix is r=1 in pixel unit
 
-imageID linopt_imtools_make1Dpolynomials(
-    const char *IDout_name,
-    long        NBpts,
-    long        MaxOrder,
-    float       r0pix
-)
+imageID linopt_imtools_make1Dpolynomials(const char *IDout_name, long NBpts, long MaxOrder, float r0pix)
 {
     DEBUG_TRACE_FSTART();
 
@@ -254,12 +179,11 @@ imageID linopt_imtools_make1Dpolynomials(
     ysize = 1;
     zsize = MaxOrder;
 
-    FUNC_CHECK_RETURN(
-        create_3Dimage_ID(IDout_name, xsize, ysize, zsize, &IDout));
+    FUNC_CHECK_RETURN(create_3Dimage_ID(IDout_name, xsize, ysize, zsize, &IDout));
 
-    for(kk = 0; kk < zsize; kk++)
+    for (kk = 0; kk < zsize; kk++)
     {
-        for(ii = 0; ii < xsize; ii++)
+        for (ii = 0; ii < xsize; ii++)
         {
             float r = 1.0 * ii / r0pix;
             data.image[IDout].array.F[kk * xsize + ii] = pow(r, 1.0 * kk);
@@ -269,13 +193,6 @@ imageID linopt_imtools_make1Dpolynomials(
     DEBUG_TRACE_FEXIT();
     return IDout;
 }
-
-
-
-
-
-
-
 
 /* --------------------------------------------------------------- */
 /*                                                                 */
@@ -308,7 +225,6 @@ double linopt_imtools_opt_f(
     return(value);
 }
 */
-
 
 /*
 void linopt_imtools_opt_df(
@@ -358,8 +274,6 @@ void linopt_imtools_opt_df(
 }
 */
 
-
-
 /*
 
 void linopt_imtools_opt_fdf(
@@ -373,13 +287,6 @@ void linopt_imtools_opt_fdf(
     linopt_imtools_opt_df(x, params, df);
 }
 */
-
-
-
-
-
-
-
 
 /*
 // FLOAT only
@@ -472,14 +379,6 @@ imageID linopt_imtools_image_construct_stream(
 }
 
 */
-
-
-
-
-
-
-
-
 
 /*
 //
@@ -791,8 +690,6 @@ double linopt_imtools_match_slow(
 
 */
 
-
-
 // match a single image (ID_name) to a linear sum of images within IDref_name
 // result is a 1D array of coefficients in IDsol_name
 //
@@ -915,23 +812,3 @@ double linopt_imtools_match(
 }
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
