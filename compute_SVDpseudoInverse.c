@@ -4,8 +4,9 @@
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_matrix.h>
 
-#include "COREMOD_iofits/savefits.h"
 #include "CommandLineInterface/CLIcore.h"
+
+#include "COREMOD_iofits/savefits.h"
 #include "CommandLineInterface/timeutils.h"
 #include "cudacomp/cudacomp.h"
 

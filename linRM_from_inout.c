@@ -1,7 +1,8 @@
 #include <math.h>
 
-#include "COREMOD_iofits/savefits.h"
 #include "CommandLineInterface/CLIcore.h"
+
+#include "COREMOD_iofits/savefits.h"
 
 #include "compute_SVDpseudoInverse.h"
 #include "cudacomp/magma_compute_SVDpseudoInverse.h"

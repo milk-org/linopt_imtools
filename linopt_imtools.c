@@ -44,11 +44,13 @@
 
 #include <fitsio.h>
 
+#include "CommandLineInterface/CLIcore.h"
+
 #include "COREMOD_arith/COREMOD_arith.h"
 #include "COREMOD_iofits/COREMOD_iofits.h"
 #include "COREMOD_memory/COREMOD_memory.h"
 #include "COREMOD_tools/COREMOD_tools.h"
-#include "CommandLineInterface/CLIcore.h"
+
 #include "cudacomp/cudacomp.h"
 #include "info/info.h"
 #include "linopt_imtools/linopt_imtools.h"
