@@ -15,32 +15,76 @@
 static int fmInit = 0;
 
 // Local variables pointers
-static char *inimname;
-static char *modesimname;
-static char *maskimname;
+static char   *inimname;
+static char   *modesimname;
+static char   *maskimname;
 static double *SVDeps;
-static char *outcoeffimname;
-static int *reuse;
+static char   *outcoeffimname;
+static int    *reuse;
 
-static CLICMDARGDEF farg[] = {
-    {CLIARG_IMG, ".inim", "input image", "im1", CLIARG_VISIBLE_DEFAULT, (void **)&inimname, NULL},
-    {CLIARG_IMG, ".modes", "modes image cube", "imcmode", CLIARG_VISIBLE_DEFAULT, (void **)&modesimname, NULL},
-    {CLIARG_IMG, ".mask", "mask image", "immask", CLIARG_VISIBLE_DEFAULT, (void **)&maskimname, NULL},
-    {CLIARG_FLOAT, ".SVDeps", "SVD cutoff", "0.001", CLIARG_VISIBLE_DEFAULT, (void **)&SVDeps, NULL},
-    {CLIARG_STR, ".outimcoeff", "output coeff image", "immask", CLIARG_VISIBLE_DEFAULT, (void **)&outcoeffimname, NULL},
-    {CLIARG_LONG, ".reuse", "reuse configuration flag", "0", CLIARG_HIDDEN_DEFAULT, (void **)&reuse, NULL}};
+static CLICMDARGDEF farg[] = {{CLIARG_IMG,
+                               ".inim",
+                               "input image",
+                               "im1",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &inimname,
+                               NULL},
+                              {CLIARG_IMG,
+                               ".modes",
+                               "modes image cube",
+                               "imcmode",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &modesimname,
+                               NULL},
+                              {CLIARG_IMG,
+                               ".mask",
+                               "mask image",
+                               "immask",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &maskimname,
+                               NULL},
+                              {CLIARG_FLOAT,
+                               ".SVDeps",
+                               "SVD cutoff",
+                               "0.001",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &SVDeps,
+                               NULL},
+                              {CLIARG_STR,
+                               ".outimcoeff",
+                               "output coeff image",
+                               "immask",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &outcoeffimname,
+                               NULL},
+                              {CLIARG_LONG,
+                               ".reuse",
+                               "reuse configuration flag",
+                               "0",
+                               CLIARG_HIDDEN_DEFAULT,
+                               (void **) &reuse,
+                               NULL}};
 
-static CLICMDDATA CLIcmddata = {"imfitmodes", "fit image as sum of modes", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata = {
+    "imfitmodes", "fit image as sum of modes", CLICMD_FIELDS_DEFAULTS};
 
 // detailed help
-static errno_t help_function() { return RETURN_SUCCESS; }
+static errno_t help_function()
+{
+    return RETURN_SUCCESS;
+}
 
 /** @brief Decompose image as linear sum
  *
  * if reuse = 1, do not recompute pixind, pixmul, respm, recm
  */
-errno_t linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_name, const char *IDmask_name,
-                                      double SVDeps, const char *IDcoeff_name, int reuse, imageID *outIDcoeff)
+errno_t linopt_imtools_image_fitModes(const char *ID_name,
+                                      const char *IDmodes_name,
+                                      const char *IDmask_name,
+                                      double      SVDeps,
+                                      const char *IDcoeff_name,
+                                      int         reuse,
+                                      imageID    *outIDcoeff)
 {
     DEBUG_TRACE_FSTART();
 
@@ -62,23 +106,49 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_n
     if ((reuse == 0) || (fmInit == 0))
     {
 
-        FUNC_CHECK_RETURN(linopt_imtools_mask_to_pixtable(IDmask_name, "_fm_pixind", "_fm_pixmul", NULL));
+        FUNC_CHECK_RETURN(linopt_imtools_mask_to_pixtable(IDmask_name,
+                                                          "_fm_pixind",
+                                                          "_fm_pixmul",
+                                                          NULL));
 
-        FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(IDmodes_name, "_fm_pixind", "_fm_pixmul", "_fm_respm", NULL));
+        FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(IDmodes_name,
+                                                      "_fm_pixind",
+                                                      "_fm_pixmul",
+                                                      "_fm_respm",
+                                                      NULL));
 
 #ifdef HAVE_MAGMA
-        FUNC_CHECK_RETURN(CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat",
-                                                                  0, 0, 1.e-4, 1.e-7, 1, 64, NULL));
+        FUNC_CHECK_RETURN(CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm",
+                                                                  "_fm_recm",
+                                                                  SVDeps,
+                                                                  10000,
+                                                                  "_fm_vtmat",
+                                                                  0,
+                                                                  0,
+                                                                  1.e-4,
+                                                                  1.e-7,
+                                                                  1,
+                                                                  64,
+                                                                  NULL));
 
 #else
-        FUNC_CHECK_RETURN(linopt_compute_SVDpseudoInverse("_fm_respm", "_fm_recm", SVDeps, 10000, "_fm_vtmat", NULL));
+        FUNC_CHECK_RETURN(linopt_compute_SVDpseudoInverse("_fm_respm",
+                                                          "_fm_recm",
+                                                          SVDeps,
+                                                          10000,
+                                                          "_fm_vtmat",
+                                                          NULL));
 #endif
     }
 
-    FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(ID_name, "_fm_pixind", "_fm_pixmul", "_fm_measvec", NULL));
+    FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(ID_name,
+                                                  "_fm_pixind",
+                                                  "_fm_pixmul",
+                                                  "_fm_measvec",
+                                                  NULL));
 
-    IDmvec = image_ID("_fm_measvec");
-    IDrecm = image_ID("_fm_recm");
+    IDmvec     = image_ID("_fm_measvec");
+    IDrecm     = image_ID("_fm_recm");
     uint32_t m = data.image[IDrecm].md[0].size[1];
     uint32_t n = data.image[IDrecm].md[0].size[0];
     // printf("m=%ld n=%ld\n", m, n);
@@ -89,24 +159,43 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name, const char *IDmodes_n
 
     //printf(" -> Entering cblas_sgemv \n");
     //fflush(stdout);
-    cblas_sgemv(CblasRowMajor, CblasNoTrans, m, n, 1.0, data.image[IDrecm].array.F, n, data.image[IDmvec].array.F, 1,
-                0.0, data.image[IDcoeff].array.F, 1);
+    cblas_sgemv(CblasRowMajor,
+                CblasNoTrans,
+                m,
+                n,
+                1.0,
+                data.image[IDrecm].array.F,
+                n,
+                data.image[IDmvec].array.F,
+                1,
+                0.0,
+                data.image[IDcoeff].array.F,
+                1);
     //printf(" -> Exiting cblas_sgemv \n");
     //fflush(stdout);
 
     // for(ii=0;ii<m;ii++)
     //   printf("  coeff %03ld  =  %g\n", ii, data.image[IDcoeff].array.F[ii]);
 
-    FUNC_CHECK_RETURN(delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING));
+    FUNC_CHECK_RETURN(
+        delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING));
 
     if (0) // testing
     {
-        printf("========  %s  %s  %s  %lf  %s  %d  ====\n", ID_name, IDmodes_name, IDmask_name, SVDeps, IDcoeff_name,
+        printf("========  %s  %s  %s  %lf  %s  %d  ====\n",
+               ID_name,
+               IDmodes_name,
+               IDmask_name,
+               SVDeps,
+               IDcoeff_name,
                reuse);
         list_image_ID();
         save_fits("_fm_respm", "fm_respm.fits");
 
-        linopt_imtools_image_construct(IDmodes_name, IDcoeff_name, "testsol", NULL);
+        linopt_imtools_image_construct(IDmodes_name,
+                                       IDcoeff_name,
+                                       "testsol",
+                                       NULL);
 
         save_fits("testsol", "testsol.fits");
         arith_image_sub(ID_name, "testsol", "fitres");
@@ -134,7 +223,13 @@ static errno_t compute_function()
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_START
 
-    linopt_imtools_image_fitModes(inimname, modesimname, maskimname, *SVDeps, outcoeffimname, *reuse, NULL);
+    linopt_imtools_image_fitModes(inimname,
+                                  modesimname,
+                                  maskimname,
+                                  *SVDeps,
+                                  outcoeffimname,
+                                  *reuse,
+                                  NULL);
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_END
 

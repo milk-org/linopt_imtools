@@ -23,7 +23,10 @@
 
 void __attribute__((constructor)) libinit_linopt_imtools();
 
-imageID linopt_imtools_make1Dpolynomials(const char *IDout_name, long NBpts, long MaxOrder, float r0pix);
+imageID linopt_imtools_make1Dpolynomials(const char *IDout_name,
+                                         long        NBpts,
+                                         long        MaxOrder,
+                                         float       r0pix);
 
 /*
 double linopt_imtools_match_slow(

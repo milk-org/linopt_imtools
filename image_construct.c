@@ -6,18 +6,42 @@ static char *modesimname;
 static char *invecname;
 static char *outimname;
 
-static CLICMDARGDEF farg[] = {
-    {CLIARG_IMG, ".modes", "modes image cube", "imcmode", CLIARG_VISIBLE_DEFAULT, (void **)&modesimname, NULL},
-    {CLIARG_IMG, ".invec", "input vector", "imvec", CLIARG_VISIBLE_DEFAULT, (void **)&invecname, NULL},
-    {CLIARG_STR, ".outim", "output image", "outim", CLIARG_VISIBLE_DEFAULT, (void **)&outimname, NULL}};
+static CLICMDARGDEF farg[] = {{CLIARG_IMG,
+                               ".modes",
+                               "modes image cube",
+                               "imcmode",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &modesimname,
+                               NULL},
+                              {CLIARG_IMG,
+                               ".invec",
+                               "input vector",
+                               "imvec",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &invecname,
+                               NULL},
+                              {CLIARG_STR,
+                               ".outim",
+                               "output image",
+                               "outim",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &outimname,
+                               NULL}};
 
-static CLICMDDATA CLIcmddata = {"imlinconstruct", "construct image as linear sum of modes", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata = {"imlinconstruct",
+                                "construct image as linear sum of modes",
+                                CLICMD_FIELDS_DEFAULTS};
 
 // detailed help
-static errno_t help_function() { return RETURN_SUCCESS; }
+static errno_t help_function()
+{
+    return RETURN_SUCCESS;
+}
 
-errno_t linopt_imtools_image_construct(const char *IDmodes_name, const char *IDcoeff_name, const char *ID_name,
-                                       imageID *outID)
+errno_t linopt_imtools_image_construct(const char *IDmodes_name,
+                                       const char *IDcoeff_name,
+                                       const char *ID_name,
+                                       imageID    *outID)
 {
     DEBUG_TRACE_FSTART();
 
@@ -26,7 +50,7 @@ errno_t linopt_imtools_image_construct(const char *IDmodes_name, const char *IDc
     imageID IDcoeff;
     uint8_t datatype;
 
-    IDmodes = image_ID(IDmodes_name);
+    IDmodes  = image_ID(IDmodes_name);
     datatype = data.image[IDmodes].md[0].datatype;
 
     uint32_t xsize = data.image[IDmodes].md[0].size[0];
@@ -49,22 +73,28 @@ errno_t linopt_imtools_image_construct(const char *IDmodes_name, const char *IDc
 
     if (datatype == _DATATYPE_FLOAT)
     {
-        memset(data.image[ID].array.F, 0, sizeof(float) * data.image[ID].md[0].nelement);
+        memset(data.image[ID].array.F,
+               0,
+               sizeof(float) * data.image[ID].md[0].nelement);
         for (uint32_t kk = 0; kk < zsize; kk++)
             for (uint64_t ii = 0; ii < sizexy; ii++)
             {
                 data.image[ID].array.F[ii] +=
-                    data.image[IDcoeff].array.F[kk] * data.image[IDmodes].array.F[kk * sizexy + ii];
+                    data.image[IDcoeff].array.F[kk] *
+                    data.image[IDmodes].array.F[kk * sizexy + ii];
             }
     }
     else
     {
-        memset(data.image[ID].array.D, 0, sizeof(double) * data.image[ID].md[0].nelement);
+        memset(data.image[ID].array.D,
+               0,
+               sizeof(double) * data.image[ID].md[0].nelement);
         for (uint32_t kk = 0; kk < zsize; kk++)
             for (uint64_t ii = 0; ii < sizexy; ii++)
             {
                 data.image[ID].array.D[ii] +=
-                    data.image[IDcoeff].array.D[kk] * data.image[IDmodes].array.D[kk * sizexy + ii];
+                    data.image[IDcoeff].array.D[kk] *
+                    data.image[IDmodes].array.D[kk * sizexy + ii];
             }
     }
 

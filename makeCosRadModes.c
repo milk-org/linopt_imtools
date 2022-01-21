@@ -3,36 +3,73 @@
 #include "CommandLineInterface/CLIcore.h"
 
 // Local variables pointers
-static char *outimname;
-static long *sizeout;
-static long *kmaxval;
+static char   *outimname;
+static long   *sizeout;
+static long   *kmaxval;
 static double *radiusval;
 static double *radfactorlimval;
 
-static CLICMDARGDEF farg[] = {
-    {CLIARG_STR, ".outim", "output image", "outim", CLIARG_VISIBLE_DEFAULT, (void **)&outimname, NULL},
-    {CLIARG_LONG, ".size", "size", "512", CLIARG_VISIBLE_DEFAULT, (void **)&sizeout, NULL},
-    {CLIARG_LONG, ".kmax", "k max", "100", CLIARG_VISIBLE_DEFAULT, (void **)&kmaxval, NULL},
-    {CLIARG_FLOAT, ".radius", "radius [pix]", "160.0", CLIARG_VISIBLE_DEFAULT, (void **)&radiusval, NULL},
-    {CLIARG_FLOAT, ".rfactlim", "radius factor limit", "2.0", CLIARG_VISIBLE_DEFAULT, (void **)&radfactorlimval, NULL}};
+static CLICMDARGDEF farg[] = {{CLIARG_STR,
+                               ".outim",
+                               "output image",
+                               "outim",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &outimname,
+                               NULL},
+                              {CLIARG_LONG,
+                               ".size",
+                               "size",
+                               "512",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &sizeout,
+                               NULL},
+                              {CLIARG_LONG,
+                               ".kmax",
+                               "k max",
+                               "100",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &kmaxval,
+                               NULL},
+                              {CLIARG_FLOAT,
+                               ".radius",
+                               "radius [pix]",
+                               "160.0",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &radiusval,
+                               NULL},
+                              {CLIARG_FLOAT,
+                               ".rfactlim",
+                               "radius factor limit",
+                               "2.0",
+                               CLIARG_VISIBLE_DEFAULT,
+                               (void **) &radfactorlimval,
+                               NULL}};
 
-static CLICMDDATA CLIcmddata = {"mkcosrmodes", "make basis of cosine radial modes", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata = {
+    "mkcosrmodes", "make basis of cosine radial modes", CLICMD_FIELDS_DEFAULTS};
 
 // detailed help
-static errno_t help_function() { return RETURN_SUCCESS; }
+static errno_t help_function()
+{
+    return RETURN_SUCCESS;
+}
 
 //
 // make cosine radial modes
 //
-errno_t linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax, float radius, float radfactlim,
-                                       imageID *outID)
+errno_t linopt_imtools_makeCosRadModes(const char *ID_name,
+                                       long        size,
+                                       long        kmax,
+                                       float       radius,
+                                       float       radfactlim,
+                                       imageID    *outID)
 {
     DEBUG_TRACE_FSTART();
 
     imageID ID;
-    long size2;
+    long    size2;
     imageID IDr;
-    FILE *fp;
+    FILE   *fp;
 
     size2 = size * size;
     create_2Dimage_ID("linopt_tmpr", size, size, &IDr);
@@ -70,7 +107,8 @@ errno_t linopt_imtools_makeCosRadModes(const char *ID_name, long size, long kmax
             }
         }
 
-    FUNC_CHECK_RETURN(delete_image_ID("linopt_tmpr", DELETE_IMAGE_ERRMODE_WARNING));
+    FUNC_CHECK_RETURN(
+        delete_image_ID("linopt_tmpr", DELETE_IMAGE_ERRMODE_WARNING));
 
     if (outID != NULL)
     {
@@ -87,7 +125,12 @@ static errno_t compute_function()
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_START
 
-    linopt_imtools_makeCosRadModes(outimname, *sizeout, *kmaxval, *radiusval, *radfactorlimval, NULL);
+    linopt_imtools_makeCosRadModes(outimname,
+                                   *sizeout,
+                                   *kmaxval,
+                                   *radiusval,
+                                   *radfactorlimval,
+                                   NULL);
 
     INSERT_STD_PROCINFO_COMPUTEFUNC_END
 
