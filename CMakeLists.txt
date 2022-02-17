@@ -11,6 +11,7 @@ set(SOURCEFILES
 	image_construct.c
 	image_fitModes.c
 	image_to_vec.c
+	imcube_crossproduct.c
 	lin1Dfit.c
 	linRM_from_inout.c
 	makeCosRadModes.c
@@ -25,6 +26,7 @@ set(INCLUDEFILES
 	image_construct.h
 	image_fitModes.h
 	image_to_vec.h
+	imcube_crossproduct.h
 	lin1Dfit.h
 	linRM_from_inout.h
 	makeCosRadModes.h
