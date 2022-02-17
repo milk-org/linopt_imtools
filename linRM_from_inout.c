@@ -186,10 +186,8 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
                                             "VTmat",
                                             0,
                                             0,
-                                            1.e-4,
-                                            1.e-7,
-                                            0,
                                             64,
+                                            0, // GPU device
                                             NULL);
 #else
     linopt_compute_SVDpseudoInverse("pokeM",

@@ -63,6 +63,7 @@
 #include "image_construct.h"
 #include "image_fitModes.h"
 #include "image_to_vec.h"
+#include "imcube_crossproduct.h"
 #include "lin1Dfit.h"
 #include "makeCPAmodes.h"
 #include "makeCosRadModes.h"
@@ -132,6 +133,8 @@ static errno_t init_module_CLI()
     CLIADDCMD_linopt_imtools__makeCPAmodes();
 
     // LINEAR DECOMPOSITION
+
+    CLIADDCMD_linopt_imtools__imcube_crossproduct();
 
     CLIADDCMD_linopt_imtools__image_fitModes();
 

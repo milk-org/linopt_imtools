@@ -528,6 +528,9 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     return RETURN_SUCCESS;
 }
 
+
+
+
 static errno_t compute_function()
 {
     DEBUG_TRACE_FSTART();
@@ -554,11 +557,9 @@ static errno_t compute_function()
                                                 *max_NBmodes,
                                                 outimVTmatname,
                                                 0,
-                                                0,
-                                                1.e-4,
-                                                1.e-7,
                                                 1,
                                                 64,
+                                                0, // GPU device
                                                 NULL);
 #endif
     }
@@ -568,6 +569,7 @@ static errno_t compute_function()
     DEBUG_TRACE_FEXIT();
     return RETURN_SUCCESS;
 }
+
 
 INSERT_STD_FPSCLIfunctions
 

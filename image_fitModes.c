@@ -118,18 +118,17 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
                                                       NULL));
 
 #ifdef HAVE_MAGMA
-        FUNC_CHECK_RETURN(CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm",
-                                                                  "_fm_recm",
-                                                                  SVDeps,
-                                                                  10000,
-                                                                  "_fm_vtmat",
-                                                                  0,
-                                                                  0,
-                                                                  1.e-4,
-                                                                  1.e-7,
-                                                                  1,
-                                                                  64,
-                                                                  NULL));
+        FUNC_CHECK_RETURN(
+            CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm",
+                                                    "_fm_recm",
+                                                    SVDeps,
+                                                    10000,
+                                                    "_fm_vtmat",
+                                                    0,
+                                                    1,
+                                                    64,
+                                                    0, // GPU device
+                                                    NULL));
 
 #else
         FUNC_CHECK_RETURN(linopt_compute_SVDpseudoInverse("_fm_respm",
