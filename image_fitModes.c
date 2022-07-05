@@ -105,7 +105,6 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
 
     if ((reuse == 0) || (fmInit == 0))
     {
-
         FUNC_CHECK_RETURN(linopt_imtools_mask_to_pixtable(IDmask_name,
                                                           "_fm_pixind",
                                                           "_fm_pixmul",

@@ -56,9 +56,10 @@ errno_t linopt_imtools_mask_to_pixtable(const char *IDmask_name,
     float     eps = 1.0e-8;
     long      k;
     uint32_t *sizearray;
-    long      IDpixindex, IDpixmult;
+    imageID   IDpixindex, IDpixmult;
 
-    ID   = image_ID(IDmask_name);
+    ID = image_ID(IDmask_name);
+
     size = data.image[ID].md[0].nelement;
 
     NBpix = 0;
@@ -111,9 +112,13 @@ errno_t linopt_imtools_mask_to_pixtable(const char *IDmask_name,
         *outNBpix = NBpix;
     }
 
+
     DEBUG_TRACE_FEXIT();
     return RETURN_SUCCESS;
 }
+
+
+
 
 static errno_t compute_function()
 {
