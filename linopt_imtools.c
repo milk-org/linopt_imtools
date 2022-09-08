@@ -319,10 +319,8 @@ imageID linopt_imtools_image_construct_stream(
 
 
     schedpar.sched_priority = RT_priority;
-#ifndef __MACH__
     sched_setscheduler(0, SCHED_FIFO,
                        &schedpar); //other option is SCHED_RR, might be faster
-#endif
 
 
 
