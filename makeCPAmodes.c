@@ -123,10 +123,10 @@ errno_t linopt_imtools_makeCPAmodes(const char *ID_name,
 
     for (ii = 0; ii < size; ii++)
     {
-        x = (1.0 * ii - 0.5 * size) / radius;
+        x = (1.0 * ii - 0.5 * size + 0.5) / radius;
         for (jj = 0; jj < size; jj++)
         {
-            y = (1.0 * jj - 0.5 * size) / radius;
+            y = (1.0 * jj - 0.5 * size + 0.5) / radius;
             r = sqrt(x * x + y * y);
             data.image[IDx].array.F[jj * size + ii] = x;
             data.image[IDy].array.F[jj * size + ii] = y;
