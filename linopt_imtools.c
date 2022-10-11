@@ -173,9 +173,9 @@ static errno_t init_module_CLI()
 // r0pix is r=1 in pixel unit
 
 imageID linopt_imtools_make1Dpolynomials(const char *IDout_name,
-                                         long        NBpts,
-                                         long        MaxOrder,
-                                         float       r0pix)
+        long        NBpts,
+        long        MaxOrder,
+        float       r0pix)
 {
     DEBUG_TRACE_FSTART();
 
@@ -190,9 +190,9 @@ imageID linopt_imtools_make1Dpolynomials(const char *IDout_name,
     FUNC_CHECK_RETURN(
         create_3Dimage_ID(IDout_name, xsize, ysize, zsize, &IDout));
 
-    for (kk = 0; kk < zsize; kk++)
+    for(kk = 0; kk < zsize; kk++)
     {
-        for (ii = 0; ii < xsize; ii++)
+        for(ii = 0; ii < xsize; ii++)
         {
             float r                                    = 1.0 * ii / r0pix;
             data.image[IDout].array.F[kk * xsize + ii] = pow(r, 1.0 * kk);

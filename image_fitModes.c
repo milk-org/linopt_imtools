@@ -22,51 +22,66 @@ static double *SVDeps;
 static char   *outcoeffimname;
 static int    *reuse;
 
-static CLICMDARGDEF farg[] = {{CLIARG_IMG,
-                               ".inim",
-                               "input image",
-                               "im1",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &inimname,
-                               NULL},
-                              {CLIARG_IMG,
-                               ".modes",
-                               "modes image cube",
-                               "imcmode",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &modesimname,
-                               NULL},
-                              {CLIARG_IMG,
-                               ".mask",
-                               "mask image",
-                               "immask",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &maskimname,
-                               NULL},
-                              {CLIARG_FLOAT,
-                               ".SVDeps",
-                               "SVD cutoff",
-                               "0.001",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &SVDeps,
-                               NULL},
-                              {CLIARG_STR,
-                               ".outimcoeff",
-                               "output coeff image",
-                               "immask",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &outcoeffimname,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".reuse",
-                               "reuse configuration flag",
-                               "0",
-                               CLIARG_HIDDEN_DEFAULT,
-                               (void **) &reuse,
-                               NULL}};
+static CLICMDARGDEF farg[] = {{
+        CLIARG_IMG,
+        ".inim",
+        "input image",
+        "im1",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &inimname,
+        NULL
+    },
+    {
+        CLIARG_IMG,
+        ".modes",
+        "modes image cube",
+        "imcmode",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &modesimname,
+        NULL
+    },
+    {
+        CLIARG_IMG,
+        ".mask",
+        "mask image",
+        "immask",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &maskimname,
+        NULL
+    },
+    {
+        CLIARG_FLOAT,
+        ".SVDeps",
+        "SVD cutoff",
+        "0.001",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &SVDeps,
+        NULL
+    },
+    {
+        CLIARG_STR,
+        ".outimcoeff",
+        "output coeff image",
+        "immask",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &outcoeffimname,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".reuse",
+        "reuse configuration flag",
+        "0",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &reuse,
+        NULL
+    }
+};
 
-static CLICMDDATA CLIcmddata = {
-    "imfitmodes", "fit image as sum of modes", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata =
+{
+    "imfitmodes", "fit image as sum of modes", CLICMD_FIELDS_DEFAULTS
+};
 
 // detailed help
 static errno_t help_function()
@@ -94,7 +109,7 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
 
     //int use_magma = 0;
 
-    if ((reuse == 0) && (fmInit == 1))
+    if((reuse == 0) && (fmInit == 1))
     {
         delete_image_ID("_fm_pixind", DELETE_IMAGE_ERRMODE_WARNING);
         delete_image_ID("_fm_pixmul", DELETE_IMAGE_ERRMODE_WARNING);
@@ -103,47 +118,47 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
         delete_image_ID("_fm_vtmat", DELETE_IMAGE_ERRMODE_WARNING);
     }
 
-    if ((reuse == 0) || (fmInit == 0))
+    if((reuse == 0) || (fmInit == 0))
     {
         FUNC_CHECK_RETURN(linopt_imtools_mask_to_pixtable(IDmask_name,
-                                                          "_fm_pixind",
-                                                          "_fm_pixmul",
-                                                          NULL));
+                          "_fm_pixind",
+                          "_fm_pixmul",
+                          NULL));
 
         FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(IDmodes_name,
-                                                      "_fm_pixind",
-                                                      "_fm_pixmul",
-                                                      "_fm_respm",
-                                                      NULL));
+                          "_fm_pixind",
+                          "_fm_pixmul",
+                          "_fm_respm",
+                          NULL));
 
 #ifdef HAVE_MAGMA
         FUNC_CHECK_RETURN(
             CUDACOMP_magma_compute_SVDpseudoInverse("_fm_respm",
-                                                    "_fm_recm",
-                                                    SVDeps,
-                                                    10000,
-                                                    "_fm_vtmat",
-                                                    0,
-                                                    1,
-                                                    64,
-                                                    0, // GPU device
-                                                    NULL));
+                    "_fm_recm",
+                    SVDeps,
+                    10000,
+                    "_fm_vtmat",
+                    0,
+                    1,
+                    64,
+                    0, // GPU device
+                    NULL));
 
 #else
         FUNC_CHECK_RETURN(linopt_compute_SVDpseudoInverse("_fm_respm",
-                                                          "_fm_recm",
-                                                          SVDeps,
-                                                          10000,
-                                                          "_fm_vtmat",
-                                                          NULL));
+                          "_fm_recm",
+                          SVDeps,
+                          10000,
+                          "_fm_vtmat",
+                          NULL));
 #endif
     }
 
     FUNC_CHECK_RETURN(linopt_imtools_image_to_vec(ID_name,
-                                                  "_fm_pixind",
-                                                  "_fm_pixmul",
-                                                  "_fm_measvec",
-                                                  NULL));
+                      "_fm_pixind",
+                      "_fm_pixmul",
+                      "_fm_measvec",
+                      NULL));
 
     IDmvec     = image_ID("_fm_measvec");
     IDrecm     = image_ID("_fm_recm");
@@ -178,7 +193,7 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
     FUNC_CHECK_RETURN(
         delete_image_ID("_fm_measvec", DELETE_IMAGE_ERRMODE_WARNING));
 
-    if (0) // testing
+    if(0)  // testing
     {
         printf("========  %s  %s  %s  %lf  %s  %d  ====\n",
                ID_name,
@@ -206,7 +221,7 @@ errno_t linopt_imtools_image_fitModes(const char *ID_name,
 
     fmInit = 1;
 
-    if (outIDcoeff != NULL)
+    if(outIDcoeff != NULL)
     {
         *outIDcoeff = IDcoeff;
     }
@@ -237,9 +252,9 @@ static errno_t compute_function()
 
 INSERT_STD_FPSCLIfunctions
 
-    // Register function in CLI
-    errno_t
-    CLIADDCMD_linopt_imtools__image_fitModes()
+// Register function in CLI
+errno_t
+CLIADDCMD_linopt_imtools__image_fitModes()
 {
     INSERT_STD_CLIREGISTERFUNC
     return RETURN_SUCCESS;

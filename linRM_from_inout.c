@@ -13,39 +13,50 @@ static char *inmaskname;
 static char *mrespimname;
 static char *outRMimname;
 
-static CLICMDARGDEF farg[] = {{CLIARG_IMG,
-                               ".inimname",
-                               "input image",
-                               "im",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &inputimname,
-                               NULL},
-                              {CLIARG_IMG,
-                               ".inmaskname",
-                               "mask image",
-                               "mask",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &inmaskname,
-                               NULL},
-                              {CLIARG_IMG,
-                               ".mrespimname",
-                               "measured response images",
-                               "mresp",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &mrespimname,
-                               NULL},
-                              {CLIARG_STR,
-                               ".outRM",
-                               "output RM image",
-                               "ourRM",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &outRMimname,
-                               NULL}};
+static CLICMDARGDEF farg[] = {{
+        CLIARG_IMG,
+        ".inimname",
+        "input image",
+        "im",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &inputimname,
+        NULL
+    },
+    {
+        CLIARG_IMG,
+        ".inmaskname",
+        "mask image",
+        "mask",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &inmaskname,
+        NULL
+    },
+    {
+        CLIARG_IMG,
+        ".mrespimname",
+        "measured response images",
+        "mresp",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &mrespimname,
+        NULL
+    },
+    {
+        CLIARG_STR,
+        ".outRM",
+        "output RM image",
+        "ourRM",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &outRMimname,
+        NULL
+    }
+};
 
-static CLICMDDATA CLIcmddata = {
+static CLICMDDATA CLIcmddata =
+{
     "lincRMiter",
     "estimate response matrix from input and output",
-    CLICMD_FIELDS_DEFAULTS};
+    CLICMD_FIELDS_DEFAULTS
+};
 
 // detailed help
 static errno_t help_function()
@@ -111,17 +122,17 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
     xsizein  = data.image[IDin].md[0].size[0];
     ysizein  = data.image[IDin].md[0].size[1];
 
-    if (autoMask_MODE == 0)
+    if(autoMask_MODE == 0)
     {
         IDinmask = image_ID(IDinmask_name);
     }
     else
     {
         create_2Dimage_ID("_RMmask", xsizein, ysizein, &IDinmask);
-        for (spl = 0; spl < insize; spl++)
-            for (ii = 0; ii < xsizein * ysizein; ii++)
-                if (data.image[IDin].array.F[spl * xsizein * ysizein + ii] >
-                    0.5)
+        for(spl = 0; spl < insize; spl++)
+            for(ii = 0; ii < xsizein * ysizein; ii++)
+                if(data.image[IDin].array.F[spl * xsizein * ysizein + ii] >
+                        0.5)
                 {
                     data.image[IDinmask].array.F[ii] = 1.0;
                 }
@@ -129,8 +140,8 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
 
     // create pokeM
     NBact = 0;
-    for (ii = 0; ii < xsizein * ysizein; ii++)
-        if (data.image[IDinmask].array.F[ii] > 0.5)
+    for(ii = 0; ii < xsizein * ysizein; ii++)
+        if(data.image[IDinmask].array.F[ii] > 0.5)
         {
             NBact++;
         }
@@ -138,21 +149,21 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
     printf("NBact = %ld\n", NBact);
 
     inpixarray = (long *) malloc(sizeof(long) * NBact);
-    if (inpixarray == NULL)
+    if(inpixarray == NULL)
     {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     act = 0;
-    for (ii = 0; ii < xsizein * ysizein; ii++)
-        if (data.image[IDinmask].array.F[ii] > 0.5)
+    for(ii = 0; ii < xsizein * ysizein; ii++)
+        if(data.image[IDinmask].array.F[ii] > 0.5)
         {
             inpixarray[act] = ii;
             act++;
         }
 
     sizearray = (uint32_t *) malloc(sizeof(uint32_t) * 2);
-    if (sizearray == NULL)
+    if(sizearray == NULL)
     {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
@@ -161,19 +172,19 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
     sizearray[1] = insize; // number of measurements
 
     printf("NBact = %ld\n", NBact);
-    for (act = 0; act < 10; act++)
+    for(act = 0; act < 10; act++)
     {
         printf("act %5ld -> pix %5ld\n", act, inpixarray[act]);
     }
 
     create_2Dimage_ID("pokeM", NBact, insize, &IDpokeM);
 
-    for (spl = 0; spl < insize; spl++)
-        for (act = 0; act < NBact; act++)
+    for(spl = 0; spl < insize; spl++)
+        for(act = 0; act < NBact; act++)
         {
             data.image[IDpokeM].array.F[NBact * spl + act] =
                 data.image[IDin]
-                    .array.F[spl * xsizein * ysizein + inpixarray[act]];
+                .array.F[spl * xsizein * ysizein + inpixarray[act]];
         }
     save_fits("pokeM", "_test_pokeM.fits");
 
@@ -209,13 +220,13 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
                       xsizein * ysizein,
                       &ID_rm);
 
-    for (act = 0; act < NBact; act++)
+    for(act = 0; act < NBact; act++)
     {
-        for (kk = 0; kk < insize; kk++)
-            for (ii = 0; ii < xsizeout * ysizeout; ii++)
+        for(kk = 0; kk < insize; kk++)
+            for(ii = 0; ii < xsizeout * ysizeout; ii++)
             {
                 data.image[ID_rm]
-                    .array.F[inpixarray[act] * xsizeout * ysizeout + ii] +=
+                .array.F[inpixarray[act] * xsizeout * ysizeout + ii] +=
                     data.image[IDout].array.F[kk * xsizeout * ysizeout + ii] *
                     data.image[IDpinv].array.F[kk * NBact + act];
             }
@@ -237,36 +248,36 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
     // on iteration 0, compute initial fit value
     fitval = 0.0;
 
-    for (kk = 0; kk < insize; kk++)
+    for(kk = 0; kk < insize; kk++)
     {
         printf("\r kk = %5ld / %5ld    ", kk, insize);
         fflush(stdout);
 
-        for (ii_out = 0; ii_out < xsizeout; ii_out++)
-            for (jj_out = 0; jj_out < ysizeout; jj_out++)
+        for(ii_out = 0; ii_out < xsizeout; ii_out++)
+            for(jj_out = 0; jj_out < ysizeout; jj_out++)
             {
                 data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] = 0.0;
             }
 
-        for (ii_in = 0; ii_in < xsizein; ii_in++)
-            for (jj_in = 0; jj_in < ysizein; jj_in++)
+        for(ii_in = 0; ii_in < xsizein; ii_in++)
+            for(jj_in = 0; jj_in < ysizein; jj_in++)
             {
 
                 //printf("%ld  pix %ld %ld active\n", kk, ii_in, jj_in);
-                for (ii_out = 0; ii_out < xsizeout; ii_out++)
-                    for (jj_out = 0; jj_out < ysizeout; jj_out++)
+                for(ii_out = 0; ii_out < xsizeout; ii_out++)
+                    for(jj_out = 0; jj_out < ysizeout; jj_out++)
                     {
                         data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] +=
                             data.image[IDin].array.F[kk * xsizein * ysizein +
                                                      jj_in * xsizein + ii_in] *
                             data.image[IDRM]
-                                .array.F[(jj_in * xsizein + ii_in) * xsizeout *
-                                             ysizeout +
-                                         jj_out * xsizeout + ii_out];
+                            .array.F[(jj_in * xsizein + ii_in) * xsizeout *
+                                                               ysizeout +
+                                                               jj_out * xsizeout + ii_out];
                     }
             }
-        for (ii_out = 0; ii_out < xsizeout; ii_out++)
-            for (jj_out = 0; jj_out < ysizeout; jj_out++)
+        for(ii_out = 0; ii_out < xsizeout; ii_out++)
+            for(jj_out = 0; jj_out < ysizeout; jj_out++)
             {
                 tmpv1 = data.image[IDtmp].array.F[jj_out * xsizeout + ii_out] -
                         data.image[IDout].array.F[kk * xsizeout * ysizeout +
@@ -274,7 +285,7 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
                 fitval += tmpv1 * tmpv1;
                 data.image[IDout1].array.F[kk * xsizeout * ysizeout +
                                            jj_out * xsizeout + ii_out] =
-                    tmpv1; //data.image[IDtmp].array.F[jj_out*xsizeout+ii_out];
+                                               tmpv1; //data.image[IDtmp].array.F[jj_out*xsizeout+ii_out];
             }
     }
     printf("\n");
@@ -287,7 +298,7 @@ errno_t linopt_compute_linRM_from_inout(const char *IDinput_name,
     free(sizearray);
     free(inpixarray);
 
-    if (outID != NULL)
+    if(outID != NULL)
     {
         *outID = IDout;
     }
@@ -321,9 +332,9 @@ static errno_t compute_function()
 
 INSERT_STD_FPSCLIfunctions
 
-    // Register function in CLI
-    errno_t
-    CLIADDCMD_linopt_imtools__linRM_from_inout()
+// Register function in CLI
+errno_t
+CLIADDCMD_linopt_imtools__linRM_from_inout()
 {
     INSERT_STD_CLIREGISTERFUNC
     return RETURN_SUCCESS;

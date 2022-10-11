@@ -9,44 +9,57 @@ static long   *kmaxval;
 static double *radiusval;
 static double *radfactorlimval;
 
-static CLICMDARGDEF farg[] = {{CLIARG_STR,
-                               ".outim",
-                               "output image",
-                               "outim",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &outimname,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".size",
-                               "size",
-                               "512",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &sizeout,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".kmax",
-                               "k max",
-                               "100",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &kmaxval,
-                               NULL},
-                              {CLIARG_FLOAT,
-                               ".radius",
-                               "radius [pix]",
-                               "160.0",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &radiusval,
-                               NULL},
-                              {CLIARG_FLOAT,
-                               ".rfactlim",
-                               "radius factor limit",
-                               "2.0",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &radfactorlimval,
-                               NULL}};
+static CLICMDARGDEF farg[] = {{
+        CLIARG_STR,
+        ".outim",
+        "output image",
+        "outim",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &outimname,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".size",
+        "size",
+        "512",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &sizeout,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".kmax",
+        "k max",
+        "100",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &kmaxval,
+        NULL
+    },
+    {
+        CLIARG_FLOAT,
+        ".radius",
+        "radius [pix]",
+        "160.0",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &radiusval,
+        NULL
+    },
+    {
+        CLIARG_FLOAT,
+        ".rfactlim",
+        "radius factor limit",
+        "2.0",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &radfactorlimval,
+        NULL
+    }
+};
 
-static CLICMDDATA CLIcmddata = {
-    "mkcosrmodes", "make basis of cosine radial modes", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata =
+{
+    "mkcosrmodes", "make basis of cosine radial modes", CLICMD_FIELDS_DEFAULTS
+};
 
 // detailed help
 static errno_t help_function()
@@ -77,17 +90,17 @@ errno_t linopt_imtools_makeCosRadModes(const char *ID_name,
     fp = fopen("ModesExpr_CosRad.txt", "w");
     fprintf(fp, "# unit for r = %f pix\n", radius);
     fprintf(fp, "\n");
-    for (long k = 0; k < kmax; k++)
+    for(long k = 0; k < kmax; k++)
     {
         fprintf(fp, "%5ld   cos(r*M_PI*%ld)\n", k, k);
     }
 
     fclose(fp);
 
-    for (long ii = 0; ii < size; ii++)
+    for(long ii = 0; ii < size; ii++)
     {
         float x = (1.0 * ii - 0.5 * size) / radius;
-        for (long jj = 0; jj < size; jj++)
+        for(long jj = 0; jj < size; jj++)
         {
             float y = (1.0 * jj - 0.5 * size) / radius;
             float r = sqrt(x * x + y * y);
@@ -97,11 +110,11 @@ errno_t linopt_imtools_makeCosRadModes(const char *ID_name,
 
     FUNC_CHECK_RETURN(create_3Dimage_ID(ID_name, size, size, kmax, &ID));
 
-    for (long k = 0; k < kmax; k++)
-        for (long ii = 0; ii < size2; ii++)
+    for(long k = 0; k < kmax; k++)
+        for(long ii = 0; ii < size2; ii++)
         {
             float r = data.image[IDr].array.F[ii];
-            if (r < radfactlim)
+            if(r < radfactlim)
             {
                 data.image[ID].array.F[k * size2 + ii] = cos(r * M_PI * k);
             }
@@ -110,7 +123,7 @@ errno_t linopt_imtools_makeCosRadModes(const char *ID_name,
     FUNC_CHECK_RETURN(
         delete_image_ID("linopt_tmpr", DELETE_IMAGE_ERRMODE_WARNING));
 
-    if (outID != NULL)
+    if(outID != NULL)
     {
         *outID = ID;
     }
@@ -140,9 +153,9 @@ static errno_t compute_function()
 
 INSERT_STD_FPSCLIfunctions
 
-    // Register function in CLI
-    errno_t
-    CLIADDCMD_linopt_imtools__makeCosRadModes()
+// Register function in CLI
+errno_t
+CLIADDCMD_linopt_imtools__makeCosRadModes()
 {
     INSERT_STD_CLIREGISTERFUNC
     return RETURN_SUCCESS;

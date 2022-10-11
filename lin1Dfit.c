@@ -10,44 +10,57 @@ static long *maxorderval;
 static char *outfname;
 static long *modeval;
 
-static CLICMDARGDEF farg[] = {{CLIARG_STR,
-                               ".indat",
-                               "input file",
-                               "data.txt",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &infname,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".NBpt",
-                               "number of sample points",
-                               "1000",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &NBptval,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".maxorder",
-                               "maximum polynomial order",
-                               "8",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &maxorderval,
-                               NULL},
-                              {CLIARG_STR,
-                               ".outdat",
-                               "output file",
-                               "fitsol.txt",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &outfname,
-                               NULL},
-                              {CLIARG_LONG,
-                               ".mode",
-                               "fit mode",
-                               "0",
-                               CLIARG_VISIBLE_DEFAULT,
-                               (void **) &modeval,
-                               NULL}};
+static CLICMDARGDEF farg[] = {{
+        CLIARG_STR,
+        ".indat",
+        "input file",
+        "data.txt",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &infname,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".NBpt",
+        "number of sample points",
+        "1000",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &NBptval,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".maxorder",
+        "maximum polynomial order",
+        "8",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &maxorderval,
+        NULL
+    },
+    {
+        CLIARG_STR,
+        ".outdat",
+        "output file",
+        "fitsol.txt",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &outfname,
+        NULL
+    },
+    {
+        CLIARG_LONG,
+        ".mode",
+        "fit mode",
+        "0",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &modeval,
+        NULL
+    }
+};
 
-static CLICMDDATA CLIcmddata = {
-    "linopt1Dfit", "least-square 1D fit", CLICMD_FIELDS_DEFAULTS};
+static CLICMDDATA CLIcmddata =
+{
+    "linopt1Dfit", "least-square 1D fit", CLICMD_FIELDS_DEFAULTS
+};
 
 // detailed help
 static errno_t help_function()
@@ -87,25 +100,25 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
     long  iter;
 
     xarray = (float *) malloc(sizeof(float) * NBpt);
-    if (xarray == NULL)
+    if(xarray == NULL)
     {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     valarray = (float *) malloc(sizeof(float) * NBpt);
-    if (valarray == NULL)
+    if(valarray == NULL)
     {
         FUNC_RETURN_FAILURE("malloc returns NULL pointer");
     }
 
     fp = fopen(fnamein, "r");
-    for (long ii = 0; ii < NBpt; ii++)
+    for(long ii = 0; ii < NBpt; ii++)
     {
         int fscanfcnt = fscanf(fp, "%f %f\n", &xarray[ii], &valarray[ii]);
 
-        if (fscanfcnt == EOF)
+        if(fscanfcnt == EOF)
         {
-            if (ferror(fp))
+            if(ferror(fp))
             {
                 perror("fscanf");
             }
@@ -117,7 +130,7 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
             }
             exit(EXIT_FAILURE);
         }
-        else if (fscanfcnt != 2)
+        else if(fscanfcnt != 2)
         {
             fprintf(stderr,
                     "Error: fscanf successfully matched and assigned %i input "
@@ -134,7 +147,7 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
 
     FUNC_CHECK_RETURN(create_2Dimage_ID("inmask", NBpt, 1, &IDmask));
 
-    for (long ii = 0; ii < NBpt; ii++)
+    for(long ii = 0; ii < NBpt; ii++)
     {
         //			printf("%18.16f  %+18.16f\n", xarray[ii], valarray[ii]);
         data.image[IDin].array.F[ii]   = valarray[ii];
@@ -148,58 +161,58 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
 
     FUNC_CHECK_RETURN(create_2Dimage_ID("outcoeff", NBmodes, 1, &IDout));
 
-    switch (MODE)
+    switch(MODE)
     {
-    case 0:
-        for (long m = 0; m < NBmodes; m++)
-        {
-            for (long ii = 0; ii < NBpt; ii++)
+        case 0:
+            for(long m = 0; m < NBmodes; m++)
             {
-                data.image[IDmodes].array.F[m * NBpt + ii] =
-                    pow(xarray[ii], 1.0 * m);
+                for(long ii = 0; ii < NBpt; ii++)
+                {
+                    data.image[IDmodes].array.F[m * NBpt + ii] =
+                        pow(xarray[ii], 1.0 * m);
+                }
             }
-        }
-        break;
-    case 1:
-        for (long m = 0; m < NBmodes; m++)
-        {
-            for (long ii = 0; ii < NBpt; ii++)
+            break;
+        case 1:
+            for(long m = 0; m < NBmodes; m++)
             {
-                data.image[IDmodes].array.F[m * NBpt + ii] =
-                    cos(xarray[ii] * M_PI * m);
+                for(long ii = 0; ii < NBpt; ii++)
+                {
+                    data.image[IDmodes].array.F[m * NBpt + ii] =
+                        cos(xarray[ii] * M_PI * m);
+                }
             }
-        }
-        break;
-    default:
-        printf("ERROR: MODE = %d not supported\n", MODE);
-        exit(0);
-        break;
+            break;
+        default:
+            printf("ERROR: MODE = %d not supported\n", MODE);
+            exit(0);
+            break;
     }
 
     list_image_ID();
 
-    for (iter = 0; iter < NBiter; iter++)
+    for(iter = 0; iter < NBiter; iter++)
     {
         FUNC_CHECK_RETURN(linopt_imtools_image_fitModes("invect0",
-                                                        "fitmodes",
-                                                        "inmask",
-                                                        SVDeps,
-                                                        "outcoeffim0",
-                                                        1,
-                                                        NULL));
+                          "fitmodes",
+                          "inmask",
+                          SVDeps,
+                          "outcoeffim0",
+                          1,
+                          NULL));
         IDout0 = image_ID("outcoeffim0");
 
-        for (long m = 0; m < NBmodes; m++)
+        for(long m = 0; m < NBmodes; m++)
         {
             data.image[IDout].array.F[m] +=
                 gain * data.image[IDout0].array.F[m];
         }
 
-        for (long ii = 0; ii < NBpt; ii++)
+        for(long ii = 0; ii < NBpt; ii++)
         {
             err = 0.0;
             val = 0.0;
-            for (long m = 0; m < NBmodes; m++)
+            for(long m = 0; m < NBmodes; m++)
             {
                 val += data.image[IDout].array.F[m] *
                        data.image[IDmodes].array.F[m * NBpt + ii];
@@ -217,7 +230,7 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
     }
 
     fp = fopen(fnameout, "w");
-    for (long m = 0; m < NBmodes; m++)
+    for(long m = 0; m < NBmodes; m++)
     {
         fprintf(fp, "%4ld %+.8g\n", m, data.image[IDout].array.F[m]);
     }
@@ -225,10 +238,10 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
 
     fp  = fopen("testout.txt", "w");
     err = 0.0;
-    for (long ii = 0; ii < NBpt; ii++)
+    for(long ii = 0; ii < NBpt; ii++)
     {
         val = 0.0;
-        for (long m = 0; m < NBmodes; m++)
+        for(long m = 0; m < NBmodes; m++)
         {
             val += data.image[IDout].array.F[m] *
                    data.image[IDmodes].array.F[m * NBpt + ii];
@@ -250,7 +263,7 @@ errno_t linopt_compute_1Dfit(const char *fnamein,
     free(xarray);
     free(valarray);
 
-    if (outID != NULL)
+    if(outID != NULL)
     {
         *outID = IDout;
     }
@@ -286,9 +299,9 @@ static errno_t compute_function()
 
 INSERT_STD_FPSCLIfunctions
 
-    // Register function in CLI
-    errno_t
-    CLIADDCMD_linopt_imtools__lin1Dfits()
+// Register function in CLI
+errno_t
+CLIADDCMD_linopt_imtools__lin1Dfits()
 {
     INSERT_STD_CLIREGISTERFUNC
     return RETURN_SUCCESS;
