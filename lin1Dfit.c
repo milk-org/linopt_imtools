@@ -20,7 +20,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".NBpt",
         "number of sample points",
         "1000",
@@ -29,7 +29,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".maxorder",
         "maximum polynomial order",
         "8",
@@ -47,7 +47,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".mode",
         "fit mode",
         "0",

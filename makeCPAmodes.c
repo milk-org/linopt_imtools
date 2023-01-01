@@ -9,14 +9,24 @@
 
 // Local variables pointers
 static char   *outimname;
-static long   *sizeout;
-static double *CPAmaxval;
-static double *deltaCPAval;
-static double *radiusval;
-static double *radiusfactorlimval;
-static long   *writefileval;
 
-static CLICMDARGDEF farg[] = {{
+static uint32_t *sizeout;
+
+static float *CPAmaxval;
+
+static float *deltaCPAval;
+
+static float *radiusval;
+
+static float *radiusfactorlimval;
+
+static uint32_t   *writefileval;
+
+
+
+static CLICMDARGDEF farg[] =
+{
+    {
         CLIARG_STR,
         ".out_name",
         "output image",
@@ -26,7 +36,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_UINT32,
         ".size",
         "size",
         "512",
@@ -35,7 +45,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT32,
         ".CPAmax",
         "maximum cycle per aperture",
         "8.0",
@@ -44,7 +54,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT32,
         ".deltaCPA",
         "CPA interval",
         "0.8",
@@ -53,7 +63,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT32,
         ".radius",
         "disk radius",
         "160.0",
@@ -62,7 +72,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT32,
         ".radfactlim",
         "radius factor limit",
         "1.5",
@@ -71,7 +81,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_UINT32,
         ".writefile",
         "write file flag",
         "0",
@@ -80,6 +90,8 @@ static CLICMDARGDEF farg[] = {{
         NULL
     }
 };
+
+
 
 static CLICMDDATA CLIcmddata =
 {
@@ -92,14 +104,19 @@ static errno_t help_function()
     return RETURN_SUCCESS;
 }
 
-errno_t linopt_imtools_makeCPAmodes(const char *ID_name,
-                                    long        size,
-                                    float       CPAmax,
-                                    float       deltaCPA,
-                                    float       radius,
-                                    float       radfactlim,
-                                    int         writeMfile,
-                                    long       *outNBmax)
+
+
+
+errno_t linopt_imtools_makeCPAmodes(
+    const char *ID_name,
+    uint32_t        size,
+    float       CPAmax,
+    float       deltaCPA,
+    float       radius,
+    float       radfactlim,
+    uint32_t         writeMfile,
+    long       *outNBmax
+)
 {
     DEBUG_TRACE_FSTART();
     DEBUG_TRACEPOINT("FARG %s", ID_name);
@@ -122,11 +139,12 @@ errno_t linopt_imtools_makeCPAmodes(const char *ID_name,
     long IDfreq;
 
     eps = 0.1 * deltaCPA;
-    printf("size       = %ld\n", size);
+    printf("size       = %u\n", size);
     printf("CPAmax     = %f\n", CPAmax);
     printf("deltaCPA   = %f\n", deltaCPA);
     printf("radius     = %f\n", radius);
     printf("radfactlim = %f\n", radfactlim);
+
 
     size2 = size * size;
     FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpx", size, size, &IDx));
@@ -218,7 +236,7 @@ errno_t linopt_imtools_makeCPAmodes(const char *ID_name,
     if(writeMfile == 1)
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
-        fprintf(fp, "# size       = %ld\n", size);
+        fprintf(fp, "# size       = %u\n", size);
         fprintf(fp, "# CPAmax     = %f\n", CPAmax);
         fprintf(fp, "# deltaCPA   = %f\n", deltaCPA);
         fprintf(fp, "# radius     = %f\n", radius);
@@ -365,28 +383,45 @@ errno_t linopt_imtools_makeCPAmodes(const char *ID_name,
     return RETURN_SUCCESS;
 }
 
+
+
+
 static errno_t compute_function()
 {
     DEBUG_TRACE_FSTART();
 
+    printf("outimname                %s\n", outimname);
+    printf("sizeout                  %u\n", *sizeout);
+    printf("CPAmaxval                %f\n", *CPAmaxval);
+    printf("deltaCPAval              %f\n", *deltaCPAval);
+    printf("radiusval                %f\n", *radiusval);
+    printf("radiusfactorlimval       %f\n", *radiusfactorlimval);
+    printf("writefileval             %u\n", *writefileval);
+
     INSERT_STD_PROCINFO_COMPUTEFUNC_START
-
-    linopt_imtools_makeCPAmodes(outimname,
-                                *sizeout,
-                                *CPAmaxval,
-                                *deltaCPAval,
-                                *radiusval,
-                                *radiusfactorlimval,
-                                *writefileval,
-                                NULL);
-
+    {
+        /*
+                linopt_imtools_makeCPAmodes(outimname,
+                                            *sizeout,
+                                            *CPAmaxval,
+                                            *deltaCPAval,
+                                            *radiusval,
+                                            *radiusfactorlimval,
+                                            *writefileval,
+                                            NULL);
+        */
+    }
     INSERT_STD_PROCINFO_COMPUTEFUNC_END
 
     DEBUG_TRACE_FEXIT();
     return RETURN_SUCCESS;
 }
 
+
+
 INSERT_STD_FPSCLIfunctions
+
+
 
 // Register function in CLI
 errno_t

@@ -19,7 +19,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".size",
         "size",
         "512",
@@ -28,7 +28,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".kmax",
         "k max",
         "100",
@@ -37,7 +37,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT64,
         ".radius",
         "radius [pix]",
         "160.0",
@@ -46,7 +46,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT64,
         ".rfactlim",
         "radius factor limit",
         "2.0",

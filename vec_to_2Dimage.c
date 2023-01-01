@@ -45,7 +45,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".xsize",
         "X size",
         "512",
@@ -54,7 +54,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".ysize",
         "Y size",
         "512",

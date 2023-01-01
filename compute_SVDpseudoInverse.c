@@ -18,7 +18,9 @@ static long   *max_NBmodes;
 static char   *outimVTmatname;
 static long   *useGPU;
 
-static CLICMDARGDEF farg[] = {{
+static CLICMDARGDEF farg[] =
+{
+    {
         CLIARG_IMG,
         ".inim",
         "input image",
@@ -37,7 +39,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT64,
         ".svdeps",
         "SVD cutoff",
         "0.001",
@@ -46,7 +48,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".maxNBmode",
         "Maximum NB modes",
         "10000",
@@ -64,7 +66,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".GPU",
         "use GPU",
         "0",
@@ -94,18 +96,19 @@ static errno_t help_function()
 // This implementation computes the eigenvalue decomposition of transpose(M) x M, so it is efficient if n>>m, as transpose(M) x M is size m x m
 //
 errno_t
-linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
-                                const char *ID_Cmatrix_name,
-                                double      SVDeps,
-                                long        MaxNBmodes,
-                                const char *ID_VTmatrix_name,
-                                imageID    *outID) /* works even for m != n */
+linopt_compute_SVDpseudoInverse(
+    const char *ID_Rmatrix_name,
+    const char *ID_Cmatrix_name,
+    double      SVDeps,
+    long        MaxNBmodes,
+    const char *ID_VTmatrix_name,
+    imageID    *outID
+) /* works for m != n */
 {
     DEBUG_TRACE_FSTART();
 
     FILE       *fp;
     char        fname[200];
-    long        ii1, jj1, k, ii, jj;
     gsl_matrix *matrix_D;  /* this is the input response matrix */
     gsl_matrix *matrix_Ds; /* this is the output pseudo inverse of D */
     gsl_matrix *matrix_Dtra;
@@ -195,8 +198,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     /* write matrix_D */
     if(datatype == _DATATYPE_FLOAT)
     {
-        for(k = 0; k < m; k++)
-            for(ii = 0; ii < n; ii++)
+        for(int k = 0; k < m; k++)
+            for(int ii = 0; ii < n; ii++)
             {
                 gsl_matrix_set(matrix_D,
                                ii,
@@ -206,8 +209,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     }
     else
     {
-        for(k = 0; k < m; k++)
-            for(ii = 0; ii < n; ii++)
+        for(int k = 0; k < m; k++)
+            for(int ii = 0; ii < n; ii++)
             {
                 gsl_matrix_set(matrix_D,
                                ii,
@@ -235,8 +238,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
         // TEST
         FUNC_CHECK_RETURN(create_2Dimage_ID("AtA", m, m, &ID_AtA));
 
-        for(ii = 0; ii < m; ii++)
-            for(jj = 0; jj < m; jj++)
+        for(int ii = 0; ii < m; ii++)
+            for(int jj = 0; jj < m; jj++)
             {
                 data.image[ID_AtA].array.F[jj * m + ii] =
                     (float) gsl_matrix_get(matrix_DtraD, ii, jj);
@@ -283,10 +286,10 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
         printf("ERROR: cannot create file \"%s\"\n", fname);
         exit(0);
     }
-    for(k = 0; k < m; k++)
+    for(int k = 0; k < m; k++)
     {
         fprintf(fp,
-                "%ld %g %g\n",
+                "%d %g %g\n",
                 k,
                 sqrt(gsl_vector_get(matrix_DtraD_eval, k)),
                 gsl_vector_get(matrix_DtraD_eval, k));
@@ -334,8 +337,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
 
     if(datatype == _DATATYPE_FLOAT)
     {
-        for(ii = 0; ii < m; ii++)   // modes
-            for(k = 0; k < m; k++)  // modes
+        for(int ii = 0; ii < m; ii++)   // modes
+            for(int k = 0; k < m; k++)  // modes
             {
                 data.image[ID_VTmatrix].array.F[k * m + ii] =
                     (float) gsl_matrix_get(matrix_DtraD_evec, k, ii);
@@ -343,8 +346,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     }
     else
     {
-        for(ii = 0; ii < m; ii++)   // modes
-            for(k = 0; k < m; k++)  // modes
+        for(int ii = 0; ii < m; ii++)   // modes
+            for(int k = 0; k < m; k++)  // modes
             {
                 data.image[ID_VTmatrix].array.D[k * m + ii] =
                     gsl_matrix_get(matrix_DtraD_evec, k, ii);
@@ -359,8 +362,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     /* second, build the "inverse" of the diagonal matrix of eigenvalues (matrix1) */
     nbmodesremoved = 0;
     matrix1        = gsl_matrix_alloc(m, m);
-    for(ii1 = 0; ii1 < m; ii1++)  // mode
-        for(jj1 = 0; jj1 < m; jj1++)
+    for(int ii1 = 0; ii1 < m; ii1++)  // mode
+        for(int jj1 = 0; jj1 < m; jj1++)
         {
             if(ii1 == jj1)
             {
@@ -415,8 +418,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     {
         FUNC_CHECK_RETURN(create_2Dimage_ID("M2", m, m, &ID));
 
-        for(ii = 0; ii < m; ii++)
-            for(jj = 0; jj < m; jj++)
+        for(int ii = 0; ii < m; ii++)
+            for(int jj = 0; jj < m; jj++)
             {
                 data.image[ID].array.F[jj * m + ii] =
                     gsl_matrix_get(matrix_DtraDinv, ii, jj);
@@ -461,8 +464,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     /* write result */
     if(datatype == _DATATYPE_FLOAT)
     {
-        for(ii = 0; ii < n; ii++)   // sensors
-            for(k = 0; k < m; k++)  // actuator modes
+        for(int ii = 0; ii < n; ii++)   // sensors
+            for(int k = 0; k < m; k++)  // actuator modes
             {
                 data.image[ID_Cmatrix].array.F[k * n + ii] =
                     (float) gsl_matrix_get(matrix_Ds, k, ii);
@@ -470,8 +473,8 @@ linopt_compute_SVDpseudoInverse(const char *ID_Rmatrix_name,
     }
     else
     {
-        for(ii = 0; ii < n; ii++)   // sensors
-            for(k = 0; k < m; k++)  // actuator modes
+        for(int ii = 0; ii < n; ii++)   // sensors
+            for(int k = 0; k < m; k++)  // actuator modes
             {
                 data.image[ID_Cmatrix].array.D[k * n + ii] =
                     gsl_matrix_get(matrix_Ds, k, ii);

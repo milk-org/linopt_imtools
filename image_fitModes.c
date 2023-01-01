@@ -50,7 +50,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_FLOAT,
+        CLIARG_FLOAT64,
         ".SVDeps",
         "SVD cutoff",
         "0.001",
@@ -68,7 +68,7 @@ static CLICMDARGDEF farg[] = {{
         NULL
     },
     {
-        CLIARG_LONG,
+        CLIARG_INT64,
         ".reuse",
         "reuse configuration flag",
         "0",
