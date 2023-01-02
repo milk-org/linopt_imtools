@@ -10,7 +10,15 @@
 // Local variables pointers
 static char   *outimname;
 
-static uint32_t *sizeout;
+static uint32_t *sizexout;
+static uint32_t *sizeyout;
+
+
+static uint64_t *centered;
+long fpi_centered;
+
+static float *xcent;
+static float *ycent;
 
 static float *CPAmaxval;
 
@@ -37,11 +45,47 @@ static CLICMDARGDEF farg[] =
     },
     {
         CLIARG_UINT32,
-        ".size",
-        "size",
+        ".sizex",
+        "sizex",
         "512",
         CLIARG_VISIBLE_DEFAULT,
-        (void **) &sizeout,
+        (void **) &sizexout,
+        NULL
+    },
+    {
+        CLIARG_UINT32,
+        ".sizey",
+        "sizey",
+        "512",
+        CLIARG_VISIBLE_DEFAULT,
+        (void **) &sizeyout,
+        NULL
+    },
+    {
+        CLIARG_ONOFF,
+        ".align.centered",
+        "on if centered",
+        "1",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &centered,
+        &fpi_centered
+    },
+    {
+        CLIARG_FLOAT32,
+        ".align.xcenter",
+        "x axis center",
+        "200",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &xcent,
+        NULL
+    },
+    {
+        CLIARG_FLOAT32,
+        ".align.ycenter",
+        "y axis center",
+        "200",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &ycent,
         NULL
     },
     {
@@ -93,6 +137,40 @@ static CLICMDARGDEF farg[] =
 
 
 
+
+// Optional custom configuration setup.
+// Runs once at conf startup
+//
+static errno_t customCONFsetup()
+{
+    if(data.fpsptr != NULL)
+    {
+
+    }
+
+    return RETURN_SUCCESS;
+}
+
+// Optional custom configuration checks.
+// Runs at every configuration check loop iteration
+//
+static errno_t customCONFcheck()
+{
+
+    if(data.fpsptr != NULL)
+    {
+
+    }
+
+    return RETURN_SUCCESS;
+}
+
+
+
+
+
+
+
 static CLICMDDATA CLIcmddata =
 {
     "mkFouriermodes", "make basis of Fourier Modes", CLICMD_FIELDS_DEFAULTS
@@ -109,7 +187,10 @@ static errno_t help_function()
 
 errno_t linopt_imtools_makeCPAmodes(
     const char *ID_name,
-    uint32_t        size,
+    uint32_t        sizex,
+    uint32_t        sizey,
+    float       xcenter,
+    float       ycenter,
     float       CPAmax,
     float       deltaCPA,
     float       radius,
@@ -139,33 +220,33 @@ errno_t linopt_imtools_makeCPAmodes(
     long IDfreq;
 
     eps = 0.1 * deltaCPA;
-    printf("size       = %u\n", size);
+    printf("size       = %u %u\n", sizex, sizey);
     printf("CPAmax     = %f\n", CPAmax);
     printf("deltaCPA   = %f\n", deltaCPA);
     printf("radius     = %f\n", radius);
     printf("radfactlim = %f\n", radfactlim);
 
 
-    size2 = size * size;
-    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpx", size, size, &IDx));
+    size2 = sizex * sizey;
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpx", sizex, sizey, &IDx));
 
-    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpy", size, size, &IDy));
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpy", sizex, sizey, &IDy));
 
-    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpr", size, size, &IDr));
+    FUNC_CHECK_RETURN(create_2Dimage_ID("cpa_tmpr", sizex, sizey, &IDr));
 
     printf("precomputing x, y, r\n");
     fflush(stdout);
 
-    for(ii = 0; ii < size; ii++)
+    for(ii = 0; ii < sizex; ii++)
     {
-        x = (1.0 * ii - 0.5 * size + 0.5) / radius;
-        for(jj = 0; jj < size; jj++)
+        x = (1.0 * ii - xcenter + 0.5) / radius;
+        for(jj = 0; jj < sizey; jj++)
         {
-            y = (1.0 * jj - 0.5 * size + 0.5) / radius;
+            y = (1.0 * jj - ycenter + 0.5) / radius;
             r = sqrt(x * x + y * y);
-            data.image[IDx].array.F[jj * size + ii] = x;
-            data.image[IDy].array.F[jj * size + ii] = y;
-            data.image[IDr].array.F[jj * size + ii] = r;
+            data.image[IDx].array.F[jj * sizex + ii] = x;
+            data.image[IDy].array.F[jj * sizex + ii] = y;
+            data.image[IDr].array.F[jj * sizex + ii] = r;
         }
     }
 
@@ -231,12 +312,12 @@ errno_t linopt_imtools_makeCPAmodes(
     quick_sort3_float(CPArarray, CPAxarray, CPAyarray, NBfrequ);
 
     NBmax = NBfrequ * 2;
-    FUNC_CHECK_RETURN(create_3Dimage_ID(ID_name, size, size, NBmax - 1, &ID));
+    FUNC_CHECK_RETURN(create_3Dimage_ID(ID_name, sizex, sizey, NBmax - 1, &ID));
 
     if(writeMfile == 1)
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
-        fprintf(fp, "# size       = %u\n", size);
+        fprintf(fp, "# size       = %u %u\n", sizex, sizey);
         fprintf(fp, "# CPAmax     = %f\n", CPAmax);
         fprintf(fp, "# deltaCPA   = %f\n", deltaCPA);
         fprintf(fp, "# radius     = %f\n", radius);
@@ -391,25 +472,49 @@ static errno_t compute_function()
     DEBUG_TRACE_FSTART();
 
     printf("outimname                %s\n", outimname);
-    printf("sizeout                  %u\n", *sizeout);
+    printf("sizeout                  %u %u\n", *sizexout, *sizeyout);
     printf("CPAmaxval                %f\n", *CPAmaxval);
     printf("deltaCPAval              %f\n", *deltaCPAval);
     printf("radiusval                %f\n", *radiusval);
     printf("radiusfactorlimval       %f\n", *radiusfactorlimval);
     printf("writefileval             %u\n", *writefileval);
 
+
+    float x0 = 0.0;
+    float y0 = 0.0;
+
+    printf("centered flag  :   %lu\n", *centered);
+    if(*centered == 1)
+    {
+        printf("CENTERED      ");
+        x0 = 0.5 * *sizexout;
+        y0 = 0.5 * *sizeyout;
+    }
+    else
+    {
+        printf("NOT CENTERED  ");
+        x0 = *xcent;
+        y0 = *ycent;
+    }
+    printf(" %8.3f x %8.3f\n", x0, y0);
+
+
     INSERT_STD_PROCINFO_COMPUTEFUNC_START
     {
-        /*
-                linopt_imtools_makeCPAmodes(outimname,
-                                            *sizeout,
-                                            *CPAmaxval,
-                                            *deltaCPAval,
-                                            *radiusval,
-                                            *radiusfactorlimval,
-                                            *writefileval,
-                                            NULL);
-        */
+
+
+        linopt_imtools_makeCPAmodes(outimname,
+                                    *sizexout,
+                                    *sizeyout,
+                                    x0,
+                                    y0,
+                                    *CPAmaxval,
+                                    *deltaCPAval,
+                                    *radiusval,
+                                    *radiusfactorlimval,
+                                    *writefileval,
+                                    NULL);
+
     }
     INSERT_STD_PROCINFO_COMPUTEFUNC_END
 
@@ -427,6 +532,9 @@ INSERT_STD_FPSCLIfunctions
 errno_t
 CLIADDCMD_linopt_imtools__makeCPAmodes()
 {
+    CLIcmddata.FPS_customCONFsetup = customCONFsetup;
+    CLIcmddata.FPS_customCONFcheck = customCONFcheck;
     INSERT_STD_CLIREGISTERFUNC
+
     return RETURN_SUCCESS;
 }
