@@ -30,6 +30,10 @@ static float *radiusfactorlimval;
 
 static float *fpowerlaw;
 
+static float *fpowerlaw_minf;
+
+static float *fpowerlaw_maxf;
+
 static uint32_t   *writefileval;
 
 
@@ -136,6 +140,24 @@ static CLICMDARGDEF farg[] =
         NULL
     },
     {
+        CLIARG_FLOAT32,
+        ".fpowerlaw_minf",
+        "frequency power law max freq",
+        "1.0",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &fpowerlaw_minf,
+        NULL
+    },
+    {
+        CLIARG_FLOAT32,
+        ".fpowerlaw_maxf",
+        "frequency power law max freq",
+        "100.0",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &fpowerlaw_maxf,
+        NULL
+    },
+    {
         CLIARG_UINT32,
         ".writefile",
         "write file flag",
@@ -207,6 +229,8 @@ errno_t linopt_imtools_makeCPAmodes(
     float       radius,
     float       radfactlim,
     float       fpowerlaw,
+    float       fpowerlaw_minf,
+    float       fpowerlaw_maxf,
     uint32_t         writeMfile,
     long       *outNBmax
 )
@@ -326,6 +350,7 @@ errno_t linopt_imtools_makeCPAmodes(
     NBmax = NBfrequ * 2;
     FUNC_CHECK_RETURN(create_3Dimage_ID(ID_name, sizex, sizey, NBmax - 1, &ID));
 
+
     if(writeMfile == 1)
     {
         fp = fopen("ModesExpr_CPA.txt", "w");
@@ -344,18 +369,21 @@ errno_t linopt_imtools_makeCPAmodes(
         {
             CPAx = CPAxarray[k1];
             CPAy = CPAyarray[k1];
+            float frequency = sqrt(CPAx * CPAx + CPAy * CPAy);
             if(CPAy < 0)
             {
                 fprintf(fp,
-                        "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n",
+                        "%4ld   %8.3f   %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n",
                         k - 1,
+                        frequency,
                         CPAx,
                         CPAy,
                         CPAx,
                         -CPAy);
                 fprintf(fp,
-                        "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n",
+                        "%4ld   %8.3f   %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n",
                         k,
+                        frequency,
                         CPAx,
                         CPAy,
                         CPAx,
@@ -364,15 +392,17 @@ errno_t linopt_imtools_makeCPAmodes(
             else
             {
                 fprintf(fp,
-                        "%4ld %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n",
+                        "%4ld   %8.3f   %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n",
                         k - 1,
+                        frequency,
                         CPAx,
                         CPAy,
                         CPAx,
                         CPAy);
                 fprintf(fp,
-                        "%4ld %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n",
+                        "%4ld   %8.3f   %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n",
                         k,
+                        frequency,
                         CPAx,
                         CPAy,
                         CPAx,
@@ -427,19 +457,36 @@ errno_t linopt_imtools_makeCPAmodes(
         CPAy = CPAyarray[k1];
         DEBUG_TRACEPOINT("    %ld %f %f", k1, CPAx, CPAy);
 
+        float frequency = sqrt(CPAx * CPAx + CPAy * CPAy);
+
+        float fampl = 1.0;
+        if(frequency < fpowerlaw_minf)
+        {
+            fampl = 1.0;
+        }
+        else if (frequency > fpowerlaw_maxf)
+        {
+            fampl = pow( fpowerlaw_maxf - fpowerlaw_minf,  fpowerlaw );
+        }
+        else
+        {
+            float f1 = frequency - fpowerlaw_minf;
+            fampl = pow( f1, fpowerlaw);
+        }
+
         for(ii = 0; ii < size2; ii++)
         {
             x                                 = data.image[IDx].array.F[ii];
             y                                 = data.image[IDy].array.F[ii];
             r                                 = data.image[IDr].array.F[ii];
-            data.image[IDfreq].array.F[k - 1] = sqrt(CPAx * CPAx + CPAy * CPAy);
-            data.image[IDfreq].array.F[k]     = sqrt(CPAx * CPAx + CPAy * CPAy);
+            data.image[IDfreq].array.F[k - 1] = frequency;
+            data.image[IDfreq].array.F[k]     = frequency;
             if(r < radfactlim)
             {
                 data.image[ID].array.F[(k - 1) * size2 + ii] =
-                    cos(M_PI * (x * CPAx + y * CPAy));
+                    fampl * cos(M_PI * (x * CPAx + y * CPAy));
                 data.image[ID].array.F[k * size2 + ii] =
-                    sin(M_PI * (x * CPAx + y * CPAy));
+                    fampl * sin(M_PI * (x * CPAx + y * CPAy));
             }
         }
         k += 2;
@@ -522,6 +569,8 @@ static errno_t compute_function()
                                     *radiusval,
                                     *radiusfactorlimval,
                                     *fpowerlaw,
+                                    *fpowerlaw_minf,
+                                    *fpowerlaw_maxf,
                                     *writefileval,
                                     NULL);
 
