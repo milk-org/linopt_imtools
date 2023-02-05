@@ -28,6 +28,8 @@ static float *radiusval;
 
 static float *radiusfactorlimval;
 
+static float *fpowerlaw;
+
 static uint32_t   *writefileval;
 
 
@@ -125,6 +127,15 @@ static CLICMDARGDEF farg[] =
         NULL
     },
     {
+        CLIARG_FLOAT32,
+        ".fpowerlaw",
+        "frequency power law (amp x f^a)",
+        "0",
+        CLIARG_HIDDEN_DEFAULT,
+        (void **) &fpowerlaw,
+        NULL
+    },
+    {
         CLIARG_UINT32,
         ".writefile",
         "write file flag",
@@ -195,6 +206,7 @@ errno_t linopt_imtools_makeCPAmodes(
     float       deltaCPA,
     float       radius,
     float       radfactlim,
+    float       fpowerlaw,
     uint32_t         writeMfile,
     long       *outNBmax
 )
@@ -433,8 +445,7 @@ errno_t linopt_imtools_makeCPAmodes(
         k += 2;
         k1++;
     }
-    //  printf("done \n");
-    // fflush(stdout);
+
     DEBUG_TRACEPOINT("free memory");
 
     free(CPAxarray);
@@ -452,8 +463,6 @@ errno_t linopt_imtools_makeCPAmodes(
     FUNC_CHECK_RETURN(
         delete_image_ID("cpa_tmpr", DELETE_IMAGE_ERRMODE_WARNING));
 
-    // printf("done \n");
-    //fflush(stdout);
 
     if(outNBmax != NULL)
     {
@@ -512,6 +521,7 @@ static errno_t compute_function()
                                     *deltaCPAval,
                                     *radiusval,
                                     *radiusfactorlimval,
+                                    *fpowerlaw,
                                     *writefileval,
                                     NULL);
 
