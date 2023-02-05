@@ -370,20 +370,38 @@ errno_t linopt_imtools_makeCPAmodes(
             CPAx = CPAxarray[k1];
             CPAy = CPAyarray[k1];
             float frequency = sqrt(CPAx * CPAx + CPAy * CPAy);
+
+
+            float fampl = 1.0;
+            if(frequency < fpowerlaw_minf)
+            {
+                fampl = 1.0;
+            }
+            else if (frequency > fpowerlaw_maxf)
+            {
+                fampl = pow( fpowerlaw_maxf - fpowerlaw_minf,  fpowerlaw );
+            }
+            else
+            {
+                float f1 = frequency - fpowerlaw_minf;
+                fampl = pow( f1, fpowerlaw);
+            }
+
+
             if(CPAy < 0)
             {
                 fprintf(fp,
-                        "%4ld   %8.3f   %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n",
+                        "%4ld   %8.3f -> %8.3f  %10.5f %10.5f    cos(M_PI*(x*%.5f-y*%.5f))\n",
                         k - 1,
-                        frequency,
+                        frequency, fampl,
                         CPAx,
                         CPAy,
                         CPAx,
                         -CPAy);
                 fprintf(fp,
-                        "%4ld   %8.3f   %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n",
+                        "%4ld   %8.3f -> %8.3f  %10.5f %10.5f    sin(M_PI*(x*%.5f-y*%.5f))\n",
                         k,
-                        frequency,
+                        frequency, fampl,
                         CPAx,
                         CPAy,
                         CPAx,
@@ -392,17 +410,17 @@ errno_t linopt_imtools_makeCPAmodes(
             else
             {
                 fprintf(fp,
-                        "%4ld   %8.3f   %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n",
+                        "%4ld   %8.3f -> %8.3f  %10.5f %10.5f    cos(M_PI*(x*%.5f+y*%.5f))\n",
                         k - 1,
-                        frequency,
+                        frequency, fampl,
                         CPAx,
                         CPAy,
                         CPAx,
                         CPAy);
                 fprintf(fp,
-                        "%4ld   %8.3f   %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n",
+                        "%4ld   %8.3f -> %8.3f  %10.5f %10.5f    sin(M_PI*(x*%.5f+y*%.5f))\n",
                         k,
-                        frequency,
+                        frequency, fampl,
                         CPAx,
                         CPAy,
                         CPAx,
